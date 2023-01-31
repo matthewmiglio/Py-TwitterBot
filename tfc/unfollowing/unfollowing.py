@@ -43,7 +43,7 @@ def unfollowing_main(logger, following_lower_limit=100, following_upper_limit=30
         friends_count = get_following_count_of_user(logger, timeout=15)
         logger.change_current_status(f"Still following {friends_count} users")
 
-        if friends_count < following_lower_limit:
+        if int(friends_count) < int(following_lower_limit):
             logger.change_current_status(
                 f"Stopping unfollow mode because hit manual limit of {following_lower_limit}"
             )
@@ -68,6 +68,8 @@ def unfollow_user(logger, timeout, user):
     try:
         api.destroy_friendship(screen_name=user)
         logger.change_current_status(f"Unfollowed {user}")
+        print(f"Unfollowed {user}")
+        
         logger.add_unfollow()
     except:
         print(

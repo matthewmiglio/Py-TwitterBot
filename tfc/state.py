@@ -61,6 +61,7 @@ def state_tree(
     # (String[])   profiles_to_scrape_for_targets is a list of profiles to look through for targets. (A larger list implies a more diverse target list)(Using one's own profile is reccomended)
     # (INT)        follow_wait_time is the amount of time to wait between following users (86 -> 1000 follows/day)
 
+    print(f"This loops state is : {state}")
 
     if state == "start":
         logger.update_current_state('Starting...')
@@ -97,4 +98,5 @@ def state_tree(
         )
 
 
+    print(f'Finished state loop. Next state is: {state}')
     return state

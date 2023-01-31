@@ -171,7 +171,7 @@ def get_following_count(logger, profile_name, timeout):
 def follow_user(logger, screen_name="", timeout=0):
     try:
         api_out=check_create_friendship_output(str(api.create_friendship(screen_name=screen_name)))
-        if api_out == "already following":
+        if api_out != "success":
             print(f'Already following {screen_name}...')
             return 'already following'
         else:
@@ -211,6 +211,7 @@ def check_create_friendship_output(text):
 
     if 'True' in following_text:
         return 'already following'
+    return 'success'
 
 # method to remove 'the user's screen name' from any list
 def remove_user_screen_name_from_follower_list(follower_list=[]):

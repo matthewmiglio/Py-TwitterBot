@@ -202,7 +202,6 @@ class WorkerThread(StoppableThread):
 
     def run(self):
         try:
-
             (
                 following_lower_limit,
                 following_upper_limit,
@@ -212,9 +211,9 @@ class WorkerThread(StoppableThread):
             ) = self.args  # parse thread args
 
             state = "start"
+
             # loop until shutdown flag is set
             while not self.shutdown_flag.is_set():
-
                 state = state_tree(
                     self.logger,
                     state,
