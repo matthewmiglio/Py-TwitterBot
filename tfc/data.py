@@ -12,7 +12,7 @@ def get_appdata_directory():
 def make_data_file():
     directory = get_appdata_directory() + r"\py-TwitterBot" + r"\data.txt"
     with open(directory, "w") as f:
-        f.write(f'0|{datetime.datetime.now().strftime("%m/%d/%Y")}|12:00:00|0')
+        f.write(f'0|{datetime.datetime.now().strftime("%m/%d/%Y")}|12:00:00|0\n')
     print(f"Made data file @ {directory}")
 
 #method to make the appdata/roaming/Py-TwitterBot folder
