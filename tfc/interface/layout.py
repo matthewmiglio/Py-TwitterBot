@@ -61,7 +61,7 @@ main_layout = [
                                 sg.Text("Targets per cycle: "),
                                 sg.InputText(
                                     key="targets_to_find",
-                                    default_text="100",
+                                    default_text="5",
                                     enable_events=True,
                                     size=(7,1),
                                 ),
@@ -70,7 +70,7 @@ main_layout = [
                                 sg.Text("Profiles to Scrape for Targets: "),
                                 sg.InputText(
                                     key="profiles_to_scrape_for_targets",
-                                    default_text="KingJames, dril, BarackObama",
+                                    default_text="YourUsername, aPopularProfile, BarackObama",
                                     enable_events=True,
                                     size=(35,2),
                                 ),
@@ -79,7 +79,7 @@ main_layout = [
                                 sg.Text("Wait time between following: "),
                                 sg.InputText(
                                     key="follow_wait_time",
-                                    default_text="100",
+                                    default_text="240",
                                     enable_events=True,
                                     size=(7,1),
                                 ),
