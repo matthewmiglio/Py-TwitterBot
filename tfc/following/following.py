@@ -69,14 +69,14 @@ def check_for_internet():
 
 
 # method to wait for the program to get internet
-def wait_for_internet():
+def wait_for_internet(logger):
     loops = 0
     print("Waiting for internet...")
     while not check_for_internet():
         time.sleep(1)
         loops += 1
         if loops % 1700 == 0:
-            print("Waiting for internet...")
+            logger.change_current_status("Waiting for internet...")
 
 
 # function to get a list of followers of a given size for a given scre[=e==='[en name
@@ -167,43 +167,6 @@ def get_following_count(logger, profile_name, timeout):
         return get_following_count(logger, profile_name, timeout=int(timeout * 1.3))
 
 
-# method to follow a selected user
-def follow_user(logger, screen_name="", timeout=0):
-    try:
-        api_out=check_create_friendship_output(str(api.create_friendship(screen_name=screen_name)))
-        if api_out != "success":
-            print(f'Already following {screen_name}...')
-            return 'already following'
-        else:
-            logger.add_follow()
-            logger.change_current_status(f"Successfully followed: {screen_name}")
-            print(f"Successfully followed: {screen_name}")
-            return "success"
-
-    except Exception as e:
-        print(e)
-        if not check_for_internet():
-            print(
-                f"No internet caused error following this [{screen_name}]. Waiting for internet..."
-            )
-            wait_for_internet()
-            return follow_user(logger, screen_name="", timeout=timeout)
-
-        # if 403 error (already following), return 'already following'
-        elif str(e).startswith("403"):
-            print(f"You cannot follow [{screen_name}]")
-            return "already following"
-
-        else:
-            if timeout > 3800:
-                timeout = 3800
-
-            logger.change_current_status(
-                f"Error following user [{screen_name}] waiting {timeout} seconds before trying again."
-            )
-            time.sleep(timeout)
-            return follow_user(logger, screen_name, timeout=int(timeout * 2))
-
 
 def check_create_friendship_output(text):
     out=text.find('following=')
@@ -252,7 +215,37 @@ def count_following(screen_name=""):
 def get_date_time():
     return time.strftime("%m/%d/%Y|%H:%M:%S", time.localtime())
 
-
-
+# method to follow a selected user
+def follow_user(logger, screen_name="", timeout=0):
+    try:
+        api.create_friendship(screen_name=screen_name)
+        print(f'Made friendship with {screen_name}')
+        logger.change_current_status(f'Successfully followed {screen_name}')
+    except Exception as follow_exception:
+        #dont let timeout exceed an hour per timeout
+        if timeout > 3800:
+            timeout = 3800
+        
+        #sleep for the timeout 
+        print(f'Sleeping {timeout}s after error occured following user {screen_name}...')
+        time.sleep(timeout)
+        
+        #read the error message
+        error_line=str(follow_exception.args[0])
+        
+        #check if this error is due to no internet
+        if not check_for_internet():
+            print('No internet caused this error')
+            logger.change_status('No internet...')
+            wait_for_internet(logger)
+        
+        #check if this error is due to the follower throttle
+        elif ' are unable to follow more people at thi' in error_line:
+            print('Following throttle reached...')
+            logger.change_current_status('Following throttle reached...')
+            return follow_user(logger, screen_name=screen_name, timeout=(timeout*1.5))
+        
+        else: 
+            print(f'An unknown error occured while following {screen_name}:\n{follow_exception}')
 
 
