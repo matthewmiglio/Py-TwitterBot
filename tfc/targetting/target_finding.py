@@ -11,14 +11,15 @@ from tfc.targetting.target_finding_file import (
 
 
 api = make_api()
-creds=get_creds()
+creds = get_creds()
+
 
 # main method for the target finding mode
-def target_finder_main(logger, targets_to_find=3, profiles_to_scrape_for_targets=[]):
+def target_finder_main(logger, profiles_to_scrape_for_targets=[]):
+    targets_to_find = 3
 
     logger.change_current_status("Target Finding")
 
-    
     if profiles_to_scrape_for_targets == []:
         logger.change_current_status(
             f"Error in new_target_finder_main(). {profiles_to_scrape_for_targets} is empty"
@@ -51,11 +52,11 @@ def target_finder_main(logger, targets_to_find=3, profiles_to_scrape_for_targets
             )
 
             # for each follower, check if they are a good target
-            follower_index=0
+            follower_index = 0
             for follower in this_follower_list:
-                follower_index+=1
+                follower_index += 1
 
-                #every 10 examined potential targets, update the logger values for following and followers
+                # every 10 examined potential targets, update the logger values for following and followers
                 update_logger_stats(logger)
 
                 # check if enough targets in target_list.txt
@@ -447,18 +448,16 @@ def parse_profiles_to_scrape_arg(arg):
     return profiles_top_scrape_string_list
 
 
-
-
-#method to update the stats in the logger for following and unfollowing
+# method to update the stats in the logger for following and unfollowing
 def update_logger_stats(logger):
-    my_screen_name=api.get_user(user_id=creds[0]).screen_name
+    my_screen_name = api.get_user(user_id=creds[0]).screen_name
 
-    #get values
+    # get values
     follower_count = get_follower_count(logger, profile_name=my_screen_name, timeout=30)
-    following_count = get_following_count(logger, profile_name=my_screen_name, timeout=30)
+    following_count = get_following_count(
+        logger, profile_name=my_screen_name, timeout=30
+    )
 
-    #update values in logger obj
+    # update values in logger obj
     logger.update_current_followers_stat(follower_count)
     logger.update_current_following_stat(following_count)
-    
-    

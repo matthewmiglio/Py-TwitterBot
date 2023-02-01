@@ -57,15 +57,7 @@ main_layout = [
                                     size=(7,1),
                                 ),
                             ],
-                            [
-                                sg.Text("[DEV] Targets per cycle: "),
-                                sg.InputText(
-                                    key="targets_to_find",
-                                    default_text="5",
-                                    enable_events=True,
-                                    size=(7,1),
-                                ),
-                            ],
+                            
                             [
                                 sg.Text("Profiles to Scrape for Targets: "),
                                 sg.InputText(
@@ -196,7 +188,7 @@ main_layout = [
             key="current_status",
             use_readonly_for_disable=True,
             disabled=True,
-            text_color="blue",
+            # text_color="blue",
             expand_x=True,
         ),
     ],
@@ -208,10 +200,8 @@ main_layout = [
 user_config_keys = [
     "following_lower_limit",
     "following_upper_limit",
-    "targets_to_find",
     "profiles_to_scrape_for_targets",
     "follow_wait_time",
-    # 'unfollow_wait_time',
 ]
 
 # list of button and checkbox keys to disable when the bot is running

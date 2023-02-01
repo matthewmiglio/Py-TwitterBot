@@ -49,7 +49,6 @@ def state_tree(
     state,
     following_lower_limit,
     following_upper_limit,
-    targets_to_find,
     profiles_to_scrape_for_targets,
     follow_wait_time,
 ):
@@ -57,7 +56,6 @@ def state_tree(
     # (String)     state is the current state of the program which is recursively passed as the program loops infinitely. (unfollowing, following, get_targets)
     # (INT)        following lower limit is the minimum amount of people your bot should be following
     # (INT)        following upper limit is the maximum amount of people your bot should be following
-    # (INT)        targets to find is the amount of targets to use per following cycle. (A lower number implies a more up-to-date target list)
     # (String[])   profiles_to_scrape_for_targets is a list of profiles to look through for targets. (A larger list implies a more diverse target list)(Using one's own profile is reccomended)
     # (INT)        follow_wait_time is the amount of time to wait between following users (86 -> 1000 follows/day)
 
@@ -93,7 +91,6 @@ def state_tree(
         logger.update_current_state('Getting targets')
         state = target_finder_main(
             logger=logger,
-            targets_to_find=3,
             profiles_to_scrape_for_targets=profiles_to_scrape_for_targets,
         )
 
