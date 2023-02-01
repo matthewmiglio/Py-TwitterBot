@@ -17,8 +17,10 @@ from tfc.interface import (
 )
 from tfc.state import state_tree
 from tfc.util.caching import (
+    cache_program_state,
     cache_user_settings,
-    check_user_settings,
+    check_for_user_settings_file,
+    read_program_state,
     read_user_settings,
 )
 from tfc.util.logger import Logger
@@ -41,8 +43,14 @@ def save_current_settings(values):
     cache_user_settings(user_settings)
 
 
+def load_last_state():
+    state=read_program_state()
+
+    return state
+
+
 def load_last_settings(window):
-    if check_user_settings():
+    if check_for_user_settings_file():
         window.read(timeout=10)  # read the window to edit the layout
         user_settings = read_user_settings()
         if user_settings is not None:
@@ -210,10 +218,13 @@ class WorkerThread(StoppableThread):
                 follow_wait_time,
             ) = self.args  # parse thread args
 
-            state = "start"
+            state = load_last_state()
 
             # loop until shutdown flag is set
             while not self.shutdown_flag.is_set():
+                #cache the current state to maintain function across multiple instances over time 
+                cache_program_state(program_state_string=state)
+
                 state = state_tree(
                     self.logger,
                     state,

@@ -211,6 +211,7 @@ user_config_keys = [
     "targets_to_find",
     "profiles_to_scrape_for_targets",
     "follow_wait_time",
+    # 'unfollow_wait_time',
 ]
 
 # list of button and checkbox keys to disable when the bot is running

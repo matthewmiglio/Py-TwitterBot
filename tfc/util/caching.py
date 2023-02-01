@@ -10,6 +10,8 @@ module_name = "py-TwitterBot"
 top_level = join(expandvars("%appdata%"), module_name)
 
 
+
+
 def _cache_data(data, file_name) -> None:
     # a method to cache data to the disk using pickle
     file_path = join(top_level, file_name)
@@ -17,7 +19,7 @@ def _cache_data(data, file_name) -> None:
         makedirs(top_level)
     with open(file_path, "wb") as f:
         pickle.dump(data, f)
-
+    print(f'Cached dat to {file_name}')
 
 def _load_data(file_name) -> Any | None:
     # a method to load data from the disk using pickle
@@ -41,6 +43,26 @@ def read_user_settings() -> dict[str, Any] | None:
     return _load_data("user_settings.dat")
 
 
-def check_user_settings() -> bool:
+def check_for_user_settings_file() -> bool:
     # a method to check if the user settings file exists
     return exists(join(top_level, "user_settings.dat"))
+
+
+
+def check_for_program_state_file() -> bool:
+    return exists(join(top_level, "program_state_data.dat"))
+
+
+def cache_program_state(program_state_string):
+    _cache_data(program_state_string, "program_state_data.dat")
+
+
+def read_program_state():
+    return _load_data("program_state_data.dat")
+
+
+# if program state folder doesn't exist, create it with 'start' as the state
+if not check_for_program_state_file():
+    print('creating program state file')
+    cache_program_state(program_state_string='start')
+
