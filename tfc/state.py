@@ -93,7 +93,7 @@ def state_tree(
         logger.update_current_state('Getting targets')
         state = target_finder_main(
             logger=logger,
-            targets_to_find=targets_to_find,
+            targets_to_find=3,
             profiles_to_scrape_for_targets=profiles_to_scrape_for_targets,
         )
 

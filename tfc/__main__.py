@@ -209,37 +209,39 @@ class WorkerThread(StoppableThread):
         self.logger = logger
 
     def run(self):
-        try:
-            (
+        # try:
+        
+        (
+            following_lower_limit,
+            following_upper_limit,
+            targets_to_find,
+            profiles_to_scrape_for_targets,
+            follow_wait_time,
+        ) = self.args  # parse thread args
+
+        state = load_last_state()
+        print(f'Last loaded state is {state}')
+
+        # loop until shutdown flag is set
+        while not self.shutdown_flag.is_set():
+            #cache the current state to maintain function across multiple instances over time 
+            cache_program_state(program_state_string=state)
+            time.sleep(5)
+
+            state = state_tree(
+                self.logger,
+                state,
                 following_lower_limit,
                 following_upper_limit,
                 targets_to_find,
                 profiles_to_scrape_for_targets,
                 follow_wait_time,
-            ) = self.args  # parse thread args
-
-            state = load_last_state()
-            print(f'Last loaded state is {state}')
-
-            # loop until shutdown flag is set
-            while not self.shutdown_flag.is_set():
-                #cache the current state to maintain function across multiple instances over time 
-                cache_program_state(program_state_string=state)
-
-                state = state_tree(
-                    self.logger,
-                    state,
-                    following_lower_limit,
-                    following_upper_limit,
-                    targets_to_find,
-                    profiles_to_scrape_for_targets,
-                    follow_wait_time,
-                )
+            )
 
 
-        except Exception as exc:  # pylint: disable=broad-except
-            # catch exceptions and log to not crash the main thread
-            self.logger.error(str(exc))
+        # except Exception as exc:  # pylint: disable=broad-except
+        #     # catch exceptions and log to not crash the main thread
+        #     self.logger.error(str(exc))
 
 
 class PlotWorkerThread(StoppableThread):

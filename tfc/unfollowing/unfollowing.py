@@ -10,20 +10,10 @@ creds = get_creds()
 
 # main method for the unfollowing mode of the state tree
 def unfollowing_main(logger, following_lower_limit=100, following_upper_limit=3000):
-    my_following_count = get_following_count_of_user(logger, timeout=15)
-    if int(my_following_count) < int(following_upper_limit):
-        logger.change_current_status(
-            f"Skipping unfollowing mode because my following count is only {my_following_count} and the upper limit is {following_upper_limit}..."
-        )
-        return
-    else:
-        logger.change_current_status(
-            f"Starting unfollowing mode because following count is {my_following_count} and limit is {following_upper_limit}"
-        )
-
     while True:
         this_list = get_following_list()
         if this_list is None:
+            print('Error getting following list... sleeping 10 seconds')
             time.sleep(10)
             continue
 

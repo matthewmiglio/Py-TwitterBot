@@ -58,7 +58,7 @@ main_layout = [
                                 ),
                             ],
                             [
-                                sg.Text("Targets per cycle: "),
+                                sg.Text("[DEV] Targets per cycle: "),
                                 sg.InputText(
                                     key="targets_to_find",
                                     default_text="5",
@@ -76,7 +76,7 @@ main_layout = [
                                 ),
                             ],
                             [
-                                sg.Text("Wait time between following: "),
+                                sg.Text("[DEV] Wait time between following: "),
                                 sg.InputText(
                                     key="follow_wait_time",
                                     default_text="240",

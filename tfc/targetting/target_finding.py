@@ -14,15 +14,11 @@ api = make_api()
 creds=get_creds()
 
 # main method for the target finding mode
-def target_finder_main(logger, targets_to_find=0, profiles_to_scrape_for_targets=[]):
+def target_finder_main(logger, targets_to_find=3, profiles_to_scrape_for_targets=[]):
 
     logger.change_current_status("Target Finding")
 
-    # null checks
-    if targets_to_find == 0:
-        logger.change_current_status(
-            f"Error in new_target_finder_main(). {targets_to_find} is 0"
-        )
+    
     if profiles_to_scrape_for_targets == []:
         logger.change_current_status(
             f"Error in new_target_finder_main(). {profiles_to_scrape_for_targets} is empty"
