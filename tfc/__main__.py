@@ -72,6 +72,8 @@ def start_button_event(logger: Logger, window, values):
         values["following_upper_limit"],
         values["profiles_to_scrape_for_targets"],
         values["follow_wait_time"],
+        values["unfollow_wait_time"],
+        
     )
 
     thread = WorkerThread(logger, args)
@@ -215,6 +217,7 @@ class WorkerThread(StoppableThread):
             following_upper_limit,
             profiles_to_scrape_for_targets,
             follow_wait_time,
+            unfollow_wait_time,
         ) = self.args  # parse thread args
 
         state = load_last_state()
@@ -233,6 +236,7 @@ class WorkerThread(StoppableThread):
                 following_upper_limit,
                 profiles_to_scrape_for_targets,
                 follow_wait_time,
+                unfollow_wait_time,
             )
 
 

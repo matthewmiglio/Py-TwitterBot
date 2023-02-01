@@ -9,7 +9,8 @@ creds = get_creds()
 
 
 # main method for the unfollowing mode of the state tree
-def unfollowing_main(logger, following_lower_limit=100, following_upper_limit=3000):
+def unfollowing_main(logger, following_lower_limit=100,unfollow_wait_time=0):
+    unfollow_wait_time=int(unfollow_wait_time)
     while True:
         this_list = get_following_list()
         if this_list is None:
@@ -24,11 +25,11 @@ def unfollowing_main(logger, following_lower_limit=100, following_upper_limit=30
             unfollow_user(logger, 30, user)
             add_line_to_data_file(make_data_string(logger))
 
-            unfollow_delay = 5
             logger.change_current_status(
-                f"Waiting {unfollow_delay} seconds before unfollowing next user"
+                f"Waiting {unfollow_wait_time} seconds before unfollowing next user"
             )
-            time.sleep(unfollow_delay)
+            print(f'Sleeping {unfollow_wait_time} after unfollowing {user}...')
+            time.sleep(unfollow_wait_time)
 
         friends_count = get_following_count_of_user(logger, timeout=15)
         logger.change_current_status(f"Still following {friends_count} users")

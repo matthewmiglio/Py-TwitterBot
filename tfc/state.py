@@ -51,6 +51,7 @@ def state_tree(
     following_upper_limit,
     profiles_to_scrape_for_targets,
     follow_wait_time,
+    unfollow_wait_time,
 ):
     # (Logger      object) of logger Class in utils folder
     # (String)     state is the current state of the program which is recursively passed as the program loops infinitely. (unfollowing, following, get_targets)
@@ -58,6 +59,7 @@ def state_tree(
     # (INT)        following upper limit is the maximum amount of people your bot should be following
     # (String[])   profiles_to_scrape_for_targets is a list of profiles to look through for targets. (A larger list implies a more diverse target list)(Using one's own profile is reccomended)
     # (INT)        follow_wait_time is the amount of time to wait between following users (86 -> 1000 follows/day)
+    # (INT)        unfollow_wait_time is the amount of time to wait between unfollowing users (lower values like 1-10 work fine but still cause throttling when following again)
 
     print(f"This loops state is : {state}")
 
@@ -76,7 +78,7 @@ def state_tree(
         state = unfollowing_main(
             logger=logger,
             following_lower_limit=following_lower_limit,
-            following_upper_limit=following_upper_limit,
+            unfollow_wait_time=unfollow_wait_time,
         )
 
     elif state == "following":

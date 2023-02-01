@@ -77,6 +77,15 @@ main_layout = [
                                 ),
                             ],
                             [
+                                sg.Text("[DEV] Wait time between unfollowing: "),
+                                sg.InputText(
+                                    key="unfollow_wait_time",
+                                    default_text="240",
+                                    enable_events=True,
+                                    size=(7,1),
+                                ),
+                            ],
+                            [
                                 sg.Column(
                                     [
                                         [
