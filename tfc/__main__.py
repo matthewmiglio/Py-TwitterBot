@@ -219,6 +219,7 @@ class WorkerThread(StoppableThread):
             ) = self.args  # parse thread args
 
             state = load_last_state()
+            print(f'Last loaded state is {state}')
 
             # loop until shutdown flag is set
             while not self.shutdown_flag.is_set():
