@@ -101,8 +101,15 @@ def count_followers(logger, screen_name="", timeout=0):
 
 
 # method to count how many people a given screen name is following
-def count_following(screen_name=""):
-    return api.get_user(screen_name=screen_name).friends_count
+def count_following(screen_name="",timeout=0):
+    try:
+        return api.get_user(screen_name=screen_name).friends_count
+    except:
+        if timeout > 3800:
+            timeout = 3800
+        print(f"Error getting following count for {screen_name}. Waiting {timeout} seconds before trying again..." )
+        time.sleep(timeout)
+        return count_following(screen_name=screen_name, timeout=int(timeout * 1.75))
 
 
 # method to get the current date and time in a readable format
@@ -112,11 +119,10 @@ def get_date_time():
 
 # method to construct the data string that is written to the data file
 def make_data_string(logger):
-    user_id = creds[0]
-    user_screen_name = api.get_user(user_id=user_id).screen_name
+    user_screen_name = get_screen_name_of_user_id(creds[0],timeout=15)
 
     followers_count=count_followers(logger=logger, screen_name=user_screen_name, timeout=15)
-    following_count=count_following(api.get_user(user_id=creds[0]).screen_name)
+    following_count=count_following(screen_name=user_screen_name,timeout=15)
 
     #update the followers and following stats in the logger obj
     logger.update_current_followers_stat(followers_count)
@@ -130,3 +136,13 @@ def make_data_string(logger):
         + "|"
         + str(following_count)
         )
+
+
+def get_screen_name_of_user_id(user_id,timeout=0):
+    try:
+        return api.get_user(user_id=user_id).screen_name
+    except:
+        if timeout>3600:timeout=3600
+        print(f'Error getting screen name of user id of {user_id} Waiting {timeout} sec then retrying...')
+        time.sleep(timeout)
+        return get_screen_name_of_user_id(user_id,timeout=timeout*1.75)
