@@ -450,7 +450,7 @@ def parse_profiles_to_scrape_arg(arg):
 
 # method to update the stats in the logger for following and unfollowing
 def update_logger_stats(logger):
-    my_screen_name = api.get_user(user_id=creds[0]).screen_name
+    my_screen_name=get_screen_name_of_user_id(user_id=creds[0],timeout=15)
 
     # get values
     follower_count = get_follower_count(logger, profile_name=my_screen_name, timeout=30)
@@ -461,3 +461,14 @@ def update_logger_stats(logger):
     # update values in logger obj
     logger.update_current_followers_stat(follower_count)
     logger.update_current_following_stat(following_count)
+
+
+
+def get_screen_name_of_user_id(user_id,timeout=0):
+    try:
+        return api.get_user(user_id=user_id).screen_name
+    except:
+        if timeout>3600:timeout=3600
+        print(f'Error getting screen name of user id of {user_id} Waiting {timeout} sec then retrying...')
+        time.sleep(timeout)
+        return get_screen_name_of_user_id(user_id,timeout=timeout*1.75)
