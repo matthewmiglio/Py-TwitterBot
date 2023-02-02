@@ -211,6 +211,8 @@ user_config_keys = [
     "following_upper_limit",
     "profiles_to_scrape_for_targets",
     "follow_wait_time",
+    'unfollow_wait_time',
+    'autostart'
 ]
 
 # list of button and checkbox keys to disable when the bot is running

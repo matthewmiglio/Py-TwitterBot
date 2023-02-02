@@ -1,3 +1,4 @@
+from tweepy import TweepyException
 import urllib.request
 import time
 from tfc.auth.auth import get_creds, make_api
@@ -135,10 +136,14 @@ def make_data_string(logger):
     user_id = creds[0]
     user_screen_name = api.get_user(user_id=user_id).screen_name
 
-    followers_count = count_followers(
-        logger=logger, screen_name=user_screen_name, timeout=15
-    )
-    following_count = count_following(api.get_user(user_id=creds[0]).screen_name)
+    try:
+        followers_count = count_followers(
+            logger=logger, screen_name=user_screen_name, timeout=15
+        )
+        following_count = count_following(api.get_user(user_id=creds[0]).screen_name,timeout=15)
+    except:
+        print('Error making data string for data file in following.py in make_data_string()')
+        return
 
     # update the followers and following stats in the logger obj
     logger.update_current_followers_stat(followers_count)
@@ -167,18 +172,25 @@ def get_following_count(logger, profile_name, timeout):
         return get_following_count(logger, profile_name, timeout=int(timeout * 1.3))
 
 
-
 def check_create_friendship_output(text):
-    out=text.find('following=')
-    following_text=(text[out:out+15])
+    out = text.find("following=")
+    following_text = text[out : out + 15]
 
-    if 'True' in following_text:
-        return 'already following'
-    return 'success'
+    if "True" in following_text:
+        return "already following"
+    return "success"
+
 
 # method to remove 'the user's screen name' from any list
 def remove_user_screen_name_from_follower_list(follower_list=[]):
-    this_screen_name = api.get_user(user_id=creds[0]).screen_name
+    try:
+        this_screen_name = api.get_user(user_id=creds[0]).screen_name
+    except:
+        timeout_time=5
+        print(f"Error getting the users screen name. Waiting {timeout_time} seconds before trying again...")
+        time.sleep(timeout_time)
+        remove_user_screen_name_from_follower_list(follower_list=follower_list) 
+
 
     return_list = []
     for name in follower_list:
@@ -207,45 +219,56 @@ def count_followers(logger, screen_name="", timeout=0):
 
 
 # method to count how many people a given screen name is following
-def count_following(screen_name=""):
-    return api.get_user(screen_name=screen_name).friends_count
+def count_following(screen_name="",timeout=0):
+    try:
+        return api.get_user(screen_name=screen_name).friends_count
+    except:
+        if timeout > 3600:timeout = 3600
+        
+        print(f'Error getting following count of {screen_name}. Waiting {timeout} seconds before trying again...')
+        time.sleep(timeout)
+        
+        return count_following(screen_name=screen_name,timeout=int(timeout*1.75))
 
 
 # method to get the current date and time in a readable format
 def get_date_time():
     return time.strftime("%m/%d/%Y|%H:%M:%S", time.localtime())
 
+
 # method to follow a selected user
 def follow_user(logger, screen_name="", timeout=0):
     try:
         api.create_friendship(screen_name=screen_name)
-        print(f'Made friendship with {screen_name}')
-        logger.change_current_status(f'Successfully followed {screen_name}')
-    except Exception as follow_exception:
-        #dont let timeout exceed an hour per timeout
+        print(f"Made friendship with {screen_name}")
+        logger.change_current_status(f"Successfully followed {screen_name}")
+    except TweepyException as follow_exception:
+        # dont let timeout exceed an hour per timeout
         if timeout > 3800:
             timeout = 3800
-        
-        #sleep for the timeout 
-        print(f'Sleeping {timeout}s after error occured following user {screen_name}...')
+
+        # sleep for the timeout
+        print(
+            f"Sleeping {timeout}s after error occured following user {screen_name}..."
+        )
         time.sleep(timeout)
-        
-        #read the error message
-        error_line=str(follow_exception.args[0])
-        
-        #check if this error is due to no internet
+
+        # read the error message
+        error_line = str(follow_exception.args[0])
+
+        # check if this error is due to no internet
         if not check_for_internet():
-            print('No internet caused this error')
-            logger.change_status('No internet...')
+            print("No internet caused this error")
+            logger.change_status("No internet...")
             wait_for_internet(logger)
-        
-        #check if this error is due to the follower throttle
-        elif ' are unable to follow more people at thi' in error_line:
-            print('Following throttle reached...')
-            logger.change_current_status('Following throttle reached...')
-            return follow_user(logger, screen_name=screen_name, timeout=(timeout*1.5))
-        
-        else: 
-            print(f'An unknown error occured while following {screen_name}:\n{follow_exception}')
 
+        # check if this error is due to the follower throttle
+        elif " are unable to follow more people at thi" in error_line:
+            print("Following throttle reached...")
+            logger.change_current_status("Following throttle reached...")
+            return follow_user(logger, screen_name=screen_name, timeout=(timeout * 1.5))
 
+        else:
+            print(
+                f"An unknown error occured while following {screen_name}:\n{follow_exception}"
+            )
