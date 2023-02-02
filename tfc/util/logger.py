@@ -115,11 +115,13 @@ class Logger:
     
     @_updates_queue
     def update_starting_followers_stat(self,stat):
+        if self.starting_followers != None: return
         self.starting_followers = stat
         self.followers_change  = self.calc_followers_change()
     
     @_updates_queue
     def update_starting_following_stat(self,stat):
+        if self.starting_following != None: return
         self.starting_following = stat
         self.following_change  = self.calc_followers_change()
     
@@ -199,14 +201,15 @@ class Logger:
         return followers_change
     
     def calc_following_change(self):
-        following_change='0'
+        print(f"current_following is {self.current_following} \n starting_following is {self.starting_following}")
+        
         #calc the change as an int
         if self.current_following is None or self.starting_following is None:
-            following_change=0
+            following_change='0'
         else: following_change = self.current_following - self.starting_following
 
         #put a plus in front if needed, then return as string
-        if following_change > 0:
+        if int(following_change) > 0:
             following_change = "+" + str(following_change)
         else:
             following_change = str(following_change)
@@ -226,3 +229,5 @@ def count_targets_in_target_list():
         return i + 1
     except:
         return 0
+
+

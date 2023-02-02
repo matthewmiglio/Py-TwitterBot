@@ -61,16 +61,17 @@ def state_tree(
     # (INT)        follow_wait_time is the amount of time to wait between following users (86 -> 1000 follows/day)
     # (INT)        unfollow_wait_time is the amount of time to wait between unfollowing users (lower values like 1-10 work fine but still cause throttling when following again)
 
+    #code to run every state loop
     print(f"This loops state is : {state}")
+    following_count=count_following(user_id=creds[0], timeout=30)
+    follower_count=count_followers(user_id=creds[0], timeout=30)
+    logger.update_starting_following_stat(following_count)
+    logger.update_starting_followers_stat(follower_count)
+
 
     if state == "start":
+        #placeholder state for any first runtime operations that may need to be implemented
         logger.update_current_state('Starting...')
-
-        following_count=count_following(user_id=creds[0], timeout=30)
-        follower_count=count_followers(user_id=creds[0], timeout=30)
-        logger.update_starting_following_stat(following_count)
-        logger.update_starting_followers_stat(follower_count)
-
         state = "following"
     
     elif state == "unfollowing":
