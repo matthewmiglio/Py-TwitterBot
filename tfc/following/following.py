@@ -242,6 +242,7 @@ def follow_user(logger, screen_name="", timeout=0):
         api.create_friendship(screen_name=screen_name)
         print(f"Made friendship with {screen_name}")
         logger.change_current_status(f"Successfully followed {screen_name}")
+        logger.add_follow()
     except TweepyException as follow_exception:
         # dont let timeout exceed an hour per timeout
         if timeout > 3800:
@@ -259,7 +260,7 @@ def follow_user(logger, screen_name="", timeout=0):
         # check if this error is due to no internet
         if not check_for_internet():
             print("No internet caused this error")
-            logger.change_status("No internet...")
+            logger.change_current_status("No internet...")
             wait_for_internet(logger)
 
         # check if this error is due to the follower throttle
