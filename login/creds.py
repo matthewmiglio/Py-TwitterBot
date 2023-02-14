@@ -52,6 +52,7 @@ def check_if_creds_file_exists():
     return os.path.exists(directory)
 
 
+# method to get creds from creds.txt
 def get_creds_from_file():
     """method to get the twitter login credentials stored in creds.txt in the py-twitterbot directory
 
@@ -77,6 +78,7 @@ def get_creds_from_file():
     return user, password
 
 
+# method to parse cred line from creds.txt file
 def parse_cred_line(line):
     """method to parse the credential line in the creds.txt file
 
@@ -95,6 +97,7 @@ def parse_cred_line(line):
     return new_line
 
 
+# method to popup a gui when user is missing crds in creds.txt
 def show_missing_creds_in_auth_file_gui(location):
     """method to show a gui to the user alerting the mof missing creds in the creds.txt file
 
@@ -123,6 +126,7 @@ def show_missing_creds_in_auth_file_gui(location):
     window.close()
 
 
+# method to check if the creds.txt file is empty or not
 def check_if_creds_file_is_empty():
     """method to check if the creds.txt file is empty
 
@@ -140,6 +144,7 @@ def check_if_creds_file_is_empty():
         return False
 
 
+# section of code to run on import of this file. check if creds file exists and has information. if not, notifiy user and end program.
 if not check_if_creds_file_exists():
     make_creds_file()
 if check_if_creds_file_is_empty():

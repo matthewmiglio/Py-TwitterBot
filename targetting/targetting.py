@@ -24,6 +24,20 @@ from utils.data import add_line_to_data_file
 
 # method to find suitable targets to follow from
 def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
+    """main method for targetting mode
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+        logger (utils.logger.Logger): the logger object
+        scrape_list (list): the list of users to scrape
+        username (string): the username of the program user
+        targets_to_find (int, optional): the number of targets to find per cycle. Defaults to 3. Developer tool.
+
+    Returns:
+        string: the next state of the program
+
+    """
+
     scrape_list = parse_scrape_target_argument(scrape_list)
 
     if count_targets_in_target_list_file() >= targets_to_find:
@@ -35,7 +49,7 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
 
     suitable_target_list = []
 
-    #add my data to data file before checking some targets
+    # add my data to data file before checking some targets
 
     while 1:
         # random.shuffle(scrape_list)
@@ -89,7 +103,17 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
                     )
 
 
+# method to parse the scrape target argument from the frontend GUI
 def parse_scrape_target_argument(line):
+    """
+
+    Args:
+        line
+
+    Returns:
+        string[]: the list of users who's follower lists will be scraped
+
+    """
     target_list = []
     this_name = ""
     for char in line:
@@ -103,13 +127,18 @@ def parse_scrape_target_argument(line):
     return target_list
 
 
+# method to check for any blacklist text in a user's description text
 def check_description_text_for_blacklist(user_description):
-    # blacklist contains words that relate to twitter groups. Some popular
-    # groups are sports, books, academics, pornography, politics, rap, crypto
-    # Because of the web scraping nature of this bot, its unfavorable to
-    # target users who are well entrenched within a group as the bot may
-    # become too well stuck in a (weird) group.
-    # !! expand this blacklist as your profile sees fit
+    """method to check for any blacklist text in a user's description text
+
+    Args:
+        user_description (string): the description text of the user to check
+
+    Returns:
+        bool: whether or not the user is suitable for targetting
+
+    """
+
     if user_description == "" or user_description is None:
         return False
 
@@ -305,14 +334,31 @@ def check_description_text_for_blacklist(user_description):
     return False
 
 
+# method to check if a user is a suitable target for following followers of
 def check_if_user_is_suitable_target(driver, logger, user):
+    """method to check if a user is a suitable target for following followers of
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+        logger (logger): the logger to use
+        user (string): the profile username to check
+
+    Returns:
+        None
+
+    """
 
     description_text = get_description_text_of_this_user(driver)
     following_value = get_following_value_of_this_profile(driver)
     follower_value = get_follower_value_of_this_profile(driver)
 
     # if failed to read any of the values, just return and go to the next profile
-    if following_value == "fail" or follower_value == "fail" or following_value is None or follower_value is None:
+    if (
+        following_value == "fail"
+        or follower_value == "fail"
+        or following_value is None
+        or follower_value is None
+    ):
         return "Failed reading"
 
     # if this user exists in the target_history.txt file in appdata/Py-TwitterBot then return false
@@ -357,6 +403,17 @@ def check_if_user_is_suitable_target(driver, logger, user):
 
 # method to get a list of followers of a given user
 def get_followers_of_user(driver, logger, user):
+    """method to get a list of followers of a given user
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+        logger (logger): the logger to use
+        user (string): the profile username to check
+
+    Returns:
+        string[]: a list of usernames of the followers of the given user
+
+    """
     # get to user profile
 
     logger.log(
@@ -379,7 +436,17 @@ def get_followers_of_user(driver, logger, user):
     return remove_duplicates_from_list(name_list)
 
 
+# method to remove dupe strings from a list of string
 def remove_duplicates_from_list(name_list):
+    """method to remove dupe strings from a list of string
+
+    Args:
+        name_list (string[]): the list of strings to remove duplicates from
+
+    Returns:
+        string[]: new string list without dupes
+
+    """
     new_list = []
     for name in name_list:
         if not name in new_list:
@@ -387,11 +454,18 @@ def remove_duplicates_from_list(name_list):
     return new_list
 
 
-
-
-
 # method to get the program user's following/follower stats
 def get_my_stats(driver, logger):
+    """method to get the program user's following/follower stats
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+        logger (logger): the logger to use
+
+    Returns:
+        int,int: the program user's following , follower values
+
+    """
     click_program_user_profile_button(driver, logger)
     time.sleep(3)
 
@@ -409,10 +483,19 @@ def get_my_stats(driver, logger):
     return follower_value, following_value
 
 
-
-
 # method to add a line of data to the data file
 def update_data_file(logger, follower_value, following_value):
+    """method to add a line of data to the data file
+
+    Args:
+        logger (logger): the logger to use
+        follower_value (int): the current follower value of the program user
+        following_value (int): the current following value of the program user
+
+    Returns:
+        None
+
+    """
     line = str(follower_value) + "|" + str(get_date_time()) + "|" + str(following_value)
     add_line_to_data_file(line)
     logger.log(message="Updated data file...", state="following")
@@ -420,6 +503,13 @@ def update_data_file(logger, follower_value, following_value):
 
 # method to get the current date and time in a readable format
 def get_date_time():
+    """method to get the current date and time in a readable format
+
+    Args:
+        None
+
+    Returns:
+        string: the current date and time in a readable format
+
+    """
     return time.strftime("%m/%d/%Y|%H:%M:%S", time.localtime())
-
-

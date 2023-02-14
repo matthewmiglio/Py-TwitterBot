@@ -5,11 +5,30 @@ import os
 
 # method to get the directory of appdata
 def get_appdata_dir():
+    """method to get the directory of appdata
+
+    Args:
+        None
+
+    Returns:
+        string: the directory of appdata
+
+    """
+
     return os.getenv("APPDATA")
 
 
 # method to make credentials.txt file in appdata/Py-twitterbot
 def make_credentials_file():
+    """method to make credentials.txt file in appdata/Py-twitterbot
+
+    Args:
+        None
+
+    Returns:
+        string: the directory of the twitterbot folder
+
+    """
     dir = get_appdata_dir() + "\Py-twitterbot\credentials.txt"
 
     # make a file called credentials.txt
@@ -21,6 +40,15 @@ def make_credentials_file():
 
 # method to make a directory called Py-TwitterBot in appdata
 def make_appdata_dir():
+    """method to make a directory called Py-TwitterBot in appdata
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    """
     # make a directory called Py-twitterbot
     dir = get_appdata_dir() + "\Py-twitterbot"
     os.mkdir(dir)
@@ -29,6 +57,15 @@ def make_appdata_dir():
 
 # method to check if Py-TwitterBot directory exists in appdata
 def check_if_appdata_dir_exists():
+    """method to check if Py-TwitterBot directory exists in appdata
+
+    Args:
+        None
+
+    Returns:
+        boolean: True if the directory exists, False if it does not
+
+    """
     # get the directory of appdata
     appdata_dir = get_appdata_dir()
 
@@ -41,6 +78,15 @@ def check_if_appdata_dir_exists():
 
 # method to check if credentials.txt exists in appdata/Py-TwitterBot directory
 def check_if_credentials_file_exists():
+    """method to check if credentials.txt exists in appdata/Py-TwitterBot directory
+
+    Args:
+        None
+
+    Returns:
+        boolean: True if the file exists, False if it does not
+
+    """
     # get the directory of appdata
     appdata_dir = get_appdata_dir()
 
@@ -53,6 +99,15 @@ def check_if_credentials_file_exists():
 
 # method to read the credentials.txt file
 def get_creds():
+    """method to read the credentials.txt file
+
+    Args:
+        None
+
+    Returns:
+        string,string : username, password from the credentials.txt file
+
+    """
     # get the directory of appdata
     appdata_dir = get_appdata_dir()
 
@@ -72,6 +127,15 @@ def get_creds():
 
 # method to check if the creds file has no data in it
 def check_if_creds_file_is_empty():
+    """method to check if the creds file has no data in it
+
+    Args:
+        None
+
+    Returns:
+        boolean: True if the file is empty, False if it is not
+
+    """
     creds = get_creds()
     if creds[0] == "" or creds[1] == "":
         return True
@@ -79,6 +143,15 @@ def check_if_creds_file_is_empty():
 
 # method to show a gui that tells the user to fill out the credentials.txt file
 def show_missing_creds_in_auth_file_gui(location):
+    """method to show a gui that tells the user to fill out the credentials.txt file
+
+    Args:
+        location (string): the location of the credentials.txt file
+
+    Returns:
+        None
+
+    """
     THEME = "SystemDefaultForReal"
     out_text = (
         "TWITTER LOGIN CREDENTIALS MISSING IN credentials.txt!\n\n"

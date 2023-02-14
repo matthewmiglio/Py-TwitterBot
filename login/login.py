@@ -4,6 +4,17 @@ import time
 
 # method to write a given username to the username input box on the login page
 def write_to_username_input_box(driver, text):
+    """method to write a given username to the username input box on the login page
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+        text (string): the text to write to the username input box
+
+    Returns:
+        recursively calls itself if the username input box is not found
+
+    """
+
     try:
         element = driver.find_element(By.NAME, "text")
         element.send_keys(text)
@@ -11,7 +22,18 @@ def write_to_username_input_box(driver, text):
         return write_to_username_input_box(driver, text)
 
 
+# method to click the next button after inputting the username text
 def click_next_button_after_username_input(driver):
+    """method to click the next button after inputting the username text on the twitter login page
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+
+    Returns:
+        recursively calls itself if the next button is not found
+
+    """
+
     try:
         element = driver.find_element(
             By.XPATH,
@@ -22,7 +44,18 @@ def click_next_button_after_username_input(driver):
         return click_next_button_after_username_input(driver)
 
 
+# method to write to the password to the password input box
 def write_password_to_password_text_box(driver, password):
+    """method to write to the password to the password input box
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+        password (string): the password to write to the password input box
+
+    Returns:
+        recursively calls itself if the password input box is not found
+
+    """
     try:
         element = driver.find_element(
             By.XPATH,
@@ -33,7 +66,17 @@ def write_password_to_password_text_box(driver, password):
         return write_password_to_password_text_box(driver, password)
 
 
+# method to click the login button after inputting the password text
 def click_log_in_button_after_password_input(driver):
+    """method to click the login button after inputting the password text in the twitter login page login sequence
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+
+    Returns:
+        recursively calls itself if the login button is not found
+
+    """
     try:
         element = driver.find_element(
             By.XPATH,
@@ -46,6 +89,18 @@ def click_log_in_button_after_password_input(driver):
 
 # main method for logging in to twitter.com
 def log_in_to_twitter(driver, logger, username, password):
+    """main method for logging in to twitter.com
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+        logger (logger.Logger): the logger object
+        username (string): the username to log in with
+        password (string): the password to log in with
+
+    Returns:
+        None
+
+    """
     logger.set_current_state("Login")
 
     start_time = time.time()
