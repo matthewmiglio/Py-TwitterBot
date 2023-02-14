@@ -1,6 +1,12 @@
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 
+
+"""
+chrome_driver.py ->  function for making a chrome driver object (a fresh browser window that can be interacted with using selenium calls)
+"""
+
+
 # method to make a chrome webpage driver object using selenium and chromedriver v1.0.9
 def make_chrome_driver():
     """

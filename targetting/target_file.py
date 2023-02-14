@@ -1,6 +1,11 @@
 import os
 
 
+"""
+target_file.py -> every function related to the storing and retrieving current and past targets in appdata/roaming/Py-TwitterBot\target_list.txt
+"""
+
+
 # method to get the appdata directory
 def get_appdata_directory():
     """method to get the appdata directory

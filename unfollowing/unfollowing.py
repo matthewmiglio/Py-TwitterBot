@@ -14,6 +14,11 @@ from utils.client_interaction import (
 from utils.data import add_line_to_data_file
 
 
+"""
+unfollowing.py -> every function related to the unfollowing state of the program
+"""
+
+
 # main method for the unfollowing state of the program
 def unfollowing_main(driver, logger, following_lower_limit, unfollow_wait_time):
     """main method for the unfollowing state of the program

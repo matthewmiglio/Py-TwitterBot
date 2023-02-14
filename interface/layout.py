@@ -9,17 +9,18 @@ The program works by following users, then unfollowing them once following count
 
 The program looks for targets by scraping the given list of accounts for their followers.
 
-It's reccomended to use your own account as one of the scrape targets, as it will target more relevant users.
-
 Matthew Miglio,  - Sept 2022"""
 
 # defining various things that r gonna be in the gui.
 
 
 main_layout = [
+    # MAIN BOX
     [
+        # LEFT SIDE BOX
         sg.Column(
             layout=[
+                # INFORMATION TEXT BOX
                 [
                     sg.Frame(
                         layout=[[sg.Text(info_text, size=(60, None))]],
@@ -28,6 +29,7 @@ main_layout = [
                         expand_x=True,
                     )
                 ],
+                # STATS BOX
                 [
                     sg.Frame(
                         layout=stats,
@@ -36,6 +38,55 @@ main_layout = [
                         expand_x=True,
                     )
                 ],
+                # PLOT IMAGE
+                [
+                    sg.Image(
+                        os.path.join(
+                            os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"
+                        ),
+                        key="data_figure",
+                    )
+                ],
+                # PROGRAM USER FOLLOWERS AND FOLLOWING STAT BOX
+                [
+                    # FOLLOWERS SECTIOn
+                    sg.InputText(
+                        "Followers", font=("Arial", 20), size=(11, 1), text_color="blue"
+                    ),
+                    sg.InputText(
+                        "----",
+                        font=("Arial", 20),
+                        size=(6, 1),
+                        text_color="blue",
+                        key="current_followers",
+                    ),
+                    sg.InputText(
+                        "----",
+                        font=("Arial", 20),
+                        size=(5, 1),
+                        text_color="blue",
+                        key="followers_change",
+                    ),
+                    # FOLLOWING SECTION
+                    sg.InputText(
+                        "Following", font=("Arial", 20), size=(11, 1), text_color="red"
+                    ),
+                    sg.InputText(
+                        "----",
+                        font=("Arial", 20),
+                        size=(6, 1),
+                        text_color="red",
+                        key="current_following",
+                    ),
+                    sg.InputText(
+                        "----",
+                        font=("Arial", 20),
+                        size=(5, 1),
+                        text_color="red",
+                        key="following_change",
+                    ),
+                ],
+                # CONTROLS BOX
                 [
                     sg.Frame(
                         layout=[
@@ -45,7 +96,7 @@ main_layout = [
                                     key="following_lower_limit",
                                     default_text="100",
                                     enable_events=True,
-                                    size=(7,1),
+                                    size=(7, 1),
                                 ),
                             ],
                             [
@@ -54,17 +105,16 @@ main_layout = [
                                     key="following_upper_limit",
                                     default_text="1000",
                                     enable_events=True,
-                                    size=(7,1),
+                                    size=(7, 1),
                                 ),
                             ],
-                            
                             [
                                 sg.Text("Profiles to Scrape for Targets: "),
                                 sg.InputText(
                                     key="profiles_to_scrape_for_targets",
                                     default_text="YourUsername, aPopularProfile, BarackObama",
                                     enable_events=True,
-                                    size=(35,2),
+                                    size=(35, 2),
                                 ),
                             ],
                             [
@@ -73,7 +123,7 @@ main_layout = [
                                     key="follow_wait_time",
                                     default_text="240",
                                     enable_events=True,
-                                    size=(7,1),
+                                    size=(7, 1),
                                 ),
                             ],
                             [
@@ -82,7 +132,7 @@ main_layout = [
                                     key="unfollow_wait_time",
                                     default_text="240",
                                     enable_events=True,
-                                    size=(7,1),
+                                    size=(7, 1),
                                 ),
                             ],
                             [
@@ -122,76 +172,72 @@ main_layout = [
                 ],
             ]
         ),
-        sg.Column(
-            layout=[
-                [
-                    sg.Image(
-                        os.path.join(
-                            os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"
-                        ),
-                        key="data_figure",
-                    )
-                ],
-                [
-                    sg.InputText('Followers',
-                        font=("Arial", 20),
-                        size=(11, 1),
-                        text_color='blue'
-                        ),
-                    sg.InputText('----',
-                        font=("Arial", 20),
-                        size=(6, 1),
-                        text_color='blue',
-                        key='current_followers'
-                        ),
-                    
-                    sg.InputText('----',
-                        font=("Arial", 20),
-                        size=(5, 1),
-                        text_color='blue',
-                        key='followers_change'
-                        ),
-                    
-                    
-                    
-                    sg.InputText('Following',
-                        font=("Arial", 20),
-                        size=(11, 1),
-                        text_color='red'
-                        ),
-                    sg.InputText('----',
-                        font=("Arial", 20),
-                        size=(6, 1),
-                        text_color='red',
-                        key='current_following'
-                        ),
-                    sg.InputText('----',
-                        font=("Arial", 20),
-                        size=(5, 1),
-                        text_color='red',
-                        key='following_change'
-                        ),
-                    
-                ]
-            ],
-            element_justification='c',
-
-        ),
+        # #RIGHT SIDE BOX
+        # sg.Column(
+        #     layout=[
+        #         #PLOT IMAGE
+        #         [
+        #             sg.Image(
+        #                 os.path.join(
+        #                     os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"
+        #                 ),
+        #                 key="data_figure",
+        #             )
+        #         ],
+        #         #PROGRAM USER FOLLOWERS AND FOLLOWING STAT BOX
+        #         [
+        #             #FOLLOWERS SECTIOn
+        #             sg.InputText('Followers',
+        #                 font=("Arial", 20),
+        #                 size=(11, 1),
+        #                 text_color='blue'
+        #                 ),
+        #             sg.InputText('----',
+        #                 font=("Arial", 20),
+        #                 size=(6, 1),
+        #                 text_color='blue',
+        #                 key='current_followers'
+        #                 ),
+        #             sg.InputText('----',
+        #                 font=("Arial", 20),
+        #                 size=(5, 1),
+        #                 text_color='blue',
+        #                 key='followers_change'
+        #                 ),
+        #             #FOLLOWING SECTION
+        #             sg.InputText('Following',
+        #                 font=("Arial", 20),
+        #                 size=(11, 1),
+        #                 text_color='red'
+        #                 ),
+        #             sg.InputText('----',
+        #                 font=("Arial", 20),
+        #                 size=(6, 1),
+        #                 text_color='red',
+        #                 key='current_following'
+        #                 ),
+        #             sg.InputText('----',
+        #                 font=("Arial", 20),
+        #                 size=(5, 1),
+        #                 text_color='red',
+        #                 key='following_change'
+        #                 ),
+        #         ]
+        #     ],
+        #     element_justification='c',
+        # ),
     ],
-    
-    # current status stats
+    # BOTTOM BOARDER BOX
     [
         stat_box("time_since_start", size=(7, 1)),
-        
         sg.InputText(
             "Idle",
             key="current_state",
             use_readonly_for_disable=True,
             disabled=True,
             size=(11, 1),
-            text_color='blue',
+            text_color="blue",
         ),
-
         sg.InputText(
             "Waiting for user start",
             key="current_status",
@@ -211,8 +257,8 @@ user_config_keys = [
     "following_upper_limit",
     "profiles_to_scrape_for_targets",
     "follow_wait_time",
-    'unfollow_wait_time',
-    'autostart'
+    "unfollow_wait_time",
+    "autostart",
 ]
 
 # list of button and checkbox keys to disable when the bot is running

@@ -2,6 +2,11 @@ from selenium.webdriver.common.by import By
 import time
 
 
+"""
+login.py -> every function related to opening twitter and logging in through the twitter.com/login page
+"""
+
+
 # method to write a given username to the username input box on the login page
 def write_to_username_input_box(driver, text):
     """method to write a given username to the username input box on the login page

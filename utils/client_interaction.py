@@ -1,6 +1,12 @@
 from selenium.webdriver.common.by import By
 import time
 
+
+"""
+client_interaction.py -> every function related to interaction with the client (reading values or clicking elements)
+"""
+
+
 # READING SECTION_______________________________________________________________
 
 # method to check for the 'signup or login' popup after getting to a new profile page

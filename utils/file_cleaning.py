@@ -2,6 +2,11 @@ import shutil
 import os
 
 
+"""
+file_cleaning.py -> every function related to the removal of residual selenium files in the program files (x86) directory (useless folders that store the browser data you accumulated while running the driver each bot session)
+"""
+
+
 # method to get the directory of the program files (x86)
 def get_program_files_dir():
     """method to get the directory of the program files (x86)

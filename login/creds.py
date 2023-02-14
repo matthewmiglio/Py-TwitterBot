@@ -2,6 +2,11 @@ import PySimpleGUI as sg
 import os
 
 
+"""
+creds.py -> every function related to storing and accessing of twitter login credentials in appdata/roaming/Py-TwitterBot\creds.txt
+"""
+
+
 # method to get appdata directory
 def get_appdata_directory():
     """method to get appdata directory

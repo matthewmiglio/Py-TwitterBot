@@ -1,6 +1,11 @@
 import os
 import datetime
 
+
+"""
+data.py -> every function related to storing of follower and following data in appdata/roaming/Py-TwitterBot\data.txt
+"""
+
 # method to get the directory of the user's appdata
 def get_appdata_directory():
     """method to get the directory of the user's appdata

@@ -18,6 +18,12 @@ from utils.client_interaction import (
 )
 from utils.data import add_line_to_data_file
 
+
+"""
+following.py -> every function related to the following state of the program
+"""
+
+
 # main method for the following state of the program
 def following_main(driver, logger, following_upper_limit, follow_wait_time):
     """main method for the following state of the program

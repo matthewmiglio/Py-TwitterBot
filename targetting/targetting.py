@@ -22,6 +22,11 @@ from utils.client_interaction import (
 from utils.data import add_line_to_data_file
 
 
+"""
+targetting.py -> every function related to the targetting state of the program
+"""
+
+
 # method to find suitable targets to follow from
 def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
     """main method for targetting mode
@@ -78,7 +83,7 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
 
                 if suitability_check == True:
                     logger.log(
-                        message=f"Verified {user} is a suitable target in {str(time.time()-this_user_check_start_time)[:4]} seconds.",
+                        message=f"Scraping {scrape_target} ||Verified {user} is a suitable target in {str(time.time()-this_user_check_start_time)[:4]} seconds.",
                         state="Targetting",
                     )
                     # add user to return list
@@ -98,7 +103,7 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
                         return "following"
                 else:
                     logger.log(
-                        message=f"Verified {user} is not a suitable target in {str(time.time()-this_user_check_start_time)[:4]} seconds for reason: {suitability_check}",
+                        message=f"Scraping {scrape_target} ||Verified {user} is not a suitable target in {str(time.time()-this_user_check_start_time)[:4]} seconds for reason: {suitability_check}",
                         state="Targetting",
                     )
 

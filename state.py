@@ -5,6 +5,14 @@ from unfollowing.unfollowing import unfollowing_main
 from utils.caching import cache_program_state
 from utils.client_interaction import get_to_user_profile_link
 
+"""
+state.py -> a file for managing the states of the program.
+    targetting state -> Looking through the follower lists of users in the scrape_target_list to find users who's accounts would be suitable follow-spam targets
+    following state -> Follow 100 users of every target in target list until following upper limit is reached, or targets run out
+    unfollowing state -> Unfollow users until following lower limit is reached
+
+"""
+
 
 def state_tree(
     driver,
@@ -79,4 +87,3 @@ def read_my_following_value(driver):
             return text1
         except:
             pass
-

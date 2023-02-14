@@ -3,6 +3,10 @@ import time
 from functools import wraps
 from queue import Queue
 
+"""
+logger.py -> a program-wide logger object for the program that stores usable statistics
+"""
+
 
 class Logger:
     """Handles creating and reading logs"""
