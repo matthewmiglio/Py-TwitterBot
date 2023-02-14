@@ -1,6 +1,2 @@
-.vscode
-__pycache__
-.venv
-build
-dist
 DEBUG.py
+__pycache__

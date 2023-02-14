@@ -14,9 +14,10 @@ pandas = "^1.5.2"
 plotly = "^5.12.0"
 plotly-express = "^0.4.1"
 cx-freeze = "^6.14.1"
+kaleido = "0.1.0post1"
 pysimplegui = "^4.60.4"
-kaleido = "0.2.1"
 pillow = "^9.4.0"
+selenium = "^4.8.0"
 
 
 [tool.poetry.group.dev.dependencies]

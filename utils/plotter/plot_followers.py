@@ -9,19 +9,16 @@ import os
 import pandas as pd
 import plotly.express as px
 from plotly.subplots import make_subplots
-import tfc.data
 
 # PLOTTING THE DATA THAT IS SAVED IN follower_count_log.txt
 
 
-
-
-def make_new_plot(mode='save'):
-    #mode param: str -> 'save' or 'show;
-        #saves to /appdata/roaming/py-twitterbot/data_figure.png
+def make_new_plot(mode="save"):
+    # mode param: str -> 'save' or 'show;
+    # saves to /appdata/roaming/py-twitterbot/data_figure.png
 
     # get path of data file
-    path = (os.getenv('APPDATA')+r"\py-TwitterBot"+r"\data.txt")
+    path = os.getenv("APPDATA") + r"\py-TwitterBot" + r"\data.txt"
 
     # make dataframe
     df = pd.read_csv(
@@ -54,17 +51,20 @@ def make_new_plot(mode='save'):
     # color each line
     fig.for_each_trace(lambda t: t.update(line=dict(color=t.marker.color)))
 
-    #if mode is show then show the figure in browser
-    if mode == 'show':
+    # if mode is show then show the figure in browser
+    if mode == "show":
         fig.show()
-    elif mode == 'save':
+    elif mode == "save":
         save_plotly_figure(fig)
     else:
-        print('invalid mode param for make_new_plot_save()')
+        print("invalid mode param for make_new_plot_save()")
 
-#method to save a plotly figure as a png
+
+# method to save a plotly figure as a png
 def save_plotly_figure(fig):
-    save_path=os.getenv("APPDATA")+r"\py-TwitterBot"+r'\data_figure.png'
+    save_path = os.getenv("APPDATA") + r"\py-TwitterBot" + r"\data_figure.png"
     fig.write_image(save_path)
+    print(f'saved figure to {save_path}')
 
 
+# make_new_plot(mode="save")
