@@ -75,7 +75,7 @@ def start_button_event(logger: Logger, window, values):
 
 
 def stop_button_event(logger: Logger, window, thread):
-    logger.change_current_status("Stopping")
+    logger.current_status("Stopping")
     window["Stop"].update(disabled=True)
     shutdown_thread(thread)  # send the shutdown flag to the thread
 
