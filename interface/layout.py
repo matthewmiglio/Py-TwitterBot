@@ -4,11 +4,8 @@ import PySimpleGUI as sg
 from .stats import stat_box, stats
 
 info_text = """Py-TwitterBot is a tool for gaining followers.
-
 The program works by following users, then unfollowing them once following count reaches a threshold.
-
 The program looks for targets by scraping the given list of accounts for their followers.
-
 Matthew Miglio,  - Sept 2022"""
 
 # defining various things that r gonna be in the gui.
@@ -23,7 +20,7 @@ main_layout = [
                 # INFORMATION TEXT BOX
                 [
                     sg.Frame(
-                        layout=[[sg.Text(info_text, size=(60, None))]],
+                        layout=[[sg.Text(info_text, size=(90, None))]],
                         title="Info",
                         relief=sg.RELIEF_SUNKEN,
                         expand_x=True,
