@@ -8,7 +8,7 @@ Py-TwitterBot was recently moved from an API based program to utilizing Selenium
 
 ```bash
 1. git clone https://github.com/matthewmiglio/Py-TwitterBot.git
-2. cd py-TarkBot
+2. cd Py-TwitterBot
 3. python -m pip install poetry # install poetry for dependency management if you don't have it
 4. poetry install --with dev # --with build # install dependencies
 5. Install the chrome driver (v109.0.5414.74) from https://chromedriver.chromium.org/downloads 
