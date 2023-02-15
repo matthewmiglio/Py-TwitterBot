@@ -2,6 +2,8 @@
 
 Py-TwitterBot is a powerful tool that helps you grow your Twitter presence through smart, automated following and unfollowing strategies. Boost your visibility, increase engagement and build a loyal following, all with just a few clicks.
 
+Py-TwitterBot was recently moved from an API based program to utilizing Selenium for browser interaction to circumvent new Twitter API pricewalls.
+
 # Getting started
 
 ```bash
