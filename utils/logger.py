@@ -27,8 +27,8 @@ class Logger:
         self.new_targets_found = 0
         self.targets_left = count_targets_in_target_list()
 
-        self.current_state = "Idle"
-        self.current_status = "Waiting for user input..."
+        self.current_state = "Idle" #state indicator
+        self.current_status = "Waiting for user input..."  #action indicator
 
         self.errored = False
 
