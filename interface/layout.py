@@ -33,58 +33,8 @@ main_layout = [
                         title="Stats",
                         relief=sg.RELIEF_SUNKEN,
                         expand_x=True,
-                    )
-                ],
-                # PLOT IMAGE
-                [
-                    sg.Image(
-                        os.path.join(
-                            os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"
-                        ),
-                        key="data_figure",
-                    )
-                ],
-                # PROGRAM USER FOLLOWERS AND FOLLOWING STAT BOX
-                [
-                    # FOLLOWERS SECTIOn
-                    sg.InputText(
-                        "Followers", font=("Arial", 20), size=(11, 1), text_color="blue"
+                        expand_y=True
                     ),
-                    sg.InputText(
-                        "----",
-                        font=("Arial", 20),
-                        size=(6, 1),
-                        text_color="blue",
-                        key="current_followers",
-                    ),
-                    sg.InputText(
-                        "----",
-                        font=("Arial", 20),
-                        size=(5, 1),
-                        text_color="blue",
-                        key="followers_change",
-                    ),
-                    # FOLLOWING SECTION
-                    sg.InputText(
-                        "Following", font=("Arial", 20), size=(11, 1), text_color="red"
-                    ),
-                    sg.InputText(
-                        "----",
-                        font=("Arial", 20),
-                        size=(6, 1),
-                        text_color="red",
-                        key="current_following",
-                    ),
-                    sg.InputText(
-                        "----",
-                        font=("Arial", 20),
-                        size=(5, 1),
-                        text_color="red",
-                        key="following_change",
-                    ),
-                ],
-                # CONTROLS BOX
-                [
                     sg.Frame(
                         layout=[
                             [
@@ -166,6 +116,58 @@ main_layout = [
                         relief=sg.RELIEF_SUNKEN,
                         expand_x=True,
                     )
+                ],
+                # PLOT IMAGE
+                [
+                    sg.Image(
+                        os.path.join(
+                            os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"
+                        ),
+                        key="data_figure",
+                    )
+                ],
+                # PROGRAM USER FOLLOWERS AND FOLLOWING STAT BOX
+                [
+                    # FOLLOWERS SECTIOn
+                    sg.InputText(
+                        "Followers", font=("Arial", 20), size=(11, 1), text_color="blue"
+                    ),
+                    sg.InputText(
+                        "----",
+                        font=("Arial", 20),
+                        size=(6, 1),
+                        text_color="blue",
+                        key="current_followers",
+                    ),
+                    sg.InputText(
+                        "----",
+                        font=("Arial", 20),
+                        size=(5, 1),
+                        text_color="blue",
+                        key="followers_change",
+                    ),
+                    # FOLLOWING SECTION
+                    sg.InputText(
+                        "Following", font=("Arial", 20), size=(11, 1), text_color="red"
+                    ),
+                    sg.InputText(
+                        "----",
+                        font=("Arial", 20),
+                        size=(6, 1),
+                        text_color="red",
+                        key="current_following",
+                    ),
+                    sg.InputText(
+                        "----",
+                        font=("Arial", 20),
+                        size=(5, 1),
+                        text_color="red",
+                        key="following_change",
+                    ),
+                ],
+                # CONTROLS BOX
+                [
+                    
                 ],
             ]
         ),
