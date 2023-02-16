@@ -1,3 +1,5 @@
+import PIL
+from PIL import Image
 import os
 import datetime
 
@@ -115,7 +117,20 @@ def check_if_data_figure_exists():
     return os.path.exists(directory)
 
 
-# run this code upon import: make sure twitterbot folder, and data file both exist
+# method to save a blank image to the data_figure.png file location
+def save_blank_data_figure_image():
+    print('Made a blank data figure image for first-time run.')
+    directory = get_appdata_directory() + r"\py-TwitterBot" + r"\data_figure.png"
+    im = PIL.Image.new(mode="RGB", size=(700, 500))
+    im.save(directory)
+
+
+
+# run this code upon import: make sure twitterbot folder, data file, and data figure image all exist
+if not check_if_data_figure_exists():
+    save_blank_data_figure_image()
+
+
 if not check_if_twitterbot_folder_exists():
 
     make_twitterbot_folder()
