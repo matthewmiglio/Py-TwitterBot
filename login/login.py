@@ -110,7 +110,7 @@ def log_in_to_twitter(driver, logger, username, password):
 
     start_time = time.time()
     link = "https://twitter.com/login"
-    logger.log(message=f"Initializing chrome driver on webpage {link}", state="login")
+    logger.log(message=f"Initializing chrome driver on webpage {link}", state="Login")
     driver.get(link)
     # time.sleep(5)
 
@@ -126,6 +126,6 @@ def log_in_to_twitter(driver, logger, username, password):
 
     logger.log(
         message=f"Logged in to twitter in {str(time.time()-start_time)[:4]} seconds",
-        state="login",
+        state="Login",
     )
     time.sleep(5)

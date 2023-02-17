@@ -481,6 +481,13 @@ def get_my_stats(driver, logger):
     if follower_value>8000 or following_value>8000:
         print('ERROR READING FOLLOWING VALUES!!! WAITING!')
         while 1:pass
+        
+    #REMOVE THIS CODE EVENTUALLY!!!! IT IS ONLY FOR TESTING
+    if follower_value<800 or following_value<500:
+        print('ERROR READING FOLLOWING VALUES!!! WAITING!')
+        while 1:pass
+
+    
 
     # update to logger
     logger.update_current_following(following_value)
