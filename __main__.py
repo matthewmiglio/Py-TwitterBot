@@ -7,16 +7,19 @@ from threading import Lock, Thread
 import PySimpleGUI as sg
 
 import targetting.target_file
+from targetting.targetting import get_my_stats
 import utils.data
-from following.following import follow_user
-from interface import (THEME, disable_keys, main_layout, show_help_gui,
-                       user_config_keys)
+from interface import THEME, disable_keys, main_layout, show_help_gui, user_config_keys
 from login.creds import get_creds_from_file
 from login.login import log_in_to_twitter
 from state import state_tree
-from utils.caching import (cache_program_state, cache_user_settings,
-                           check_for_user_settings_file, read_program_state,
-                           read_user_settings)
+from utils.caching import (
+    cache_program_state,
+    cache_user_settings,
+    check_for_user_settings_file,
+    read_program_state,
+    read_user_settings,
+)
 from utils.chrome_driver import make_chrome_driver
 from utils.file_cleaning import clean_selenium_files
 from utils.logger import Logger
@@ -271,34 +274,14 @@ def test_main():
     driver = make_chrome_driver()
     log_in_to_twitter(driver, logger, username, password=creds[1])
 
-    user_list = [
-        "_emosaurus_",
-        "jangly_j",
-        "Drakodan_",
-        "the__cool_dude",
-        "DavidLl07182372",
-        "hrnyassbeetch",
-        "BornAgainLesbo",
-        "ambalienn",
-        "imGabrielScott",
-        "pikesfreak",
-        "BabuXclips",
-        "raincloudflower",
-        "maddiesullivan1",
-        "alyssahopeb",
-        "paleckovaa",
-        "yokitooli",
-    ]
 
-    for user in user_list:
-        print(follow_user(driver, logger, user))
+    get_my_stats(driver, logger)
 
-        input("Enter to cont")
 
     while 1:
         pass
 
 
 if __name__ == "__main__":
-    main()
-    # test_main()
+    # main()
+    test_main()

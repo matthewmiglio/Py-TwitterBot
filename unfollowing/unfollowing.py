@@ -99,6 +99,11 @@ def get_my_stats(driver, logger):
     following_value = get_following_value_of_this_profile(driver)
     follower_value = get_follower_value_of_this_profile(driver)
 
+    #REMOVE THIS CODE EVENTUALLY!!!! IT IS ONLY FOR TESTING
+    if follower_value>8000 or following_value>8000:
+        print('ERROR READING FOLLOWING VALUES!!! WAITING!')
+        while 1:pass
+
     # update to logger
     logger.update_current_following(following_value)
     logger.update_current_followers(follower_value)

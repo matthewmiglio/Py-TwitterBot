@@ -92,6 +92,11 @@ def get_my_stats(driver, logger):
     click_program_user_profile_button(driver, logger)
     time.sleep(3)
 
+    #REMOVE THIS CODE EVENTUALLY!!!! IT IS ONLY FOR TESTING
+    if follower_value>8000 or following_value>8000:
+        print('ERROR READING FOLLOWING VALUES!!! WAITING!')
+        while 1:pass
+
     following_value = get_following_value_of_this_profile(driver)
     follower_value = get_follower_value_of_this_profile(driver)
 
@@ -246,10 +251,9 @@ def follow_users(driver, logger, user_list, wait_time=0):
                 message="Taking profile data in between following users...",
                 state="Following",
             )
-            my_stats = get_my_stats(driver, logger)
-            update_data_file(
-                logger, follower_value=my_stats[0], following_value=my_stats[1]
-            )
+            get_my_stats(driver, logger)
+            
+            
 
     return users_followed
 
