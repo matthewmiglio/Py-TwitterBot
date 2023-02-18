@@ -94,8 +94,8 @@ def get_my_stats(driver, logger, username):
     time.sleep(3)
 
 
-    follower_value = get_follower_value_of_this_profile(driver, logger)
-    following_value = get_following_value_of_this_profile(driver, logger)
+    follower_value = get_follower_value_of_this_profile(driver)
+    following_value = get_following_value_of_this_profile(driver)
 
     # update to logger
     logger.update_current_following(following_value)
