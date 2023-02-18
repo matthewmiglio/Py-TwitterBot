@@ -7,7 +7,6 @@ from threading import Lock, Thread
 import PySimpleGUI as sg
 
 import targetting.target_file
-from targetting.targetting import get_my_stats
 import utils.data
 from interface import THEME, disable_keys, main_layout, show_help_gui, user_config_keys
 from login.creds import get_creds_from_file
@@ -275,7 +274,6 @@ def test_main():
     log_in_to_twitter(driver, logger, username, password=creds[1])
 
 
-    get_my_stats(driver, logger)
 
 
     while 1:

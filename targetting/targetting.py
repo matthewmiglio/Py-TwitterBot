@@ -54,7 +54,6 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
 
     suitable_target_list = []
 
-    # add my data to data file before checking some targets
 
     while 1:
         # random.shuffle(scrape_list)
@@ -458,46 +457,6 @@ def remove_duplicates_from_list(name_list):
             new_list.append(name)
     return new_list
 
-
-# method to get the program user's following/follower stats
-def get_my_stats(driver, logger):
-    """method to get the program user's following/follower stats
-
-    Args:
-        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
-        logger (logger): the logger to use
-
-    Returns:
-        int,int: the program user's following , follower values
-
-    """
-    click_program_user_profile_button(driver, logger)
-    time.sleep(3)
-
-    following_value = get_following_value_of_this_profile(driver)
-    follower_value = get_follower_value_of_this_profile(driver)
-
-    #REMOVE THIS CODE EVENTUALLY!!!! IT IS ONLY FOR TESTING
-    if follower_value>8000 or following_value>8000:
-        print('ERROR READING FOLLOWING VALUES!!! WAITING!')
-        while 1:pass
-        
-    #REMOVE THIS CODE EVENTUALLY!!!! IT IS ONLY FOR TESTING
-    if follower_value<800 or following_value<500:
-        print('ERROR READING FOLLOWING VALUES!!! WAITING!')
-        while 1:pass
-
-    
-
-    # update to logger
-    logger.update_current_following(following_value)
-    logger.update_current_followers(follower_value)
-
-    update_data_file(
-        logger=logger, follower_value=follower_value, following_value=following_value
-    )
-
-    return follower_value, following_value
 
 
 # method to add a line of data to the data file

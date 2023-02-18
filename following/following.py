@@ -25,7 +25,7 @@ following.py -> every function related to the following state of the program
 
 
 # main method for the following state of the program
-def following_main(driver, logger, following_upper_limit, follow_wait_time):
+def following_main(driver, logger, following_upper_limit, follow_wait_time, username):
     """main method for the following state of the program
 
     Args:
@@ -57,7 +57,7 @@ def following_main(driver, logger, following_upper_limit, follow_wait_time):
             driver, logger, user=this_target
         )
 
-        my_stats = get_my_stats(driver, logger)
+        my_stats = get_my_stats(driver, logger, username)
         my_following_value = my_stats[1]
         if int(my_following_value) > int(following_upper_limit):
             logger.log(
@@ -79,7 +79,7 @@ def following_main(driver, logger, following_upper_limit, follow_wait_time):
 
 
 # method to get the program user's following/follower stats
-def get_my_stats(driver, logger):
+def get_my_stats(driver, logger, username):
     """method to get the program user's following/follower stats
 
     Args:
@@ -89,25 +89,9 @@ def get_my_stats(driver, logger):
     Returns:
         int, int: the program user's follower value, following value
     """
-    click_program_user_profile_button(driver, logger)
+    # click_program_user_profile_button(driver, logger)
+    get_to_user_profile_link(driver, logger, username)
     time.sleep(3)
-
-    
-
-    following_value = get_following_value_of_this_profile(driver)
-    follower_value = get_follower_value_of_this_profile(driver)
-
-    #REMOVE THIS CODE EVENTUALLY!!!! IT IS ONLY FOR TESTING
-    if follower_value>8000 or following_value>8000:
-        print('ERROR READING FOLLOWING VALUES!!! WAITING!')
-        while 1:pass
-
-    #REMOVE THIS CODE EVENTUALLY!!!! IT IS ONLY FOR TESTING
-    if follower_value<800 or following_value<500:
-        print('ERROR READING FOLLOWING VALUES!!! WAITING!')
-        while 1:pass
-
-    
 
     # update to logger
     logger.update_current_following(following_value)
@@ -261,8 +245,6 @@ def follow_users(driver, logger, user_list, wait_time=0):
                 state="Following",
             )
             get_my_stats(driver, logger)
-            
-            
 
     return users_followed
 

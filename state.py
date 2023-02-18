@@ -35,11 +35,11 @@ def state_tree(
         # placeholder state for now
         pass
     elif state == "following":
-        state = following_main(driver, logger, following_upper_limit, follow_wait_time)
+        state = following_main(driver, logger, following_upper_limit, follow_wait_time,username)
 
     elif state == "unfollowing":
         state = unfollowing_main(
-            driver, logger, following_lower_limit, unfollow_wait_time
+            driver, logger, following_lower_limit, unfollow_wait_time,username
         )
 
     elif state == "targetting":
