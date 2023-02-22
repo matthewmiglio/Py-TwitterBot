@@ -240,16 +240,18 @@ def check_if_target_in_target_history_file(target_name):
         boolean: True if the target is in the file, False if it is not
 
     """
+    print(f'name im checking if is in target histroy list {target_name}')
+
     target_history_directory = (
         get_appdata_directory() + r"\py-TwitterBot" + r"\target_list_history.txt"
     )
     with open(target_history_directory, "r") as f:
         lines = f.readlines()
     for line in lines:
-        if line == (target_name):
+        line = line.replace("\n", "")
+        if line == target_name:
             return True
     return False
-
 
 # method to count the amoutn of targets in the appdata/roaming/Py-TwitterBot\target_list.txt file
 def count_targets_in_target_list_file():

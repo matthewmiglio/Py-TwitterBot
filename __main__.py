@@ -7,6 +7,8 @@ from threading import Lock, Thread
 import PySimpleGUI as sg
 
 import targetting.target_file
+from targetting.targetting import check_if_user_is_suitable_target
+from utils.client_interaction import get_to_user_profile_link
 import utils.data
 from interface import THEME, disable_keys, main_layout, show_help_gui, user_config_keys
 from login.creds import get_creds_from_file
@@ -271,10 +273,11 @@ def test_main():
     creds = get_creds_from_file()
     username = creds[0]
     driver = make_chrome_driver()
-    log_in_to_twitter(driver, logger, username, password=creds[1])
+    # log_in_to_twitter(driver, logger, username, password=creds[1])
 
-
-
+    
+    
+    print(targetting.target_file.check_if_target_in_target_history_file(user_to_check))
 
     while 1:
         pass
