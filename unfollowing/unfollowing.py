@@ -11,7 +11,7 @@ from utils.client_interaction import (
     get_to_user_profile_link,
     scroll_to_bottom,
 )
-from utils.data import add_line_to_data_file
+from utils.data import add_line_to_data_file, get_most_recent_stats
 
 
 """
@@ -207,7 +207,7 @@ def unfollow_users(driver, logger, unfollow_wait_time, user_list):
 
 
 # method to add a line of data to the data file
-def update_data_file(logger, follower_value, following_value):
+def update_data_file(logger, input_follower_value, input_following_value):
     """method to add a line of data to the data file
 
     Args:
@@ -219,7 +219,14 @@ def update_data_file(logger, follower_value, following_value):
         None
 
     """
-    line = str(follower_value) + "|" + str(get_date_time()) + "|" + str(following_value)
+    #if new values are off significantly from previous just skip this time
+        #follower, following
+    most_recent_stats = get_most_recent_stats()
+    if (abs(most_recent_stats[0] - input_follower_value) > 50) or (abs(most_recent_stats[1] - input_following_value) > 50):
+        return
+
+
+    line = str(input_follower_value) + "|" + str(get_date_time()) + "|" + str(input_following_value)
     add_line_to_data_file(line)
     logger.log(message="Updated data file...", state="Unfollowing")
 
@@ -236,3 +243,4 @@ def get_date_time():
 
     """
     return time.strftime("%m/%d/%Y|%H:%M:%S", time.localtime())
+

@@ -16,7 +16,7 @@ from utils.client_interaction import (
     get_to_user_profile_link,
     scroll_to_bottom,
 )
-from utils.data import add_line_to_data_file
+from utils.data import add_line_to_data_file, get_most_recent_stats
 
 
 """
@@ -93,7 +93,6 @@ def get_my_stats(driver, logger, username):
     get_to_user_profile_link(driver, logger, username)
     time.sleep(3)
 
-
     follower_value = get_follower_value_of_this_profile(driver)
     following_value = get_following_value_of_this_profile(driver)
 
@@ -102,7 +101,9 @@ def get_my_stats(driver, logger, username):
     logger.update_current_followers(follower_value)
 
     update_data_file(
-        logger=logger, follower_value=follower_value, following_value=following_value
+        logger=logger,
+        input_follower_value=follower_value,
+        input_following_value=following_value,
     )
 
     return follower_value, following_value
@@ -192,17 +193,26 @@ def follow_user(driver, logger, user):
         string: "success" if the follow was successful, "fail" if not
 
     """
+    # get to this user's profile
     get_to_user_profile_link(driver, logger, user)
-    time.sleep(3)
+
+    # need a manual sleep (of literally any time (not sure why this is. Selenium webpage loading is weird)) to make sure the page loads
+    time.sleep(1)
+
+    # click follow button on profile page, if login popup or unfollow popup appear then the follow was unsuccessful
     if (
         click_follow_button_of_profile_page(driver, logger) == "success"
         and not check_for_login_popup_after_following_on_profile_page(driver, logger)
         and not check_for_unfollow_popup_after_following_on_profile_page(driver, logger)
     ):
-        time.sleep(1.5)
+        # manual wait to let any possible popups appear after clicking the follow button element
+        time.sleep(0.5)
+
+        # if throttle popup doesnt appear then the follow was unsuccessful
         if not check_for_throttle_popup(driver, logger):
             logger.add_follow()
             return "success"
+
     return "fail"
 
 
@@ -220,12 +230,23 @@ def follow_users(driver, logger, user_list, wait_time=0):
         int: the number of users successfully followed
 
     """
+    # var to keep track of how many users were successfully followed
     users_followed = 0
+
+    # shuffle the list of users to follow in case of similar lists among multiple run-times
     random.shuffle(user_list)
+
     for user in user_list:
+        # track the start time of the following process
         start_time = time.time()
+
+        # hold the return of the follow_user method
         follow_return = follow_user(driver, logger, user)
+
+        # track the end time of the following process
         end_time = time.time()
+
+        # if the follow was successful, log it and sleep for the wait time between following
         if follow_return == "success":
             users_followed += 1
             logger.log(
@@ -237,12 +258,15 @@ def follow_users(driver, logger, user_list, wait_time=0):
                 state="Following",
             )
             time.sleep(wait_time)
+
+        # if the follow was unsuccessful, continue
         else:
             logger.log(
                 message=f"Failed to follow {user} in {str(end_time-start_time)[:4]} seconds",
                 state="Following",
             )
 
+        # half the time after following a user, take the program user's profile data, update the data file,and update the GUI vars
         if random.randint(0, 2) == 0:
             logger.log(
                 message="Taking profile data in between following users...",
@@ -250,11 +274,12 @@ def follow_users(driver, logger, user_list, wait_time=0):
             )
             get_my_stats(driver, logger)
 
+    # return the number of users successfully followed
     return users_followed
 
 
 # method to add a line of data to the data file
-def update_data_file(logger, follower_value, following_value):
+def update_data_file(logger, input_follower_value, input_following_value):
     """method to add a line of data to the data file
 
     Args:
@@ -266,8 +291,21 @@ def update_data_file(logger, follower_value, following_value):
         None
 
     """
+    # if new values are off significantly from previous just skip this time
+    # follower, following
+    most_recent_stats = get_most_recent_stats()
+    if (abs(most_recent_stats[0] - input_follower_value) > 50) or (
+        abs(most_recent_stats[1] - input_following_value) > 50
+    ):
+        return
 
-    line = str(follower_value) + "|" + str(get_date_time()) + "|" + str(following_value)
+    line = (
+        str(input_follower_value)
+        + "|"
+        + str(get_date_time())
+        + "|"
+        + str(input_following_value)
+    )
     add_line_to_data_file(line)
     logger.log(message="Updated data file...", state="following")
 

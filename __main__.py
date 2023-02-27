@@ -20,6 +20,7 @@ from utils.caching import (
     read_user_settings,
 )
 from utils.chrome_driver import make_chrome_driver
+from utils.data import get_follower_count_from_line, get_following_count_from_line
 from utils.file_cleaning import clean_selenium_files
 from utils.logger import Logger
 from utils.plotter.plot_followers import make_new_plot
@@ -27,7 +28,7 @@ from utils.thread import StoppableThread
 
 plot_mutex = Lock()
 
-
+# method for caching the user's GUI settings
 def save_current_settings(values):
     # read the currently selected values for each key in user_config_keys
     user_settings = {key: values[key] for key in user_config_keys if key in values}
@@ -35,12 +36,14 @@ def save_current_settings(values):
     cache_user_settings(user_settings)
 
 
+# method to retrieve the previous runtime's last state
 def load_last_state():
     state = read_program_state()
 
     return state
 
 
+# method to load the GUI with the previous runtime's saved settings
 def load_last_settings(window):
     if check_for_user_settings_file():
         window.read(timeout=10)  # read the window to edit the layout
@@ -52,6 +55,7 @@ def load_last_settings(window):
         window.refresh()  # refresh the window to update the layout
 
 
+# method to handle the start button event (begins the program)
 def start_button_event(logger: Logger, window, values):
     logger.log(message="Starting", state="Idle")
 
@@ -76,12 +80,14 @@ def start_button_event(logger: Logger, window, values):
     return thread
 
 
+# method to handle the stop button event (stops the program)
 def stop_button_event(logger: Logger, window, thread):
     logger.set_current_status("Stopping")
     window["Stop"].update(disabled=True)
     shutdown_thread(thread)  # send the shutdown flag to the thread
 
 
+# method to handle the closing of a thread
 def shutdown_thread(thread, join=False):
     if thread is not None:
         thread.shutdown_flag.set()
@@ -90,6 +96,7 @@ def shutdown_thread(thread, join=False):
             thread.join()  # this will block the gui
 
 
+# method to update the GUI's display vars
 def update_layout(window: sg.Window, logger: Logger):
     # comm_queue: Queue[dict[str, str | int]] = logger.queue
     window["time_since_start"].update(logger.calc_time_since_start())  # type: ignore
@@ -104,6 +111,7 @@ def update_layout(window: sg.Window, logger: Logger):
             window[stat].update(val)  # type: ignore
 
 
+# main method of the entire Py-TwitterBot program
 def main():
     # clean residuial selenium files
     clean_selenium_files()
@@ -112,6 +120,7 @@ def main():
     plotter_thread = PlotWorkerThread()
     plotter_thread.start()
 
+    # start the worker thread (the thread that runs the bot)
     thread: WorkerThread | None = None
     comm_queue: Queue[dict[str, str | int]] = Queue()
     logger = Logger(comm_queue, timed=False)  # dont time the inital logger
@@ -119,6 +128,7 @@ def main():
     # window layout
     window = sg.Window("Py-TwitterBot", main_layout)
 
+    # load the last settings from the previous runtime
     load_last_settings(window)
 
     # start timer for autostart
@@ -198,14 +208,20 @@ def main():
     window.close()
 
 
+# test method for running any specific function of the program that happens to be buggy
+def test_main():
+    s = utils.data.get_most_recent_stats()
+    print (s)
+
+
+# the thread that handles the bot
 class WorkerThread(StoppableThread):
     def __init__(self, logger: Logger, args, kwargs=None):
         super().__init__(args, kwargs)
         self.logger = logger
 
     def run(self):
-        # try:
-
+        # unpack the vars from the GUI
         (
             following_lower_limit,
             following_upper_limit,
@@ -214,26 +230,30 @@ class WorkerThread(StoppableThread):
             unfollow_wait_time,
         ) = self.args  # unpack args from gui to thread
 
+        # convert the number vars from strings to ints
         following_lower_limit = int(following_lower_limit)
         following_upper_limit = int(following_upper_limit)
         follow_wait_time = int(follow_wait_time)
         unfollow_wait_time = int(unfollow_wait_time)
 
+        # load the last state from the previous runtime
         state = load_last_state()
-        print(f"Last loaded state is {state}")
 
+        # create the selenium driver object
         driver = make_chrome_driver()
 
+        # retrieve twitter credentials from the file
         creds = get_creds_from_file()
         username = creds[0]
-
-        # logger = Logger()
 
         log_in_to_twitter(driver, self.logger, username, password=creds[1])
         time.sleep(3)
 
+        # run the program until stopped
         while not self.shutdown_flag.is_set():
             cache_program_state(program_state_string=state)
+
+            # loop the state tree, continually updating the current state to that of the output of the previous state
             state = state_tree(
                 driver=driver,
                 logger=self.logger,
@@ -248,14 +268,16 @@ class WorkerThread(StoppableThread):
             )
 
 
+# the thread that handles the plotting
 class PlotWorkerThread(StoppableThread):
     def __init__(self):
         super().__init__(args=None, kwargs=None)
 
     def run(self):
+        # Make a new plot and save it to the appdata/roaming/Py-TwitterBot folder every 200 seconds
         figure_update_delay = 280
 
-        # loop until shutdown flag is set
+        # loop this until the program is stopped
         while not self.shutdown_flag.is_set():
             print("PLOT: Making a new plot")
             with plot_mutex:
@@ -265,21 +287,6 @@ class PlotWorkerThread(StoppableThread):
             time.sleep(figure_update_delay)
 
 
-def test_main():
-    clean_selenium_files()
-    logger = Logger()
-    creds = get_creds_from_file()
-    username = creds[0]
-    driver = make_chrome_driver()
-    log_in_to_twitter(driver, logger, username, password=creds[1])
-
-
-
-
-    while 1:
-        pass
-
-
 if __name__ == "__main__":
-    main()
-    # test_main()
+    # main()
+    test_main()

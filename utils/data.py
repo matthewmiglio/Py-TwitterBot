@@ -119,11 +119,77 @@ def check_if_data_figure_exists():
 
 # method to save a blank image to the data_figure.png file location
 def save_blank_data_figure_image():
-    print('Made a blank data figure image for first-time run.')
+    print("Made a blank data figure image for first-time run.")
     directory = get_appdata_directory() + r"\py-TwitterBot" + r"\data_figure.png"
     im = PIL.Image.new(mode="RGB", size=(700, 500))
     im.save(directory)
 
+
+# method to get the most recent line of the data file
+def get_most_recent_stats():
+    """method to get the most recent line of the data file
+
+    Args:
+        None
+
+    Returns:
+        (int,int) tuple: the most recent follower and following count
+
+    """
+    directory = get_appdata_directory() + r"\py-TwitterBot" + r"\data.txt"
+    with open(directory, "r") as f:
+        lines = f.readlines()
+        line = lines[-1]
+        follower_count = get_follower_count_from_line(line)
+        following_count = get_following_count_from_line(line)
+
+    return follower_count, following_count
+
+
+# method to get the follower count from a data line string
+def get_follower_count_from_line(line):
+    """method to get the follower count from a data line string
+
+    Args:
+        line (string): the line to get the follower count from
+
+    Returns:
+        int: the follower count
+
+    """
+
+    count = ""
+    for char in line:
+        if char != "|":
+            count += char
+        else:
+            break
+    return count
+
+
+# method to get the follower count from a data line string
+def get_following_count_from_line(line):
+    """method to get the following count from a data line string
+
+    Args:
+        line (string): the line to get the following count from
+
+    Returns:
+        int: the following count
+
+    """
+
+    count = ""
+    div_count = 0
+    for char in line:
+        if char == "\n":
+            continue
+        if char == "|":
+            div_count += 1
+            continue
+        if div_count == 3:
+            count += char
+    return count
 
 
 # run this code upon import: make sure twitterbot folder, data file, and data figure image all exist
@@ -135,6 +201,7 @@ if not check_if_twitterbot_folder_exists():
 
     make_twitterbot_folder()
     make_data_file()
+
 
 elif not check_if_data_file_exists():
     make_data_file()
