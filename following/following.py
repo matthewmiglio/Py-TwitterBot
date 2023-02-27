@@ -71,6 +71,7 @@ def following_main(driver, logger, following_upper_limit, follow_wait_time, user
             logger,
             user_list=follower_list_of_this_target,
             wait_time=follow_wait_time,
+            username=username,
         )
         logger.log(
             message=f"Successfully followed {users_followed} users this loop...",
@@ -217,14 +218,14 @@ def follow_user(driver, logger, user):
 
 
 # method to follow a given list of usernames
-def follow_users(driver, logger, user_list, wait_time=0):
+def follow_users(driver, logger, user_list, wait_time,username):
     """method to follow a given list of usernames
 
     Args:
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
         logger (utils.logger.Logger): the logger object
         user_list (string[]): the list of usernames to follow
-        wait_time (int, optional): the time to wait between following each user. Defaults to 0.
+        wait_time (int): the time to wait between following each user. Defaults to 0.
 
     Returns:
         int: the number of users successfully followed
@@ -272,7 +273,7 @@ def follow_users(driver, logger, user_list, wait_time=0):
                 message="Taking profile data in between following users...",
                 state="Following",
             )
-            get_my_stats(driver, logger)
+            get_my_stats(driver, logger,username)
 
     # return the number of users successfully followed
     return users_followed
