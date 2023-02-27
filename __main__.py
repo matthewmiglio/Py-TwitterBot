@@ -306,5 +306,5 @@ def test_main():
 
 
 if __name__ == "__main__":
-    # main()
-    test_main()
+    main()
+    # test_main()

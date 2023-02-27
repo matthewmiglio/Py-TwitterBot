@@ -295,7 +295,7 @@ def update_data_file(logger, input_follower_value, input_following_value):
     # if new values are off significantly from previous just skip this time
     # follower, following
     most_recent_stats = get_most_recent_stats()
-    if (abs(most_recent_stats[0] - input_follower_value) > 50) or (
+    if (abs(int(most_recent_stats[0]) - int(input_follower_value)) > 50) or (
         abs(most_recent_stats[1] - input_following_value) > 50
     ):
         return
