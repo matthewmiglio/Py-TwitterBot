@@ -28,7 +28,7 @@ targetting.py -> every function related to the targetting state of the program
 
 
 # method to find suitable targets to follow from
-def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
+def targetting_main(driver, logger, scrape_list, username, targets_to_find,following_maximum):
     """main method for targetting mode
 
     Args:
@@ -36,7 +36,8 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
         logger (utils.logger.Logger): the logger object
         scrape_list (list): the list of users to scrape
         username (string): the username of the program user
-        targets_to_find (int, optional): the number of targets to find per cycle. Defaults to 3. Developer tool.
+        targets_to_find (int): the number of targets to find per cycle. Developer tool.
+        following_maximum (int): the maximum number of people the program user can follow. 
 
     Returns:
         string: the next state of the program
@@ -50,10 +51,18 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
             message="Have enough targets, moving to following state.",
             state="Targetting",
         )
-        return "following"
+        following_value, follower_value = get_my_stats(driver, logger, username)
+
+        if following_value > following_maximum:
+            logger.log(
+                message="Following maximum reached, moving to unfollowing state.",
+                state="Targetting",
+            )
+            return "unfollowing"
+        else:
+            return "following"
 
     suitable_target_list = []
-
 
     while 1:
         # random.shuffle(scrape_list)
@@ -93,13 +102,22 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find=3):
                     add_line_to_target_history_file(user)
                     # increment logger's target's added count
                     logger.add_new_target_found()
-                    # if we have enough targets, pass to following state
+                    # if we have enough targets, pass to next state dependent on following count and following uppper limit
                     if len(suitable_target_list) == targets_to_find:
                         logger.log(
                             message="Have enough targets, moving to following state.",
                             state="Following",
                         )
-                        return "following"
+                        following_value, follower_value = get_my_stats(driver, logger, username)
+
+                        if following_value > following_maximum:
+                            logger.log(
+                                message="Following maximum reached, moving to unfollowing state.",
+                                state="Targetting",
+                            )
+                            return "unfollowing"
+                        else:
+                            return "following"
                 else:
                     logger.log(
                         message=f"Scraping {scrape_target} ||Verified {user} is not a suitable target in {str(time.time()-this_user_check_start_time)[:4]} seconds for reason: {suitability_check}",
@@ -458,7 +476,6 @@ def remove_duplicates_from_list(name_list):
     return new_list
 
 
-
 # method to add a line of data to the data file
 def update_data_file(logger, input_follower_value, input_following_value):
     """method to add a line of data to the data file
@@ -473,12 +490,20 @@ def update_data_file(logger, input_follower_value, input_following_value):
 
     """
 
-    #if new values are off significantly from previous just skip this time
-        #follower, following
+    # if new values are off significantly from previous just skip this time
+    # follower, following
     most_recent_stats = get_most_recent_stats()
-    if (abs(int(most_recent_stats[0]) - int(input_follower_value)) > 50) or (abs(int(most_recent_stats[1]) - int(input_following_value)) > 50):
+    if (abs(int(most_recent_stats[0]) - int(input_follower_value)) > 50) or (
+        abs(int(most_recent_stats[1]) - int(input_following_value)) > 50
+    ):
         return
-    line = str(input_follower_value) + "|" + str(get_date_time()) + "|" + str(input_following_value)
+    line = (
+        str(input_follower_value)
+        + "|"
+        + str(get_date_time())
+        + "|"
+        + str(input_following_value)
+    )
     add_line_to_data_file(line)
     logger.log(message="Updated data file...", state="following")
 
@@ -495,3 +520,30 @@ def get_date_time():
 
     """
     return time.strftime("%m/%d/%Y|%H:%M:%S", time.localtime())
+
+
+# method to get the program user's following/follower stats
+def get_my_stats(driver, logger, username):
+    """method to get the program user's following/follower stats
+
+    Args:
+        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
+        logger (utils.logger.Logger): the logger object
+
+    Returns:
+        int,int: the program user's following , follower values
+
+    """
+    get_to_user_profile_link(driver, logger, username)
+    time.sleep(3)
+
+    following_value = get_following_value_of_this_profile(driver)
+    follower_value = get_follower_value_of_this_profile(driver)
+
+    # update to logger
+    logger.update_current_following(following_value)
+    logger.update_current_followers(follower_value)
+
+    update_data_file(logger, follower_value, following_value)
+
+    return following_value, follower_value

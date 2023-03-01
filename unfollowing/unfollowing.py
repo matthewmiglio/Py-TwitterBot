@@ -38,6 +38,7 @@ def unfollowing_main(
 
     logger.log(message="Initiating unfollowing state...", state="Unfollowing")
     while 1:
+        logger.log('Checking following value before continuing with unfollowing state...')
         my_stats = get_my_stats(driver, logger, username)
 
         my_following_value = my_stats[0]
@@ -55,7 +56,7 @@ def unfollowing_main(
             state="Unfollowing",
         )
         following_list = cut_following_list_size(
-            get_following_list_of_program_user(driver, logger)
+            get_following_list_of_program_user(driver, logger,username)
         )
         logger.log(
             message=f"Retrieved a list of {len(following_list)} users to unfollow",
@@ -111,7 +112,7 @@ def get_my_stats(driver, logger, username):
 
 
 # method to get a list of followings of a given user
-def get_following_list_of_program_user(driver, logger):
+def get_following_list_of_program_user(driver, logger,username):
     """method to get a list of followings of a given user
 
     Args:
@@ -124,7 +125,8 @@ def get_following_list_of_program_user(driver, logger):
     """
     # get to user profile
 
-    click_program_user_profile_button(driver, logger)
+    # click_program_user_profile_button(driver, logger)
+    get_to_user_profile_link(driver, logger, username)
 
     # click following button
     click_following_button_of_profile_page(driver, logger)

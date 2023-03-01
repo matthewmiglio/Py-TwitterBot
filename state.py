@@ -35,15 +35,24 @@ def state_tree(
         # placeholder state for now
         pass
     elif state == "following":
-        state = following_main(driver, logger, following_upper_limit, follow_wait_time,username)
+        state = following_main(
+            driver, logger, following_upper_limit, follow_wait_time, username
+        )
 
     elif state == "unfollowing":
         state = unfollowing_main(
-            driver, logger, following_lower_limit, unfollow_wait_time,username
+            driver, logger, following_lower_limit, unfollow_wait_time, username
         )
 
     elif state == "targetting":
-        state = targetting_main(driver, logger, scrape_list, username, targets_to_find)
+        state = targetting_main(
+            driver,
+            logger,
+            scrape_list,
+            username,
+            targets_to_find,
+            following_maximum=following_upper_limit,
+        )
 
     logger.set_current_state(state)
     cache_program_state(state)
@@ -68,7 +77,7 @@ def read_my_follower_value(driver):
 
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             text1 = element.get_attribute("innerHTML")
             return text1
         except:
@@ -82,7 +91,7 @@ def read_my_following_value(driver):
 
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             text1 = element.get_attribute("innerHTML")
             return text1
         except:

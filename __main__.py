@@ -8,7 +8,13 @@ import PySimpleGUI as sg
 
 import targetting.target_file
 from targetting.targetting import check_if_user_is_suitable_target
-from utils.client_interaction import get_to_user_profile_link
+from unfollowing.unfollowing import unfollowing_main
+from utils.client_interaction import (
+    click_following_button_of_profile_page,
+    click_unfollow_button_of_profile_page,
+    element_locator_function,
+    get_to_user_profile_link,
+)
 import utils.data
 from interface import THEME, disable_keys, main_layout, show_help_gui, user_config_keys
 from login.creds import get_creds_from_file
@@ -213,7 +219,7 @@ def main():
 # test method for running any specific function of the program that happens to be buggy
 def test_main():
     s = utils.data.get_most_recent_stats()
-    print (s)
+    print(s)
 
 
 # the thread that handles the bot
@@ -295,16 +301,33 @@ def test_main():
     creds = get_creds_from_file()
     username = creds[0]
     driver = make_chrome_driver()
-    # log_in_to_twitter(driver, logger, username, password=creds[1])
+    log_in_to_twitter(driver, logger, username, password=creds[1])
 
+    unfollowing_main(
+        driver,
+        logger,
+        following_lower_limit=500,
+        unfollow_wait_time=3500,
+        username=username,
+    )
     
     
-    print(targetting.target_file.check_if_target_in_target_history_file(user_to_check))
+    # user_list=[
+    #     'YoUR3DEaD',
+    #     'Prettyassshit',
+    #     'kiefbowlbaby',
+    #     'DonaldDumpsucks',
+    #     'Become_Stoic',
+    # ]
+    # for user in user_list:
+    #     get_to_user_profile_link(driver, logger, user=user)
+    #     input('Enter to cont')
+    # click_unfollow_button_of_profile_page(driver, logger)
 
     while 1:
         pass
 
 
 if __name__ == "__main__":
-    main()
-    # test_main()
+    # main()
+    test_main()

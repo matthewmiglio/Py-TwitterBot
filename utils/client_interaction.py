@@ -26,6 +26,12 @@ def check_for_signup_popup_after_getting_to_profile_page(driver):
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[2]/div/div/div[2]/a/div/span/span",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[1]/div[2]/span",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[1]/div[1]/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a/div/span/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a/div/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a/div",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[2]/a",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[2]/a/div",
     ]
     for path in path_list:
         try:
@@ -99,7 +105,7 @@ def get_privacy_of_this_profile(driver):
     ]
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             text = element.get_attribute("innerHTML")
             if 'aria-label="Protected account"' in text:
                 return True
@@ -242,7 +248,7 @@ def check_for_throttle_popup(driver, logger):
 
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             text = element.get_attribute("innerHTML")
             if "u are unable to follow more people at th" in text:
                 return True
@@ -298,7 +304,7 @@ def check_for_unfollow_confirmation_popup(driver):
     ]
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             return True
         except:
             return False
@@ -324,7 +330,7 @@ def check_for_login_popup_after_following_on_profile_page(driver, logger):
     ]
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             text = element.get_attribute("innerHTML")
             if "gn up so you never miss their T" in text:
                 return True
@@ -383,7 +389,7 @@ def check_for_unfollow_confirmation_popup_on_profile_page(driver, logger):
 
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             text = element.get_attribute("innerHTML")
             if "ir Tweets will no longer show up in your home tim" in text:
                 return True
@@ -412,7 +418,7 @@ def check_for_signup_buttons_on_bottom_of_profile_page(driver, logger):
     ]
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             text = element.get_attribute("innerHTML")
             if "Sign up" in text:
                 return True
@@ -441,7 +447,7 @@ def click_unfollow_confirmation_popup_on_profile_page(driver, logger):
     ]
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             element.click()
             return "success"
         except:
@@ -519,7 +525,7 @@ def click_unfollow_button_of_profile_page(driver, logger):
 
     for path in path_list:
         try:
-            element = driver.find_element_by_xpath(path)
+            element = driver.find_element(By.XPATH, path)
             text = element.get_attribute("innerHTML")
             if "following" in text.lower():
                 element.click()
@@ -630,7 +636,7 @@ def click_follower_button_of_profile_page(driver, logger, attempt=0):
 
 
 # method to click the following button that appears on the profile page
-def click_following_button_of_profile_page(driver, logger, attempt=0):
+def click_following_button_of_profile_page(driver, logger):
     """method to click the following button that appears on the profile page
 
     Args:
@@ -642,15 +648,19 @@ def click_following_button_of_profile_page(driver, logger, attempt=0):
         recursively call itself if the button is not clicked, None otherwise
 
     """
-    path = "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[2]/span"
-    try:
-        element = driver.find_element_by_xpath(path)
-        element.click()
-        return
-    except:
-        pass
-
-    return click_following_button_of_profile_page(driver, logger, attempt=1)
+    path_list = [
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[2]",
+    ]
+    for path in path_list:
+        try:
+            element = driver.find_element(By.XPATH, path)
+            element.click()
+            return
+        except:
+            print("fail")
+            pass
 
 
 # UTILS SECTION_______________________________________________________________
@@ -695,11 +705,9 @@ def element_locator_function(driver):
     """
     elements_found = 0
     input_list = [
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]/div[1]/a",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[2]",
     ]
     index = 0
     for input in input_list:
