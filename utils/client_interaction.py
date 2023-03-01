@@ -500,45 +500,39 @@ def click_follow_button_of_profile_page(driver, logger):
 
 # method to click the unfollow button when on a profile page
 def click_unfollow_button_of_profile_page(driver, logger):
-    """method to click the unfollow button when on a profile page
-
-    Args:
-        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
-        logger (logging.Logger): the logger
-
-    Returns:
-        string : "success" if the button was clicked, "fail" otherwise
-
-    """
     path_list = [
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div/div/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div/div/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div/div[1]/div/div/span/span",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]",
     ]
-
     for path in path_list:
         try:
             element = driver.find_element(By.XPATH, path)
-            text = element.get_attribute("innerHTML")
-            if "following" in text.lower():
+            text=element.get_attribute("innerHTML")
+            if "Following" in text:
                 element.click()
-
-                if check_for_unfollow_confirmation_popup_on_profile_page(
-                    driver, logger
-                ):
-                    click_unfollow_confirmation_popup_on_profile_page(driver, logger)
-
                 return "success"
         except:
             pass
-    return "fail"
+
+
+# method to click the unfollow in the unfollow confrimation popup that occuers after clicking 'following' button on a user's profile page
+def click_unfollow_in_unfollow_confirmation_popup(driver, logger):
+    path_list = [
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]",
+    ]
+    for path in path_list:
+        try:
+            element = driver.find_element(By.XPATH, path)
+            element.click()
+            return
+        except:
+            pass
 
 
 # method to get to the follower page from a profile page

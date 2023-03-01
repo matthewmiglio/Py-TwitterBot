@@ -8,7 +8,7 @@ import PySimpleGUI as sg
 
 import targetting.target_file
 from targetting.targetting import check_if_user_is_suitable_target
-from unfollowing.unfollowing import unfollowing_main
+from unfollowing.unfollowing import unfollow_user, unfollowing_main
 from utils.client_interaction import (
     click_following_button_of_profile_page,
     click_unfollow_button_of_profile_page,
@@ -303,26 +303,9 @@ def test_main():
     driver = make_chrome_driver()
     log_in_to_twitter(driver, logger, username, password=creds[1])
 
-    unfollowing_main(
-        driver,
-        logger,
-        following_lower_limit=500,
-        unfollow_wait_time=3500,
-        username=username,
-    )
-    
-    
-    # user_list=[
-    #     'YoUR3DEaD',
-    #     'Prettyassshit',
-    #     'kiefbowlbaby',
-    #     'DonaldDumpsucks',
-    #     'Become_Stoic',
-    # ]
-    # for user in user_list:
-    #     get_to_user_profile_link(driver, logger, user=user)
-    #     input('Enter to cont')
-    # click_unfollow_button_of_profile_page(driver, logger)
+    unfollowing_main(driver, logger, 300, 1, username)
+
+    # unfollow_user(driver, logger, 'lauren_db3')
 
     while 1:
         pass

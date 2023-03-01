@@ -5,6 +5,7 @@ from utils.client_interaction import (
     click_following_button_of_profile_page,
     click_program_user_profile_button,
     click_unfollow_button_of_profile_page,
+    click_unfollow_in_unfollow_confirmation_popup,
     get_follower_value_of_this_profile,
     get_following_value_of_this_profile,
     get_names_of_followers_on_follower_list_page,
@@ -38,7 +39,9 @@ def unfollowing_main(
 
     logger.log(message="Initiating unfollowing state...", state="Unfollowing")
     while 1:
-        logger.log('Checking following value before continuing with unfollowing state...')
+        logger.log(
+            "Checking following value before continuing with unfollowing state..."
+        )
         my_stats = get_my_stats(driver, logger, username)
 
         my_following_value = my_stats[0]
@@ -56,7 +59,7 @@ def unfollowing_main(
             state="Unfollowing",
         )
         following_list = cut_following_list_size(
-            get_following_list_of_program_user(driver, logger,username)
+            get_following_list_of_program_user(driver, logger, username)
         )
         logger.log(
             message=f"Retrieved a list of {len(following_list)} users to unfollow",
@@ -112,7 +115,7 @@ def get_my_stats(driver, logger, username):
 
 
 # method to get a list of followings of a given user
-def get_following_list_of_program_user(driver, logger,username):
+def get_following_list_of_program_user(driver, logger, username):
     """method to get a list of followings of a given user
 
     Args:
@@ -174,18 +177,21 @@ def unfollow_user(driver, logger, user):
 
     """
     start_time = time.time()
-    get_to_user_profile_link(driver, logger, user)
-    time.sleep(1)
-    if click_unfollow_button_of_profile_page(driver, logger) == "success":
-        logger.add_unfollow()
+    try:
+        get_to_user_profile_link(driver, logger, user)
+        time.sleep(1)
+        click_unfollow_button_of_profile_page(driver, logger)
+        time.sleep(0.2)
+        click_unfollow_in_unfollow_confirmation_popup(driver, logger)
         logger.log(
-            message=f"Unfollowed {user} in {str(time.time()-start_time)[:4]} seconds",
+            message=f"Unfollowed {user} in {str(time.time() - start_time)[:4]} seconds",
             state="Unfollowing",
         )
-    logger.log(
-        message=f"Failed to unfollow {user} in {str(time.time()-start_time)[:4]} seconds",
-        state="Unfollowing",
-    )
+    except:
+        logger.log(
+            message=f"Failed to unfollow {user} in {str(time.time() - start_time)[:4]} seconds",
+            state="Unfollowing",
+        )
 
 
 # method to unfollow a given list of users
@@ -221,14 +227,21 @@ def update_data_file(logger, input_follower_value, input_following_value):
         None
 
     """
-    #if new values are off significantly from previous just skip this time
-        #follower, following
+    # if new values are off significantly from previous just skip this time
+    # follower, following
     most_recent_stats = get_most_recent_stats()
-    if (abs(int(most_recent_stats[0]) - int(input_follower_value)) > 50) or (abs(int(most_recent_stats[1]) - int(input_following_value)) > 50):
+    if (abs(int(most_recent_stats[0]) - int(input_follower_value)) > 50) or (
+        abs(int(most_recent_stats[1]) - int(input_following_value)) > 50
+    ):
         return
 
-
-    line = str(input_follower_value) + "|" + str(get_date_time()) + "|" + str(input_following_value)
+    line = (
+        str(input_follower_value)
+        + "|"
+        + str(get_date_time())
+        + "|"
+        + str(input_following_value)
+    )
     add_line_to_data_file(line)
     logger.log(message="Updated data file...", state="Unfollowing")
 
@@ -245,4 +258,3 @@ def get_date_time():
 
     """
     return time.strftime("%m/%d/%Y|%H:%M:%S", time.localtime())
-
