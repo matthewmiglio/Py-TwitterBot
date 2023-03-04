@@ -40,7 +40,8 @@ def unfollowing_main(
     logger.log(message="Initiating unfollowing state...", state="Unfollowing")
     while 1:
         logger.log(
-            "Checking following value before continuing with unfollowing state..."
+            message="Checking following value before continuing with unfollowing state...",
+            state="Unfollowing",
         )
         my_stats = get_my_stats(driver, logger, username)
 
@@ -137,7 +138,7 @@ def get_following_list_of_program_user(driver, logger, username):
 
     # scroll down to load follower elements
     for _ in range(4):
-        logger.log(message="Loading more followers...", state="following")
+        logger.log(message="Loading more followers...", state="unfollowing")
         scroll_to_bottom(driver, logger)
         time.sleep(2)
 
@@ -177,17 +178,16 @@ def unfollow_user(driver, logger, user):
 
     """
     start_time = time.time()
-    try:
-        get_to_user_profile_link(driver, logger, user)
-        time.sleep(1)
-        click_unfollow_button_of_profile_page(driver, logger)
+    get_to_user_profile_link(driver, logger, user)
+    time.sleep(1)
+    if click_unfollow_button_of_profile_page(driver, logger)!='fail':
         time.sleep(0.2)
         click_unfollow_in_unfollow_confirmation_popup(driver, logger)
         logger.log(
             message=f"Unfollowed {user} in {str(time.time() - start_time)[:4]} seconds",
             state="Unfollowing",
         )
-    except:
+    else:
         logger.log(
             message=f"Failed to unfollow {user} in {str(time.time() - start_time)[:4]} seconds",
             state="Unfollowing",

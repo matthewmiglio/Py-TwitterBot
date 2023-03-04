@@ -305,12 +305,12 @@ def test_main():
 
     unfollowing_main(driver, logger, 300, 1, username)
 
-    # unfollow_user(driver, logger, 'lauren_db3')
+    # unfollow_user(driver, logger, 'Faajir_Libertas')
 
     while 1:
         pass
 
 
 if __name__ == "__main__":
-    main()
-    # test_main()
+    # main()
+    test_main()
