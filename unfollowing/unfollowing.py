@@ -30,6 +30,7 @@ def unfollowing_main(
         logger (utils.logger.Logger): the logger object
         following_lower_limit (int): the lower limit of following
         unfollow_wait_time (int): the time to wait between unfollowing users
+        username (string): the username of the program user
 
     Returns:
         string: The next state of the program
@@ -97,6 +98,7 @@ def get_my_stats(driver, logger, username):
     Args:
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
         logger (utils.logger.Logger): the logger object
+        username (string): the username of the program user
 
     Returns:
         int,int: the program user's following , follower values
@@ -124,6 +126,7 @@ def get_following_list_of_program_user(driver, logger, username):
     Args:
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
         logger (utils.logger.Logger): the logger object
+        username (string): the username of the program user
 
     Returns:
         string[]: list of usernames
@@ -222,8 +225,8 @@ def update_data_file(logger, input_follower_value, input_following_value):
 
     Args:
         logger (utils.logger.Logger): the logger object
-        follower_value (int): the number of followers
-        following_value (int): the number of followings
+        input_follower_value (int): the number of followers
+        input_following_value (int): the number of followings
 
     Returns:
         None

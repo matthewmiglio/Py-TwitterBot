@@ -32,18 +32,20 @@ def following_main(driver, logger, following_upper_limit, follow_wait_time, user
         logger (utils.logger.Logger): the logger object
         following_upper_limit (int): the upper limit of following
         follow_wait_time (int): the time to wait between following users
+        username (string): the username of the program user
 
     Returns:
         string: The next state of the program
 
     """
 
+    # run the following state until the following limit is reached
     while 1:
-        # get a new target
+        # get a new target from target_list.txt file in appdata/roaming/Py-Twitterbot/target_list.txt
         this_target = get_next_target()
         logger.log(message=f"Next target is {this_target}", state="Following")
 
-        # if target is empty pass to targetting state
+        # if target is empty pass to targetting state to get more targets
         if this_target is None:
             logger.log(
                 message="Ran out of targets in following state... passing to targetting state",
@@ -51,13 +53,16 @@ def following_main(driver, logger, following_upper_limit, follow_wait_time, user
             )
             return "targetting"
 
+        # incremenet targetted stat
         logger.add_account_targetted()
+
+        # get a list of people who follow this target
         follower_list_of_this_target = get_followers_of_user(
             driver, logger, user=this_target
         )
 
-        my_stats = get_my_stats(driver, logger, username)
-        my_following_value = my_stats[1]
+        # check for following limit
+        my_following_value = get_my_stats(driver, logger, username)[1]
         if int(my_following_value) > int(following_upper_limit):
             logger.log(
                 message=f"Following limit reached. Stopping following",
@@ -65,6 +70,7 @@ def following_main(driver, logger, following_upper_limit, follow_wait_time, user
             )
             return "targetting"
 
+        # follow this list of users
         users_followed = follow_users(
             driver,
             logger,
@@ -72,6 +78,8 @@ def following_main(driver, logger, following_upper_limit, follow_wait_time, user
             wait_time=follow_wait_time,
             username=username,
         )
+
+        # log this following state loop's stats
         logger.log(
             message=f"Successfully followed {users_followed} users this loop...",
             state="Following",
@@ -85,6 +93,7 @@ def get_my_stats(driver, logger, username):
     Args:
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
         logger (utils.logger.Logger): the logger object
+        username (string): the username of the program user
 
     Returns:
         int, int: the program user's follower value, following value
@@ -116,7 +125,7 @@ def get_followers_of_user(driver, logger, user):
     Args:
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
         logger (utils.logger.Logger): the logger object
-        user (string): the usernaem of the user to get the followers of
+        user (string): the username of the user to get the followers of
 
     Returns:
         String[]: a list of the usernames of a given user's followers
@@ -224,7 +233,8 @@ def follow_users(driver, logger, user_list, wait_time, username):
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
         logger (utils.logger.Logger): the logger object
         user_list (string[]): the list of usernames to follow
-        wait_time (int): the time to wait between following each user. Defaults to 0.
+        wait_time (int): the time to wait between following each user.
+        username (string): the username of the program user
 
     Returns:
         int: the number of users successfully followed
@@ -259,14 +269,14 @@ def follow_users(driver, logger, user_list, wait_time, username):
             )
             time.sleep(wait_time)
 
-        # if the follow was unsuccessful, continue
+        # if the follow was unsuccessful, continue to next account to follow
         else:
             logger.log(
                 message=f"Failed to follow {user} in {str(end_time-start_time)[:4]} seconds",
                 state="Following",
             )
 
-        # half the time after following a user, take the program user's profile data, update the data file,and update the GUI vars
+        # half of the times after following a user, take the program user's profile data, update the data file,and update the GUI vars
         if random.randint(0, 2) == 0:
             logger.log(
                 message="Taking profile data in between following users...",

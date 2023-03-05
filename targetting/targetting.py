@@ -29,7 +29,7 @@ targetting.py -> every function related to the targetting state of the program
 def targetting_main(
     driver, logger, scrape_list, username, targets_to_find, following_maximum
 ):
-    """main method for targetting mode
+    """main method for targetting mode. Grabs new targets from followers of users in scrape_list, then adds them to target_list.txt in appdata/roaming/Py-Twitterbot/target_list.txt
 
     Args:
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
@@ -44,15 +44,18 @@ def targetting_main(
 
     """
 
+    # parse scrape list into a list of strings
     scrape_list = parse_scrape_target_argument(scrape_list)
 
+    # if there are enough targets, move to the next state according to current following value
     if count_targets_in_target_list_file() >= targets_to_find:
         logger.log(
             message="Have enough targets, moving to following state.",
             state="Targetting",
         )
-        following_value, follower_value = get_my_stats(driver, logger, username)
+        following_value = get_my_stats(driver, logger, username)[0]
 
+        # if following value is less than following maximum, move to following state, otherwise pass to unfollowing state
         if following_value > following_maximum:
             logger.log(
                 message="Following maximum reached, moving to unfollowing state.",
@@ -62,17 +65,17 @@ def targetting_main(
         else:
             return "following"
 
+    # if there are not enough targets, loop until there are enough targets
     suitable_target_list = []
 
     while 1:
-        # random.shuffle(scrape_list)
         for scrape_target in scrape_list:
             logger.log(
                 message=f"Searching through [{scrape_target}]'s follower list for suitable targets.",
                 state="Targetting",
             )
 
-            # get a list of this user's followers
+            # get a list of this scrape_target's followers
             this_follower_list = get_followers_of_user(driver, logger, scrape_target)
 
             # check each user for suitability
@@ -81,37 +84,44 @@ def targetting_main(
                 state="Targetting",
             )
             for user in this_follower_list:
+                # track time of suitability check
                 this_user_check_start_time = time.time()
+
+                # get to target in question's profile
                 get_to_user_profile_link(driver, logger, user)
 
                 # check this user's stuff for suitability
-                suitability_check = check_if_user_is_suitable_target(
-                    driver, logger, user
-                )
+                suitability_check = check_if_user_is_suitable_target(driver, user)
 
+                # if this target is suitable, add user to target_list.txt, and target_history.txt files
                 if suitability_check == True:
                     logger.log(
                         message=f"Scraping {scrape_target} ||Verified {user} is a suitable target in {str(time.time()-this_user_check_start_time)[:4]} seconds.",
                         state="Targetting",
                     )
-                    # add user to return list
+                    # add user to current target list
                     suitable_target_list.append(user)
+
                     # add user to target_list.txt
                     add_line_to_target_list_file(user)
+
                     # add user to target_list_history.txt
                     add_line_to_target_history_file(user)
+
                     # increment logger's target's added count
                     logger.add_new_target_found()
+
                     # if we have enough targets, pass to next state dependent on following count and following uppper limit
                     if len(suitable_target_list) == targets_to_find:
                         logger.log(
                             message="Have enough targets, moving to following state.",
                             state="Following",
                         )
-                        following_value, follower_value = get_my_stats(
-                            driver, logger, username
-                        )
 
+                        # get program user's following value
+                        following_value = get_my_stats(driver, logger, username)[0]
+
+                        # if following value is less than following maximum, move to following state, otherwise pass to unfollowing state
                         if following_value > following_maximum:
                             logger.log(
                                 message="Following maximum reached, moving to unfollowing state.",
@@ -120,6 +130,8 @@ def targetting_main(
                             return "unfollowing"
                         else:
                             return "following"
+
+                # if user is not suitable, log the reason then continue
                 else:
                     logger.log(
                         message=f"Scraping {scrape_target} ||Verified {user} is not a suitable target in {str(time.time()-this_user_check_start_time)[:4]} seconds for reason: {suitability_check}",
@@ -151,7 +163,7 @@ def parse_scrape_target_argument(line):
     return target_list
 
 
-# method to check for any blacklist text in a user's description text
+# method to check for any blacklist text in a user's description text // blacklist text is meant to encompass users who are not likely to follow back (themed, official, advertising related accounts, etc...)
 def check_description_text_for_blacklist(user_description):
     """method to check for any blacklist text in a user's description text
 
@@ -180,6 +192,7 @@ def check_description_text_for_blacklist(user_description):
         "bills",
         "UGA",
         "Atlanta",
+        "discord",
         "Sports",
         "Tigers",
         "Bills",
@@ -359,12 +372,11 @@ def check_description_text_for_blacklist(user_description):
 
 
 # method to check if a user is a suitable target for following followers of
-def check_if_user_is_suitable_target(driver, logger, user):
+def check_if_user_is_suitable_target(driver, user):
     """method to check if a user is a suitable target for following followers of
 
     Args:
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
-        logger (logger): the logger to use
         user (string): the profile username to check
 
     Returns:
@@ -484,8 +496,8 @@ def update_data_file(logger, input_follower_value, input_following_value):
 
     Args:
         logger (logger): the logger to use
-        follower_value (int): the current follower value of the program user
-        following_value (int): the current following value of the program user
+        input_follower_value (int): the current follower value of the program user
+        input_following_value (int): the current following value of the program user
 
     Returns:
         None
@@ -531,6 +543,7 @@ def get_my_stats(driver, logger, username):
     Args:
         driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
         logger (utils.logger.Logger): the logger object
+        username (string): the username of the program user
 
     Returns:
         int,int: the program user's following , follower values
