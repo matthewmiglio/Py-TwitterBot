@@ -100,7 +100,7 @@ class Logger:
         if self.starting_following == 0:
             self.starting_following = value
         self.current_following = value
-        self.following_change = value - self.starting_following
+        self.following_change = int(value) - self.starting_following
 
     @_updates_queue
     def add_follow(self):

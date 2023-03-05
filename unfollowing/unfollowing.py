@@ -81,6 +81,9 @@ def cut_following_list_size(following_list):
         string[]: list of random 20 usernames from the given list
 
     """
+    # if list is under 20, return the list
+    if len(following_list) < 20:
+        return following_list
     random.shuffle(following_list)
     new_list = []
     for n in range(20):
