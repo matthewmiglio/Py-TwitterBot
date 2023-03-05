@@ -18,3 +18,4 @@ Py-TwitterBot was recently moved from an API based program to utilizing Selenium
 8. start the program by running __main__.py
 ```
 
+![py-twitterbot screenshot](https://user-images.githubusercontent.com/105177840/222979672-836d36ec-091f-44ea-ab91-d96795076db8.png)
