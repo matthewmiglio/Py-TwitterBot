@@ -1,4 +1,3 @@
-import random
 import re
 import time
 
@@ -10,7 +9,6 @@ from targetting.target_file import (
 )
 from utils.client_interaction import (
     click_follower_button_of_profile_page,
-    click_program_user_profile_button,
     get_description_text_of_this_user,
     get_follower_value_of_this_profile,
     get_following_value_of_this_profile,
@@ -28,7 +26,9 @@ targetting.py -> every function related to the targetting state of the program
 
 
 # method to find suitable targets to follow from
-def targetting_main(driver, logger, scrape_list, username, targets_to_find,following_maximum):
+def targetting_main(
+    driver, logger, scrape_list, username, targets_to_find, following_maximum
+):
     """main method for targetting mode
 
     Args:
@@ -37,7 +37,7 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find,follo
         scrape_list (list): the list of users to scrape
         username (string): the username of the program user
         targets_to_find (int): the number of targets to find per cycle. Developer tool.
-        following_maximum (int): the maximum number of people the program user can follow. 
+        following_maximum (int): the maximum number of people the program user can follow.
 
     Returns:
         string: the next state of the program
@@ -108,7 +108,9 @@ def targetting_main(driver, logger, scrape_list, username, targets_to_find,follo
                             message="Have enough targets, moving to following state.",
                             state="Following",
                         )
-                        following_value, follower_value = get_my_stats(driver, logger, username)
+                        following_value, follower_value = get_my_stats(
+                            driver, logger, username
+                        )
 
                         if following_value > following_maximum:
                             logger.log(

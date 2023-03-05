@@ -3,7 +3,6 @@ import time
 
 from utils.client_interaction import (
     click_following_button_of_profile_page,
-    click_program_user_profile_button,
     click_unfollow_button_of_profile_page,
     click_unfollow_in_unfollow_confirmation_popup,
     get_follower_value_of_this_profile,
@@ -183,9 +182,9 @@ def unfollow_user(driver, logger, user):
     start_time = time.time()
     get_to_user_profile_link(driver, logger, user)
     time.sleep(1)
-    if click_unfollow_button_of_profile_page(driver, logger)!='fail':
+    if click_unfollow_button_of_profile_page(driver) != "fail":
         time.sleep(0.2)
-        click_unfollow_in_unfollow_confirmation_popup(driver, logger)
+        click_unfollow_in_unfollow_confirmation_popup(driver)
         logger.log(
             message=f"Unfollowed {user} in {str(time.time() - start_time)[:4]} seconds",
             state="Unfollowing",

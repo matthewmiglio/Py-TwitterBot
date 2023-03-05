@@ -3,11 +3,9 @@ import time
 
 
 """
-client_interaction.py -> every function related to interaction with the client (reading values or clicking elements)
+client_interaction.py -> every function related to interaction with the chrome driver client (reading values or clicking elements)
 """
 
-
-# READING SECTION_______________________________________________________________
 
 # method to check for the 'signup or login' popup after getting to a new profile page
 def check_for_signup_popup_after_getting_to_profile_page(driver):
@@ -24,14 +22,14 @@ def check_for_signup_popup_after_getting_to_profile_page(driver):
     path_list = [
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[2]/div/div/div[1]/a/div/span/span",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[2]/div/div/div[2]/a/div/span/span",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[1]/div[2]/span",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[1]/div[1]/span",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a/div/span/span",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a/div/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[2]/a/div",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a/div",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[1]/div[2]/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/div[1]/div[1]/span",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[2]/a",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[2]/a/div",
     ]
     for path in path_list:
         try:
@@ -61,15 +59,15 @@ def check_for_notification_popup_after_getting_to_profile_page(driver):
     """
 
     for path in [
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div/span",
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div/span/span",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div/span",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[2]/span",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/div",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/div[1]",
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[1]",
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[2]",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[2]/span",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]",
     ]:
         try:
             element = driver.find_element(By.XPATH, path)
@@ -97,9 +95,9 @@ def get_privacy_of_this_profile(driver):
     """
     path_list = [
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div[2]/div[2]/div[1]/div/div[1]/div/div/span[2]/svg/g/path",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[2]/div[1]/div/div[1]/div/div/span[2]/svg/g/path",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div[2]/div[2]/div[1]/div/div[1]/div/div/span[2]/svg",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div[2]/div[2]/div[1]/div/div[1]/div/div/span[2]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[2]/div[1]/div/div[1]/div/div/span[2]/svg/g/path",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[2]/div[1]/div/div[1]/div/div/span[2]/svg",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[2]/div[1]/div/div[1]/div/div/span[2]",
     ]
@@ -155,10 +153,10 @@ def get_following_value_of_this_profile(driver):
 
     """
     input_list = [
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]/span",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div[1]/div[2]/div[5]/div[1]/div/span[1]/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div[1]/div[2]/div[5]/div[1]/div/span[1]",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]/span",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div[2]/div[4]/div[1]/a/span[1]/span",
+        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div[1]/div[2]/div[5]/div[1]/div/span[1]",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[1]/a/span[1]/span",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[4]/div[1]/a/span[1]/span",
     ]
@@ -242,8 +240,8 @@ def check_for_throttle_popup(driver, logger):
 
     """
     path_list = [
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[1]/span",
         "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[2]/a/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div[1]/span",
     ]
 
     for path in path_list:
@@ -273,7 +271,6 @@ def get_names_of_followers_on_follower_list_page(driver, logger):
     for index in range(0, 100):
         for path in [
             f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/section/div/div/div[{index}]/div/div/div/div/div[2]/div[1]/div[1]/div/div[2]/div/a/div/div/span",
-            # f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/section/div/div/div[{index}]/div/div/div/div/div[2]/div/div[1]/div/div[2]/div/a/div/div/span",
         ]:
 
             try:
@@ -285,29 +282,6 @@ def get_names_of_followers_on_follower_list_page(driver, logger):
             except:
                 pass
     return username_list
-
-
-# method to check for the unfollow confirmation popup that arises when following a user from their profile page
-def check_for_unfollow_confirmation_popup(driver):
-    """method to check for the unfollow confirmation popup that arises when following a user from their profile page
-
-    Args:
-        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
-
-    Returns:
-        boolean: True if the popup is present, False otherwise
-
-    """
-    path_list = [
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]",
-    ]
-    for path in path_list:
-        try:
-            element = driver.find_element(By.XPATH, path)
-            return True
-        except:
-            return False
 
 
 # method to check for the login popup that may popup when getting to a new profile page
@@ -323,10 +297,10 @@ def check_for_login_popup_after_following_on_profile_page(driver, logger):
 
     """
     path_list = [
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[2]/span",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[1]",
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/a[2]/div/span/span",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[2]/span",
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[1]/span",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div[1]",
     ]
     for path in path_list:
         try:
@@ -352,10 +326,9 @@ def check_for_unfollow_popup_after_following_on_profile_page(driver, logger):
 
     """
     path_list = [
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/h1/span",
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div",
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[1]/span[1]",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[1]/span[1]",
+        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/h1/span",
     ]
     for path in path_list:
         try:
@@ -368,95 +341,8 @@ def check_for_unfollow_popup_after_following_on_profile_page(driver, logger):
     return False
 
 
-# method to check for the unfollow confirmatino popup when unfollowing a user from their profile page
-def check_for_unfollow_confirmation_popup_on_profile_page(driver, logger):
-    """method to check for the unfollow confirmatino popup when unfollowing a user from their profile page
-
-    Args:
-        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
-        logger (logging.Logger): the logger
-
-    Returns:
-        boolean: True if the popup is present, False otherwise
-
-    """
-    path_list = [
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/h1/span",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[1]/span[1]",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[2]/div",
-    ]
-
-    for path in path_list:
-        try:
-            element = driver.find_element(By.XPATH, path)
-            text = element.get_attribute("innerHTML")
-            if "ir Tweets will no longer show up in your home tim" in text:
-                return True
-        except:
-            pass
-    return False
-
-
-# method to check for the signup popup that occurs when getting to a new profile page
-def check_for_signup_buttons_on_bottom_of_profile_page(driver, logger):
-    """method to check for the signup popup that occurs when getting to a new profile page
-
-    Args:
-        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
-        logger (logging.Logger): the logger
-
-    Returns:
-        boolean: True if the popup is present, False otherwise
-
-    """
-    path_list = [
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[2]/a/div",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a/div",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[1]/a/div/span/span",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div/div/div/div[2]/a/div/span/span",
-    ]
-    for path in path_list:
-        try:
-            element = driver.find_element(By.XPATH, path)
-            text = element.get_attribute("innerHTML")
-            if "Sign up" in text:
-                return True
-        except:
-            pass
-    return False
-
-
-# ACTION SECTION_______________________________________________________________
-
-# method to click confirm unfollow button in the unfollow confirmation popup that occuers when unfollowing a user from their profile page
-def click_unfollow_confirmation_popup_on_profile_page(driver, logger):
-    """method to click confirm unfollow button in the unfollow confirmation popup that occuers when unfollowing a user from their profile page
-
-    Args:
-        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
-        logger (logging.Logger): the logger
-
-    Returns:
-        string : "success" if the button was clicked, "fail" otherwise
-
-    """
-    path_list = [
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div",
-        "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]",
-    ]
-    for path in path_list:
-        try:
-            element = driver.find_element(By.XPATH, path)
-            element.click()
-            return "success"
-        except:
-            pass
-    return "fail"
-
-
 # method to click the follow button when on a profile page
-def click_follow_button_of_profile_page(driver, logger):
+def click_follow_button_of_profile_page(driver):
     """method to click the follow button when on a profile page
 
     Args:
@@ -467,71 +353,57 @@ def click_follow_button_of_profile_page(driver, logger):
         string : "success" if the button was clicked, "fail" otherwise
 
     """
-    path_list = [
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[2]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[2]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[2]/div[1]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[2]/div[1]/div/div/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[2]/div[1]/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[2]/div[1]/div/div  ",
-    ]
-    for path in path_list:
-        try:
-            element = driver.find_element(By.XPATH, path)
-            text = element.get_attribute("innerHTML")
-            if "Follow" in text:
-                element.click()
-                return "success"
-        except:
-            pass
+    for index in range(1, 4):
+        path_list = [
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div/div/span/span",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div/div/span",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div/div",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]",
+        ]
+        for path in path_list:
+            try:
+                element = driver.find_element(By.XPATH, path)
+                text = element.get_attribute("innerHTML")
+                if "Follow" in text:
+                    element.click()
+                    return "success"
+            except:
+                pass
     return "fail"
 
 
 # method to click the unfollow button when on a profile page
-def click_unfollow_button_of_profile_page(driver, logger):
-    path_list = [
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div[2]/div[1]/div[2]/div[4]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div[2]/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
-        "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
-        '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div/div/span',
-        '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div/div',
-        '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div',
-        '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[4]/div[1]/div/div/span/span',
-
-        
-    ]
-    for path in path_list:
-        try:
-            element = driver.find_element(By.XPATH, path)
-            text = element.get_attribute("innerHTML")
-            if "Following" in text:
-                element.click()
-                return "success"
-        except:
-            pass
+def click_unfollow_button_of_profile_page(driver):
+    for index in range(1, 5):
+        path_list = [
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div[2]/div[1]/div[2]/div[{index}]/div[1]/div/div/span/span",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div[2]/div[1]/div[2]/div[{index}]/div[1]/div/div/span/span",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div/div/span/span",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div/div/span/span",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div/div/span",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div/div",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div/div",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]/div",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]/div[1]",
+            f"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[{index}]",
+        ]
+        for path in path_list:
+            try:
+                element = driver.find_element(By.XPATH, path)
+                text = element.get_attribute("innerHTML")
+                if "Following" in text:
+                    element.click()
+                    return "success"
+            except:
+                pass
     return "fail"
 
 
 # method to click the unfollow in the unfollow confrimation popup that occuers after clicking 'following' button on a user's profile page
-def click_unfollow_in_unfollow_confirmation_popup(driver, logger):
+def click_unfollow_in_unfollow_confirmation_popup(driver):
     path_list = [
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span",
         "/html/body/div[1]/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span",
@@ -545,37 +417,6 @@ def click_unfollow_in_unfollow_confirmation_popup(driver, logger):
             return
         except:
             pass
-
-
-# method to get to the follower page from a profile page
-def click_program_user_profile_button(driver, logger):
-    """method to get to the follower page from a profile page
-
-    Args:
-        driver (selenium.webdriver.chrome.webdriver.WebDriver): the selenium chrome driver
-        logger (logging.Logger): the logger
-
-    Returns:
-        string : "success" if the button was clicked, "fail" otherwise
-
-    """
-    path_list = [
-        "/html/body/div[1]/div/div/div[2]/header/div/div/div/div[1]/div[2]/nav/a[7]/div/div/svg",
-        "/html/body/div[1]/div/div/div[2]/header/div/div/div/div[1]/div[2]/nav/a[7]/div",
-        "/html/body/div[1]/div/div/div[2]/header/div/div/div/div[1]/div[2]/nav/a[7]/div",
-        "/html/body/div[1]/div/div/div[2]/header/div/div/div/div[1]/div[2]/nav/a[7]/div/div[2]",
-        "/html/body/div[1]/div/div/div[2]/header/div/div/div/div[1]/div[2]/nav/a[7]/div/div[1]",
-    ]
-
-    for p in path_list:
-        try:
-            element = driver.find_element(By.XPATH, p)
-            element.click()
-            return "success"
-        except:
-            pass
-
-    return "fail"
 
 
 # method to scroll to the bottom of the page as far as it has loaded
@@ -667,34 +508,6 @@ def click_following_button_of_profile_page(driver, logger):
         except:
             print("fail")
             pass
-
-
-# UTILS SECTION_______________________________________________________________
-
-
-# method to check if a given element's string is an html element
-def check_if_string_is_html_element(string):
-    """method to check if a given element's string is an html element
-
-    Args:
-        string (string): the element to check represented as a string
-
-    Returns:
-        boolean : True if the string is an html element, False otherwise
-
-    """
-    if 'dir="' in string:
-        return True
-    if "css-" in string:
-        return True
-    if "href=" in string:
-        return True
-    if "class=" in string:
-        return True
-    if "role=" in string:
-        return True
-
-    return False
 
 
 # method to find elements on a webpage by giving it a list of possible paths, IDs, class names, etc

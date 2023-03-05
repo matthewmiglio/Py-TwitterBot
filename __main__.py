@@ -7,14 +7,7 @@ from threading import Lock, Thread
 import PySimpleGUI as sg
 
 import targetting.target_file
-from targetting.targetting import check_if_user_is_suitable_target
-from unfollowing.unfollowing import unfollow_user, unfollowing_main
-from utils.client_interaction import (
-    click_following_button_of_profile_page,
-    click_unfollow_button_of_profile_page,
-    element_locator_function,
-    get_to_user_profile_link,
-)
+
 import utils.data
 from interface import THEME, disable_keys, main_layout, show_help_gui, user_config_keys
 from login.creds import get_creds_from_file
@@ -28,7 +21,7 @@ from utils.caching import (
     read_user_settings,
 )
 from utils.chrome_driver import make_chrome_driver
-from utils.data import get_follower_count_from_line, get_following_count_from_line
+import utils.data 
 from utils.file_cleaning import clean_selenium_files
 from utils.logger import Logger
 from utils.plotter.plot_followers import make_new_plot
@@ -295,22 +288,5 @@ class PlotWorkerThread(StoppableThread):
             time.sleep(figure_update_delay)
 
 
-def test_main():
-    clean_selenium_files()
-    logger = Logger()
-    creds = get_creds_from_file()
-    username = creds[0]
-    driver = make_chrome_driver()
-    log_in_to_twitter(driver, logger, username, password=creds[1])
-
-    unfollowing_main(driver, logger, 300, 1, username)
-
-    # unfollow_user(driver, logger, 'Faajir_Libertas')
-
-    while 1:
-        pass
-
-
 if __name__ == "__main__":
     main()
-    # test_main()

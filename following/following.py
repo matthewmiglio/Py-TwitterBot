@@ -9,7 +9,6 @@ from utils.client_interaction import (
     check_for_unfollow_popup_after_following_on_profile_page,
     click_follow_button_of_profile_page,
     click_follower_button_of_profile_page,
-    click_program_user_profile_button,
     get_follower_value_of_this_profile,
     get_following_value_of_this_profile,
     get_names_of_followers_on_follower_list_page,
@@ -202,7 +201,7 @@ def follow_user(driver, logger, user):
 
     # click follow button on profile page, if login popup or unfollow popup appear then the follow was unsuccessful
     if (
-        click_follow_button_of_profile_page(driver, logger) == "success"
+        click_follow_button_of_profile_page(driver) == "success"
         and not check_for_login_popup_after_following_on_profile_page(driver, logger)
         and not check_for_unfollow_popup_after_following_on_profile_page(driver, logger)
     ):
@@ -218,7 +217,7 @@ def follow_user(driver, logger, user):
 
 
 # method to follow a given list of usernames
-def follow_users(driver, logger, user_list, wait_time,username):
+def follow_users(driver, logger, user_list, wait_time, username):
     """method to follow a given list of usernames
 
     Args:
@@ -273,7 +272,7 @@ def follow_users(driver, logger, user_list, wait_time,username):
                 message="Taking profile data in between following users...",
                 state="Following",
             )
-            get_my_stats(driver, logger,username)
+            get_my_stats(driver, logger, username)
 
     # return the number of users successfully followed
     return users_followed
