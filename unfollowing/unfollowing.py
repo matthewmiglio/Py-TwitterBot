@@ -45,6 +45,9 @@ def unfollowing_main(
         )
         my_stats = get_my_stats(driver, logger, username)
 
+        if my_stats=='fail':
+            return
+
         my_following_value = my_stats[0]
 
         if my_following_value < following_lower_limit:
@@ -62,6 +65,16 @@ def unfollowing_main(
         following_list = cut_following_list_size(
             get_following_list_of_program_user(driver, logger, username)
         )
+
+        if following_list == "fail":
+            logger.log(
+                message="Failed to get a list of people the program user follows",
+                state="unfollowing",
+            )
+            return unfollowing_main(
+                driver, logger, following_lower_limit, unfollow_wait_time, username
+            )
+
         logger.log(
             message=f"Retrieved a list of {len(following_list)} users to unfollow",
             state="Unfollowing",
@@ -104,7 +117,8 @@ def get_my_stats(driver, logger, username):
         int,int: the program user's following , follower values
 
     """
-    get_to_user_profile_link(driver, logger, username)
+    if get_to_user_profile_link(driver, logger, username) =='fail':
+        return 'fail'
     time.sleep(3)
 
     following_value = get_following_value_of_this_profile(driver)
@@ -135,7 +149,9 @@ def get_following_list_of_program_user(driver, logger, username):
     # get to user profile
 
     # click_program_user_profile_button(driver, logger)
-    get_to_user_profile_link(driver, logger, username)
+    if get_to_user_profile_link(driver, logger, username) == "fail":
+        logger.log(f"Failed to get to {username}'s profile ")
+        return "fail"
 
     # click following button
     click_following_button_of_profile_page(driver, logger)
@@ -183,7 +199,8 @@ def unfollow_user(driver, logger, user):
 
     """
     start_time = time.time()
-    get_to_user_profile_link(driver, logger, user)
+    if get_to_user_profile_link(driver, logger, user) == "fail":
+        return "fail"
     time.sleep(1)
     if click_unfollow_button_of_profile_page(driver) != "fail":
         time.sleep(0.2)
@@ -215,7 +232,10 @@ def unfollow_users(driver, logger, unfollow_wait_time, user_list):
     """
     random.shuffle(user_list)
     for user in user_list:
-        unfollow_user(driver, logger, user)
+        if unfollow_user(driver, logger, user) == "fail":
+            logger.log(
+                f"Couldnt unfollow {user} because of an error getting to their webpage..."
+            )
         time.sleep(unfollow_wait_time)
 
 
