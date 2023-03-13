@@ -41,17 +41,37 @@ def make_new_plot(mode="save"):
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_traces(fig_followers.data + fig_following.data)
 
+    # edit the tick colors
+    fig.update_layout(
+        # time axis
+        xaxis=dict(tickfont=dict(color="White")),
+        # left axis
+        yaxis=dict(tickfont=dict(color="Blue")),
+        # right axis
+        yaxis2=dict(tickfont=dict(color="Red")),
+    )
+
+    # edit background color
+    fig.update_layout(plot_bgcolor="darkgrey", paper_bgcolor="black")
+
+    # edit the border size
+    fig.update_layout(margin=dict(l=60, r=40, b=30, t=10))
+
     # configure axis titles
-    fig.layout.xaxis.title = "Time"
-    fig.layout.yaxis.title = "Followers"
-    fig.layout.yaxis.color = "blue"
-    fig.layout.yaxis2.title = "Following"
-    fig.layout.yaxis2.color = "red"
+    fig.layout.xaxis.title = dict(
+        text="Time", font=dict(family="Times New Roman", size=25, color="white")
+    )
+    fig.layout.yaxis.title = dict(
+        text="Followers", font=dict(family="Times New Roman", size=25, color="white")
+    )
+    fig.layout.yaxis2.title = dict(
+        text="Following", font=dict(family="Times New Roman", size=25, color="white")
+    )
 
     # color each line
     fig.for_each_trace(lambda t: t.update(line=dict(color=t.marker.color)))
 
-    # if mode is show then show the figure in browser
+    # if mode is show then show the figure in browser, otherwise save with caching method
     if mode == "show":
         fig.show()
     elif mode == "save":
@@ -64,7 +84,7 @@ def make_new_plot(mode="save"):
 def save_plotly_figure(fig):
     save_path = os.getenv("APPDATA") + r"\py-TwitterBot" + r"\data_figure.png"
     fig.write_image(save_path)
-    print(f'saved figure to {save_path}')
+    print(f"saved figure to {save_path}")
 
 
 # make_new_plot(mode="save")

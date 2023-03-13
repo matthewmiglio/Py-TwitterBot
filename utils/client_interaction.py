@@ -447,7 +447,14 @@ def get_to_user_profile_link(driver, logger, user):
         recurseive call to itself if the page is not loaded or if problem-indicating popups occur, None otherwise
 
     """
-    driver.get("https://twitter.com/" + user)
+    try:
+        driver.get("https://twitter.com/" + user)
+    except:
+        if not check_for_internet():
+            handle_connection_issues()
+        else:
+            logger.error("Error getting to user profile page")
+            return 'fail'
     time.sleep(3)
 
     if check_for_notification_popup_after_getting_to_profile_page(driver):
@@ -591,3 +598,21 @@ def element_locator_function(driver):
 
     if elements_found == 0:
         print("No elements found")
+
+
+# method to check for internet
+def check_for_internet():
+    import urllib.request
+
+    try:
+        urllib.request.urlopen("http://google.com")  # Python 3.x
+        return True
+    except:
+        return False
+
+
+#method to handle when connection issues occur
+def handle_connection_issues(logger):
+    logger.log('Internet connection issues... waiting for connection')
+    while not check_for_internet():
+        time.sleep(3)
