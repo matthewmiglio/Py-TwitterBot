@@ -10,7 +10,7 @@ def stat_box(stat_name: str, size=(5, 1)):
         "0",
         key=stat_name,
         relief=sg.RELIEF_SUNKEN,
-        text_color="blue",
+        text_color="white",
         size=size,
     )
 

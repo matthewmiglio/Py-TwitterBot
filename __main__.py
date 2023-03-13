@@ -21,7 +21,7 @@ from utils.caching import (
     read_user_settings,
 )
 from utils.chrome_driver import make_chrome_driver
-import utils.data 
+import utils.data
 from utils.file_cleaning import clean_selenium_files
 from utils.logger import Logger
 from utils.plotter.plot_followers import make_new_plot
@@ -207,12 +207,6 @@ def main():
     shutdown_thread(plotter_thread, join=True)
 
     window.close()
-
-
-# test method for running any specific function of the program that happens to be buggy
-def test_main():
-    s = utils.data.get_most_recent_stats()
-    print(s)
 
 
 # the thread that handles the bot

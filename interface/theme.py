@@ -1,6 +1,5 @@
 import PySimpleGUI as sg
 
-# THEME = "DarkBlack1"
-THEME = "Purple"
-# THEME = "SystemDefaultForReal"
+THEME = "black"
+
 sg.theme(THEME)
