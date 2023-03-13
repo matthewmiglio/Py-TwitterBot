@@ -44,11 +44,11 @@ def make_new_plot(mode="save"):
     # edit the tick colors
     fig.update_layout(
         # time axis
-        xaxis=dict(tickfont=dict(color="White")),
+        xaxis=dict(tickfont=dict(color="White", size=20)),
         # left axis
-        yaxis=dict(tickfont=dict(color="Blue")),
+        yaxis=dict(tickfont=dict(color="Blue", size=20)),
         # right axis
-        yaxis2=dict(tickfont=dict(color="Red")),
+        yaxis2=dict(tickfont=dict(color="Red", size=20)),
     )
 
     # edit background color
