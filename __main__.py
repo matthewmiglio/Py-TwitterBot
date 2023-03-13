@@ -274,10 +274,10 @@ class PlotWorkerThread(StoppableThread):
 
         # loop this until the program is stopped
         while not self.shutdown_flag.is_set():
-            print("PLOT: Making a new plot")
+            # print("PLOT: Making a new plot")
             with plot_mutex:
                 make_new_plot()
-            print(f"PLOT: Made a new plot... sleeping {figure_update_delay} seconds")
+            # print(f"PLOT: Made a new plot... sleeping {figure_update_delay} seconds")
 
             time.sleep(figure_update_delay)
 
