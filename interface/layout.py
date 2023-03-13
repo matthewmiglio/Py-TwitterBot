@@ -184,6 +184,7 @@ main_layout = [
         sg.InputText(
             "Waiting for user start",
             key="current_status",
+            text_color="black",
             use_readonly_for_disable=True,
             disabled=True,
             expand_x=True,
