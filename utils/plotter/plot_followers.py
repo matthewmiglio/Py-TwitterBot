@@ -84,7 +84,6 @@ def make_new_plot(mode="save"):
 def save_plotly_figure(fig):
     save_path = os.getenv("APPDATA") + r"\py-TwitterBot" + r"\data_figure.png"
     fig.write_image(save_path)
-    print(f"saved figure to {save_path}")
 
 
 # make_new_plot(mode="save")
