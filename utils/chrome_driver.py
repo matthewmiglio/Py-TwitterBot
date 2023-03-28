@@ -29,4 +29,5 @@ def make_chrome_driver():
 
     return webdriver.Chrome(
         options=chrome_options,
+        # executable_path=r"C:\Users\matmi\OneDrive\Desktop\chromedriver.exe"
     )

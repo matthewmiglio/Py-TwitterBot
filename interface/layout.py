@@ -91,7 +91,7 @@ main_layout = [
                                     [
                                         [
                                             sg.Button("Start"),
-                                            sg.Button("Stop", disabled=True),
+                                            sg.Button("Restart", disabled=True),
                                             sg.Checkbox(
                                                 text="Auto-start",
                                                 key="autostart",

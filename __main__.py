@@ -76,15 +76,15 @@ def start_button_event(logger: Logger, window, values):
     thread.start()
 
     # enable the stop button after the thread is started
-    window["Stop"].update(disabled=False)
+    window["Restart"].update(disabled=False)
 
     return thread
 
 
 # method to handle the stop button event (stops the program)
 def stop_button_event(logger: Logger, window, thread):
-    logger.set_current_status("Stopping")
-    window["Stop"].update(disabled=True)
+    logger.set_current_status("Restarting")
+    window["Restart"].update(disabled=True)
     shutdown_thread(thread)  # send the shutdown flag to the thread
 
 
@@ -165,7 +165,7 @@ def main():
             logger = Logger(comm_queue)
             thread = start_button_event(logger, window, values)
 
-        elif event == "Stop":
+        elif event == "Restart":
             stop_button_event(logger, window, thread)
 
         elif event == "Help":
@@ -194,7 +194,7 @@ def main():
             for key in disable_keys:
                 window[key].update(disabled=False)
             if thread.logger.errored:
-                window["Stop"].update(disabled=True)
+                window["Restart"].update(disabled=True)
             else:
                 # reset the communication queue and logger
                 comm_queue = Queue()
@@ -283,4 +283,8 @@ class PlotWorkerThread(StoppableThread):
 
 
 if __name__ == "__main__":
-    main()
+    while 1:
+        try:
+            main()
+        except:
+            pass
