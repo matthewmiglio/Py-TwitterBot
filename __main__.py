@@ -29,6 +29,7 @@ from utils.thread import StoppableThread
 
 plot_mutex = Lock()
 
+
 # method for caching the user's GUI settings
 def save_current_settings(values):
     # read the currently selected values for each key in user_config_keys
@@ -283,8 +284,4 @@ class PlotWorkerThread(StoppableThread):
 
 
 if __name__ == "__main__":
-    while 1:
-        try:
-            main()
-        except:
-            pass
+    main()
