@@ -2,14 +2,11 @@ import os
 import time
 import webbrowser
 from queue import Queue
-from threading import Lock, Thread
+from threading import Lock
 
 import PySimpleGUI as sg
 
-import targetting.target_file
-
-import utils.data
-from interface import THEME, disable_keys, main_layout, show_help_gui, user_config_keys
+from interface import  disable_keys, main_layout, show_help_gui, user_config_keys
 from login.creds import get_creds_from_file
 from login.login import log_in_to_twitter
 from state import state_tree
@@ -21,7 +18,6 @@ from utils.caching import (
     read_user_settings,
 )
 from utils.chrome_driver import make_chrome_driver
-import utils.data
 from utils.file_cleaning import clean_selenium_files
 from utils.logger import Logger
 from utils.plotter.plot_followers import make_new_plot
