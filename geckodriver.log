@@ -5109,3 +5109,27 @@ Read port: 50660
 1704380112568	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
 DevTools listening on ws://127.0.0.1:50653/devtools/browser/c6a38ce3-5f88-473d-ad2f-00b97eb43f06
 console.warn: LoginRecipes: "Falling back to a synchronous message for: https://twitter.com."
+1704380269220	geckodriver	INFO	Listening on 127.0.0.1:50926
+1704380272260	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 27" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofileaGsQRU"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1704380272495	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-mute-audio"
+console.error: "Warning: unrecognized command line flag" "-disable-software-rasterizer"
+1704380272556	Marionette	INFO	Listening on port 50936
+WebDriver BiDi listening on ws://127.0.0.1:50927
+Read port: 50936
+1704380272685	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:50927/devtools/browser/7ab72fa5-0430-473a-890a-ecd742bde255
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://twitter.com."
+JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.571ebf5a.js, line 1: Error: ApiError: https://twitter.com/i/api/graphql/h2T1HQnHrvf-aWCmoQD30A/HomeTimeline HTTP-0 codes:[1004]
+JavaScript error: https://twitter.com/, line 492: ChunkLoadError: Loading chunk shared~loader.DMDrawer~bundle.DirectMessages~bundle.LiveEvent~bundle.UserProfile~loader.TimelineRenderer failed.
+(error: https://abs.twimg.com/responsive-web/client-web/shared~loader.DMDrawer~bundle.DirectMessages~bundle.LiveEvent~bundle.UserProfile~loader.TimelineRenderer.1dbae95a.js)
+JavaScript error: resource://gre/modules/XULStore.sys.mjs, line 60: Error: Can't find profile directory.
+1704380302867	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+console.error: services.settings: 
+  main/search-config-v2 Signature failed  InvalidSignatureError: Invalid content signature (main/search-config-v2) using 'remote-settings.content-signature.mozilla.org-2024-02-08-20-06-04.chain'
+console.error: services.settings: 
+  main/search-config-v2 local data was corrupted
+console.warn: services.settings: main/search-config-v2 Signature verified failed. Retry from scratch
