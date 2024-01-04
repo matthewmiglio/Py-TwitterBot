@@ -11,3 +11,10 @@ WebDriver BiDi listening on ws://127.0.0.1:51090
 Read port: 51098
 1704380519025	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
 DevTools listening on ws://127.0.0.1:51090/devtools/browser/e9eb31f8-5843-49e6-886e-f74d5426e7fc
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://twitter.com."
+JavaScript error: https://twitter.com/, line 484: ChunkLoadError: Loading chunk i18n/emoji-en failed.
+(error: https://abs.twimg.com/responsive-web/client-web/i18n/emoji-en.a28c488a.js)
+JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.571ebf5a.js, line 1: Error: ApiError: https://twitter.com/i/api/graphql/PFIxTk8owMoZgiMccP0r4g/getAltTextPromptPreference HTTP-0 codes:[1004]
+JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.571ebf5a.js, line 1: Error: ApiError: https://twitter.com/i/api/graphql/h2T1HQnHrvf-aWCmoQD30A/HomeTimeline HTTP-0 codes:[1004]
+JavaScript error: https://twitter.com/, line 492: ChunkLoadError: Loading chunk shared~bundle.DirectMessages~loader.PushNotificationsPrompt~loader.MessageHandler~loader.promptHandler~bundle failed.
+(error: https://abs.twimg.com/responsive-web/client-web/shared~bundle.DirectMessages~loader.PushNotificationsPrompt~loader.MessageHandler~loader.promptHandler~bundle.606ba3ca.js)
