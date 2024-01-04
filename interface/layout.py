@@ -1,212 +1,159 @@
+"""
+This module defines the layout of the PyClashBot interface using PySimpleGUI.
+"""
+
 import os
+
 import PySimpleGUI as sg
 
-from .stats import stat_box, stats
 
-info_text = """Py-TwitterBot is a tool for gaining followers.
--The program works by following users, then unfollowing them once the user's following count reaches a threshold.
--The program looks for targets by scraping the given list of accounts for their followers.
--The program then follows the followers of the targetted accounts to expand your follower circle based on your existing followers and popular accounts you think are similar to your demographic.
-\nMatthew Miglio,  - Sept 2022"""
+from PySimpleGUI import Window
+
+sg.theme("Material2")
+# Set the option to suppress error popups
+sg.set_options(suppress_error_popups=True)
 
 
-main_layout = [
-    # MAIN BOX
+def stat_box(stat_name: str, size=(5, 1)) -> sg.Text:
+    """Returns a pysimplegui text box object for stats layout"""
+    return sg.Text(
+        "0",
+        key=stat_name,
+        relief=sg.RELIEF_SUNKEN,
+        text_color="blue",
+        size=size,
+    )
+
+
+# fight stats
+
+
+new_stats = [
     [
-        # LEFT SIDE BOX
-        sg.Column(
+        sg.Frame(
+            title="",
+            expand_y=True,
             layout=[
-                # INFORMATION TEXT BOX
                 [
-                    sg.Frame(
-                        layout=[[sg.Text(info_text, size=(90, None))]],
-                        title="Info",
-                        relief=sg.RELIEF_SUNKEN,
-                        expand_x=True,
-                    )
-                ],
-                # STATS BOX
+                    sg.Column([[sg.Text("Follows: ")], [sg.Text("Unfollows: ")]]),
+                    sg.Column([[stat_box("follows")], [stat_box("unfollows")]]),
+                ]
+            ],
+        ),
+        sg.Frame(
+            expand_y=True,
+            title="",
+            layout=[
                 [
-                    sg.Frame(
-                        layout=stats,
-                        title="Stats",
-                        relief=sg.RELIEF_SUNKEN,
-                        expand_x=True,
-                        expand_y=True,
+                    sg.Column(
+                        [
+                            [sg.Text("Current Following: ")],
+                            [sg.Text("Current Followers: ")],
+                        ]
                     ),
-                    sg.Frame(
-                        layout=[
-                            [
-                                sg.Text("Following lower limit: "),
-                                sg.InputText(
-                                    key="following_lower_limit",
-                                    default_text="100",
-                                    enable_events=True,
-                                    size=(7, 1),
-                                    text_color='black'
-                                ),
-                            ],
-                            [
-                                sg.Text("Following upper limit: "),
-                                sg.InputText(
-                                    key="following_upper_limit",
-                                    default_text="1000",
-                                    enable_events=True,
-                                    size=(7, 1),
-                                    text_color='black'
-                                ),
-                            ],
-                            [
-                                sg.Text("Profiles to Scrape for Targets: "),
-                                sg.InputText(
-                                    key="profiles_to_scrape_for_targets",
-                                    default_text="YourUsername, aPopularProfile, BarackObama",
-                                    enable_events=True,
-                                    size=(35, 2),
-                                    text_color='black'
-                                ),
-                            ],
-                            [
-                                sg.Text("[DEV] Wait time between following: "),
-                                sg.InputText(
-                                    key="follow_wait_time",
-                                    default_text="240",
-                                    enable_events=True,
-                                    size=(7, 1),
-                                    text_color='black'
-                                ),
-                            ],
-                            [
-                                sg.Text("[DEV] Wait time between unfollowing: "),
-                                sg.InputText(
-                                    key="unfollow_wait_time",
-                                    default_text="240",
-                                    enable_events=True,
-                                    size=(7, 1),
-                                    text_color='black'
-                                ),
-                            ],
-                            [
-                                sg.Column(
-                                    [
-                                        [
-                                            sg.Button("Start"),
-                                            sg.Button("Restart", disabled=True),
-                                            sg.Checkbox(
-                                                text="Auto-start",
-                                                key="autostart",
-                                                default=False,
-                                                enable_events=True,
-                                            ),
-                                        ]
-                                    ],
-                                    element_justification="left",
-                                    expand_x=True,
-                                ),
-                                sg.Column(
-                                    [
-                                        [
-                                            sg.Button("Help"),
-                                            sg.Button("Issues?", key="issues-link"),
-                                            sg.Button("Donate"),
-                                        ]
-                                    ],
-                                    element_justification="right",
-                                    expand_x=True,
-                                ),
-                            ],
-                        ],
-                        title="Controls",
-                        relief=sg.RELIEF_SUNKEN,
-                        expand_x=True,
+                    sg.Column(
+                        [
+                            [stat_box("bot_user_following_value")],
+                            [stat_box("bot_user_follower_value")],
+                        ]
                     ),
-                ],
-                # PLOT IMAGE
+                ]
+            ],
+        ),
+        sg.Frame(
+            expand_y=True,
+            title="",
+            layout=[
                 [
-                    sg.Image(
-                        os.path.join(
-                            os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"
-                        ),
-                        key="data_figure",
-                    )
-                ],
-                # PROGRAM USER FOLLOWERS AND FOLLOWING STAT BOX
+                    sg.Column(
+                        [
+                            [sg.Text("Blacklist count: ")],
+                            [sg.Text("Whitelist count: ")],
+                            [sg.Text("Greylist count: ")],
+                        ]
+                    ),
+                    sg.Column(
+                        [
+                            [stat_box("blacklist_count")],
+                            [stat_box("whitelist_count")],
+                            [
+                                stat_box("greylist_count"),
+                            ],
+                        ]
+                    ),
+                ]
+            ],
+        ),
+        sg.Frame(
+            expand_y=True,
+            title="",
+            layout=[
                 [
-                    # FOLLOWERS SECTION
-                    sg.InputText(
-                        "Followers", font=("Arial", 20), size=(11, 1), text_color="blue"
+                    sg.Column(
+                        [
+                            [sg.Text("Restarts: ")],
+                        ]
                     ),
-                    sg.InputText(
-                        "----",
-                        font=("Arial", 20),
-                        size=(6, 1),
-                        text_color="blue",
-                        key="current_followers",
+                    sg.Column(
+                        [
+                            [stat_box("restarts")],
+                        ]
                     ),
-                    sg.InputText(
-                        "----",
-                        font=("Arial", 20),
-                        size=(5, 1),
-                        text_color="blue",
-                        key="followers_change",
-                    ),
-                    # FOLLOWING SECTION
-                    sg.InputText(
-                        "Following", font=("Arial", 20), size=(11, 1), text_color="red"
-                    ),
-                    sg.InputText(
-                        "----",
-                        font=("Arial", 20),
-                        size=(6, 1),
-                        text_color="red",
-                        key="current_following",
-                    ),
-                    sg.InputText(
-                        "----",
-                        font=("Arial", 20),
-                        size=(5, 1),
-                        text_color="red",
-                        key="following_change",
-                    ),
-                ],
-                # CONTROLS BOX
-                [],
-            ]
+                ]
+            ],
         ),
     ],
-    # BOTTOM BOARDER BOX
     [
-        stat_box("time_since_start", size=(7, 1)),
-        sg.InputText(
-            "Idle",
-            key="current_state",
-            use_readonly_for_disable=True,
-            disabled=True,
-            size=(11, 1),
-            text_color="black",
-        ),
-        sg.InputText(
-            "Waiting for user start",
-            key="current_status",
-            text_color="black",
-            use_readonly_for_disable=True,
-            disabled=True,
-            expand_x=True,
-        ),
+        sg.Frame(
+            title="",
+            expand_y=True,
+            layout=[
+                [
+                    sg.Column(
+                        [
+                            [
+                                sg.Text(
+                                    "0",
+                                    key="status",
+                                    relief=sg.RELIEF_SUNKEN,
+                                    text_color="blue",
+                                    size=(60, 1),
+                                ),
+                            ],
+                        ]
+                    ),
+                    sg.Text(
+                        "0",
+                        key="runtime",
+                        relief=sg.RELIEF_SUNKEN,
+                        text_color="blue",
+                        size=(10, 1),
+                    ),
+                ]
+            ],
+        )
     ],
-    # https://www.paypal.com/donate/?business=YE72ZEB3KWGVY&no_recurring=0&item_name=Support+my+projects%21&currency_code=USD
 ]
 
-# a list of all the keys that contain user configuration
-# user_config_keys = ["rows_to_target", "remove_offers_timer", "autostart"]
-user_config_keys = [
-    "following_lower_limit",
-    "following_upper_limit",
-    "profiles_to_scrape_for_targets",
-    "follow_wait_time",
-    "unfollow_wait_time",
-    "autostart",
+
+controls_layout = [
+    [sg.Button("Start", key="start_button")],
 ]
 
-# list of button and checkbox keys to disable when the bot is running
-disable_keys = user_config_keys + ["Start"]
+plot_layout = [
+    # PLOT IMAGE
+    [
+        sg.Image(
+            os.path.join(os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"),
+            key="data_figure",
+        )
+    ],
+]
+
+# main_layout = [stats, controls_layout, plot_layout]
+main_layout = [new_stats, controls_layout, plot_layout]
+
+
+def create_window() -> Window:
+    """method for creating the main gui window"""
+    return sg.Window(title="Twitterbot v0.0.1", layout=main_layout)
