@@ -7,7 +7,6 @@ import PySimpleGUI as sg
 import os
 from PySimpleGUI import Window
 from utils.logger import Logger
-from twitterbot import login_to_twitter
 from worker import WorkerThread
 from utils.thread import StoppableThread, PausableThread
 from interface.layout import create_window
