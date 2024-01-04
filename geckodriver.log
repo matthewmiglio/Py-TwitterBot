@@ -1,1 +1,13 @@
 1704380515596	geckodriver	INFO	Listening on 127.0.0.1:51089
+1704380518634	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 90" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofilegLzKcD"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1704380518852	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-mute-audio"
+console.error: "Warning: unrecognized command line flag" "-disable-software-rasterizer"
+1704380518903	Marionette	INFO	Listening on port 51098
+WebDriver BiDi listening on ws://127.0.0.1:51090
+Read port: 51098
+1704380519025	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:51090/devtools/browser/e9eb31f8-5843-49e6-886e-f74d5426e7fc
