@@ -96,6 +96,30 @@ SCRAPE_TARGET_URLS = [
 ]
 
 
+def check_for_failed_login(driver):
+    xpaths = [
+        '/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[2]/a/div/span/span',
+        '/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[1]/a/div',
+        '/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[2]/span',
+        '/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[1]/span',
+    ]
+
+    for xpath in xpaths:
+        try:
+            element = find_element_by_xpath(driver, xpath)
+            text = element.text
+
+            if "Sign up" in text or "Log in" in text or "People on X are the first to know." in text or "Don’t miss what’s happening" in text:
+                return True
+
+
+        except:
+            pass
+
+    return False
+
+
+
 def login_to_twitter(driver, logger) -> bool:
     start_time = time.time()
 
@@ -146,6 +170,17 @@ def login_to_twitter(driver, logger) -> bool:
         logger.change_status("Failed to click login button Returning False")
         return False
     time.sleep(2)
+
+    #get back to twitter.com
+    get_to_webpage(driver, "https://twitter.com")
+    time.sleep(3)
+
+    if check_for_failed_login(driver):
+        logger.change_status("Failed to login")
+        return False
+    else:
+        logger.change_status('Good login!')
+        time.sleep(0.33)
 
     time_taken = str(time.time() - start_time)[:5]
     logger.change_status(f"Logged in to twitter in {time_taken}s")

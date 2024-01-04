@@ -15,7 +15,6 @@ import time
 from plotter.plot_followers import make_new_plot, plot_png_dir
 from utils.docker import start_dock_mode
 
-# from plotter.plot_followers import make_new_plot
 
 plot_mutex = Lock()
 

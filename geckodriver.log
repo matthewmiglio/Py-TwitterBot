@@ -18,3 +18,144 @@ JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.571ebf5a.
 JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.571ebf5a.js, line 1: Error: ApiError: https://twitter.com/i/api/graphql/h2T1HQnHrvf-aWCmoQD30A/HomeTimeline HTTP-0 codes:[1004]
 JavaScript error: https://twitter.com/, line 492: ChunkLoadError: Loading chunk shared~bundle.DirectMessages~loader.PushNotificationsPrompt~loader.MessageHandler~loader.promptHandler~bundle failed.
 (error: https://abs.twimg.com/responsive-web/client-web/shared~bundle.DirectMessages~loader.PushNotificationsPrompt~loader.MessageHandler~loader.promptHandler~bundle.606ba3ca.js)
+1704380641131	geckodriver	INFO	Listening on 127.0.0.1:51315
+1704380644177	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 16" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofilerexX8F"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1704380644386	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-mute-audio"
+console.error: "Warning: unrecognized command line flag" "-disable-software-rasterizer"
+1704380644437	Marionette	INFO	Listening on port 51323
+WebDriver BiDi listening on ws://127.0.0.1:51316
+Read port: 51323
+1704380644556	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:51316/devtools/browser/df5d469c-5dca-4bcc-9565-061996c3a686
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://twitter.com."
+JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.571ebf5a.js, line 1: Error: ApiError: https://twitter.com/i/api/graphql/h2T1HQnHrvf-aWCmoQD30A/HomeTimeline HTTP-0 codes:[1004]
+JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.571ebf5a.js, line 1: Error: ApiError: https://twitter.com/i/api/graphql/PFIxTk8owMoZgiMccP0r4g/getAltTextPromptPreference HTTP-0 codes:[1004]
+1704380674556	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+console.error: services.settings: 
+  main/search-config-v2 Signature failed  InvalidSignatureError: Invalid content signature (main/search-config-v2) using 'remote-settings.content-signature.mozilla.org-2024-02-08-20-06-04.chain'
+console.error: services.settings: 
+  main/search-config-v2 local data was corrupted
+console.warn: services.settings: main/search-config-v2 Signature verified failed. Retry from scratch
+JavaScript error: resource://gre/modules/XULStore.sys.mjs, line 60: Error: Can't find profile directory.
+[Child 27992, MediaDecoderStateMachine #1] WARNING: Decoder=1b48a428f00 Decode error: NS_ERROR_DOM_MEDIA_CANCELED (0x806e000a) - RefPtr<MediaSourceTrackDemuxer::SeekPromise> __cdecl mozilla::MediaSourceTrackDemuxer::DoSeek(const TimeUnit &): manager is detached.: file /builds/worker/checkouts/gecko/dom/media/MediaDecoderStateMachineBase.cpp:166
+1704381669198	Marionette	WARN	TimedPromise timed out after 500 ms: stacktrace:
+TimedPromise/<@chrome://remote/content/marionette/sync.sys.mjs:219:24
+TimedPromise@chrome://remote/content/marionette/sync.sys.mjs:203:10
+interaction.flushEventLoop@chrome://remote/content/marionette/interaction.sys.mjs:466:10
+webdriverClickElement@chrome://remote/content/marionette/interaction.sys.mjs:219:33
+JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.571ebf5a.js, line 1: Error: ApiError: https://api.twitter.com/1.1/account/settings.json HTTP-0 codes:[1004]
+1704382022686	Marionette	INFO	Stopped listening on port 51323
+Dynamically enable window occlusion 1
+1704382139844	geckodriver	INFO	Listening on 127.0.0.1:49806
+1704382142850	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 07" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofilehiiH8Q"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1704382146078	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-mute-audio"
+console.error: "Warning: unrecognized command line flag" "-disable-software-rasterizer"
+1704382147012	Marionette	INFO	Listening on port 50032
+Read port: 50032
+WebDriver BiDi listening on ws://127.0.0.1:49807
+1704382148409	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:49807/devtools/browser/240c15a6-2fcd-4899-bfd5-dc3c28c1c021
+JavaScript warning: https://accounts.google.com/gsi/button?theme=outline&size=large&shape=circle&logo_alignment=center&text=signup_with&width=300&client_id=49625052041-kgt0hghf445lmcmhijv46b715m2mpbct.apps.googleusercontent.com&iframe_id=gsi_214928_394803&as=Kt8umpsS%2BRdV2GCmupH1Ug&hl=en, line 196: Script terminated by timeout at:
+Oi@/_/gsi/_/js/k=gsi.gsi.en.wsQFeCBNTH4.O/am=ABQq/d=1/rs=AF0KOtW3lCNlnXigZvQ0nobv2Vf3V6SFzg/m=credential_button_library:196:441
+Li@/_/gsi/_/js/k=gsi.gsi.en.wsQFeCBNTH4.O/am=ABQq/d=1/rs=AF0KOtW3lCNlnXigZvQ0nobv2Vf3V6SFzg/m=credential_button_library:196:22
+Hi.prototype.I@/_/gsi/_/js/k=gsi.gsi.en.wsQFeCBNTH4.O/am=ABQq/d=1/rs=AF0KOtW3lCNlnXigZvQ0nobv2Vf3V6SFzg/m=credential_button_library:195:100
+Hi/<@/_/gsi/_/js/k=gsi.gsi.en.wsQFeCBNTH4.O/am=ABQq/d=1/rs=AF0KOtW3lCNlnXigZvQ0nobv2Vf3V6SFzg/m=credential_button_library:189:288
+pc@/_/gsi/_/js/k=gsi.gsi.en.wsQFeCBNTH4.O/am=ABQq/d=1/rs=AF0KOtW3lCNlnXigZvQ0nobv2Vf3V6SFzg/m=credential_button_library:62:102
+b@/_/gsi/_/js/k=gsi.gsi.en.wsQFeCBNTH4.O/am=ABQq/d=1/rs=AF0KOtW3lCNlnXigZvQ0nobv2Vf3V6SFzg/m=credential_button_library:59:473
+
+console.error: services.settings: 
+  main/search-config-v2 Signature failed  InvalidSignatureError: Invalid content signature (main/search-config-v2) using 'remote-settings.content-signature.mozilla.org-2024-02-08-20-06-04.chain'
+console.error: services.settings: 
+  main/search-config-v2 local data was corrupted
+console.warn: services.settings: main/search-config-v2 Signature verified failed. Retry from scratch
+JavaScript warning: https://accounts.google.com/gsi/iframe/select?client_id=49625052041-kgt0hghf445lmcmhijv46b715m2mpbct.apps.googleusercontent.com&ux_mode=popup&ui_mode=card&as=o81cJaMRkt0fiyLJSHUcYw&is_itp=true&channel_id=c368f6b2ea47f82eda7fb5ba4bb6be6d7a4b457a407705fd6d59b4d23a2c1743&origin=https%3A%2F%2Ftwitter.com, line 130: Script terminated by timeout at:
+_.I<@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:130:1218
+nf@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:131:41
+_.N@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:131:158
+Qi@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:198:286
+Ni@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:198:225
+Hi.prototype.I@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:195:66
+Hi/<@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:189:288
+pc@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:62:102
+b@/_/gsi/_/js/k=gsi.gsi.en_US.C_bdy-Ugg9g.O/am=ABQq/d=1/rs=AF0KOtUwp8BnuO_taQctwTtqzxE6qCHdzQ/m=credential_server_library:59:473
+
+JavaScript error: resource://gre/modules/PromiseWorker.sys.mjs, line 102: Error: Could not get children of file(C:\Users\matt\AppData\Local\Temp\rust_mozprofilehiiH8Q\thumbnails) because it does not exist
+JavaScript error: resource://gre/modules/PromiseWorker.sys.mjs, line 102: Error: Could not get children of file(C:\Users\matt\AppData\Local\Temp\rust_mozprofilehiiH8Q\thumbnails) because it does not exist
+JavaScript error: chrome://global/content/elements/browser-custom-element.js, line 1690: Error: permitUnload is already running for this tab.
+JavaScript error: chrome://global/content/elements/browser-custom-element.js, line 1690: Error: permitUnload is already running for this tab.
+JavaScript error: chrome://global/content/elements/browser-custom-element.js, line 1690: Error: permitUnload is already running for this tab.
+JavaScript error: chrome://global/content/elements/browser-custom-element.js, line 1690: Error: permitUnload is already running for this tab.
+1704391944748	Marionette	INFO	Stopped listening on port 50031704391947939	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe1704391950375	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 21" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofileFRUg8I"
+console.warn: services.settings: Ignoring preference override of remote settings server1704391954023	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error1704391955632	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-1704391957742	Marionette	INFO	Listening on port 55049
+Read port: 55049
+WebDriver BiDi listening on ws1704391962455	Marionette	INFO	Listening on port 55137
+Read port: 55137
+WebDriver BiDi listening on ws://Read port: 55049
+Read port: 55049
+Read port: 55049
+Read port: 55049
+Read port: 55137
+Read port: 55137
+1704410914043	geckodriver	INFO	Listening on 127.0.0.1:56256
+1704410917105	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 57" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofilevqchbw"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1704410917695	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-mute-audio"
+console.error: "Warning: unrecognized command line flag" "-disable-software-rasterizer"
+1704410917759	Marionette	INFO	Listening on port 56269
+WebDriver BiDi listening on ws://127.0.0.1:56257
+Read port: 56269
+1704410917905	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:56257/devtools/browser/e3495a4e-e79c-49c6-a39a-eef1aece1259
+1704410948509	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+console.error: services.settings: 
+  main/search-config-v2 Signature failed  InvalidSignatureError: Invalid content signature (main/search-config-v2) using 'remote-settings.content-signature.mozilla.org-2024-02-08-20-06-04.chain'
+console.error: services.settings: 
+  main/search-config-v2 local data was corrupted
+console.warn: services.settings: main/search-config-v2 Signature verified failed. Retry from scratch
+1704411087936	geckodriver	INFO	Listening on 127.0.0.1:56624
+1704411090997	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 25" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofileYUqfEY"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1704411091187	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-mute-audio"
+console.error: "Warning: unrecognized command line flag" "-disable-software-rasterizer"
+1704411091235	Marionette	INFO	Listening on port 56638
+WebDriver BiDi listening on ws://127.0.0.1:56625
+Read port: 56638
+1704411091348	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:56625/devtools/browser/08789fac-1f52-4af5-bc1d-6188ff52b222
+1704411117092	geckodriver	INFO	Listening on 127.0.0.1:56745
+1704411120133	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 46" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofileKYjgM8"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1704411120328	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-mute-audio"
+console.error: "Warning: unrecognized command line flag" "-disable-software-rasterizer"
+1704411120375	Marionette	INFO	Listening on port 56758
+WebDriver BiDi listening on ws://127.0.0.1:56746
+Read port: 56758
+1704411120484	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:56746/devtools/browser/426a5dd1-319c-489c-b761-c70d2a30a3a3
+1704411151493	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+console.error: services.settings: 
+  main/search-config-v2 Signature failed  InvalidSignatureError: Invalid content signature (main/search-config-v2) using 'remote-settings.content-signature.mozilla.org-2024-02-08-20-06-04.chain'
+console.error: services.settings: 
+  main/search-config-v2 local data was corrupted
+console.warn: services.settings: main/search-config-v2 Signature verified failed. Retry from scratch
