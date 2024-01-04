@@ -82,12 +82,12 @@ def check_positions():
 
     # if x diff is more than 1 away from 731, return False
     if x_diff > 1:
-        print('x_diff',x_diff)
+        print("x_diff", x_diff)
         return False
 
     # if y diff is more than 1 away from 0, return False
     if y_diff > 1:
-        print('y_diff',y_diff)
+        print("y_diff", y_diff)
         return False
 
     return True

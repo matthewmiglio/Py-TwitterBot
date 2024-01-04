@@ -1,9 +1,9 @@
 import random
 import time
 
-from logger import Logger
-from thread import PausableThread, ThreadKilled
-from firefox_driver import create_firefox_driver
+from utils.logger import Logger
+from utils.thread import PausableThread, ThreadKilled
+from firefox.firefox_driver import create_firefox_driver
 from twitterbot import login_to_twitter, main_loop, update_data_list_logger_values
 
 

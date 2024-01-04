@@ -1,14 +1,14 @@
-from logger import Logger
+from utils.logger import Logger
 import PySimpleGUI as sg
 
 import random
 import time
-from firefox_driver import (
+from firefox.firefox_driver import (
     find_element_by_xpath,
     get_to_webpage,
     scroll_down_to_load_more,
 )
-from file_handler import (
+from data.file_handler import (
     add_to_blacklist_file,
     get_creds,
     add_to_greylist_file,
@@ -22,7 +22,7 @@ from file_handler import (
     count_blacklist_profiles,
     add_line_to_data_file,
 )
-from firefox_driver import check_for_timeout_webpage
+from firefox.firefox_driver import check_for_timeout_webpage
 
 
 BOT_USER_FOLLOWING_LIMIT = 3000

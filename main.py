@@ -6,15 +6,15 @@ import sys
 import PySimpleGUI as sg
 import os
 from PySimpleGUI import Window
-from logger import Logger
+from utils.logger import Logger
 from twitterbot import login_to_twitter
 from worker import WorkerThread
-from thread import StoppableThread, PausableThread
+from utils.thread import StoppableThread, PausableThread
 from interface.layout import create_window
 from threading import Lock
 import time
 from plotter.plot_followers import make_new_plot, plot_png_dir
-from docker import start_dock_mode
+from utils.docker import start_dock_mode
 
 # from plotter.plot_followers import make_new_plot
 
