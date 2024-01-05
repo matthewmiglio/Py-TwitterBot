@@ -41,7 +41,7 @@ class Logger:
         self._update_stats()
 
     def check_if_should_restart(self):
-        restart_increment = 10*60 # 10 minutes
+        restart_increment = 6*60 # 6 minutes
 
         restarts = self.restarts
         time_taken = time.time() - self.start_time

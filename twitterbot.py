@@ -34,6 +34,7 @@ FOLLOW_TIMEOUT_TIME = 300  # s
 # Set the option to suppress error popups
 sg.set_options(suppress_error_popups=True)
 SCRAPE_TARGET_URLS = [
+    "https://twitter.com/whatsaplat/followers",
     "https://twitter.com/RUNYOMONEY/followers",
     "https://twitter.com/jupitersembrace/followers",
     "https://twitter.com/steventaughtme/followers",
@@ -93,8 +94,27 @@ SCRAPE_TARGET_URLS = [
     "https://twitter.com/katyperry/followers",
     "https://twitter.com/kanyewest/followers",
     "https://twitter.com/VectorThaViper/followers",
-]
 
+
+]
+SCRAPE_TARGET_USERNAMES = [
+    'lameyzzz_',
+    'TySpiritual',
+    'SlimeAnime',
+    'AnimeExpo',
+    'Dj_AniMe',
+    'animecentral',
+    '_ANIMEse',
+    'animeunitedBR',
+    'LoKoKaBoosTeR69',
+    'TheSliceofAnime',
+    'HuinGuillaume',
+    'GelicaJayy',
+    'Chiitan_Osaka',
+    'Sacb0y',
+]
+for n in SCRAPE_TARGET_USERNAMES:
+    SCRAPE_TARGET_URLS.append(f"https://twitter.com/{n}/followers")
 
 def check_for_failed_login(driver):
     xpaths = [
