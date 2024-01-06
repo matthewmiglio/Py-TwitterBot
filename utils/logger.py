@@ -21,6 +21,7 @@ class Logger:
         # bot progress stats
         self.follows = 0
         self.unfollows = 0
+        self.time_of_last_follow = None
 
         # bot user profile stats
         self.bot_user_following_value = 0
@@ -40,8 +41,23 @@ class Logger:
         # write initial values to queue
         self._update_stats()
 
+
+    def check_if_can_follow(self) -> bool:
+        #follow timeout = 4 minutes
+        follow_timeout = 4*60
+
+        if self.time_of_last_follow is None:
+            return True
+
+        time_since_last_follow = time.time() - self.time_of_last_follow
+
+        if time_since_last_follow > follow_timeout:
+            return True
+
+        return False
+
     def check_if_should_restart(self):
-        restart_increment = 6*60 # 6 minutes
+        restart_increment = 10*60 # 6 minutes
 
         restarts = self.restarts
         time_taken = time.time() - self.start_time
@@ -145,6 +161,14 @@ class Logger:
     def add_follow(self):
         """add 1 to follows"""
         self.follows += 1
+
+    @_updates_log
+    def set_time_of_last_follow(self):
+        self.time_of_last_follow = time.time()
+
+
+
+
 
     @_updates_log
     def add_unfollow(self):

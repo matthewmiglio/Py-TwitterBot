@@ -94,34 +94,33 @@ SCRAPE_TARGET_URLS = [
     "https://twitter.com/katyperry/followers",
     "https://twitter.com/kanyewest/followers",
     "https://twitter.com/VectorThaViper/followers",
-
-
 ]
 SCRAPE_TARGET_USERNAMES = [
-    'lameyzzz_',
-    'TySpiritual',
-    'SlimeAnime',
-    'AnimeExpo',
-    'Dj_AniMe',
-    'animecentral',
-    '_ANIMEse',
-    'animeunitedBR',
-    'LoKoKaBoosTeR69',
-    'TheSliceofAnime',
-    'HuinGuillaume',
-    'GelicaJayy',
-    'Chiitan_Osaka',
-    'Sacb0y',
+    "lameyzzz_",
+    "TySpiritual",
+    "SlimeAnime",
+    "AnimeExpo",
+    "Dj_AniMe",
+    "animecentral",
+    "_ANIMEse",
+    "animeunitedBR",
+    "LoKoKaBoosTeR69",
+    "TheSliceofAnime",
+    "HuinGuillaume",
+    "GelicaJayy",
+    "Chiitan_Osaka",
+    "Sacb0y",
 ]
 for n in SCRAPE_TARGET_USERNAMES:
     SCRAPE_TARGET_URLS.append(f"https://twitter.com/{n}/followers")
 
+
 def check_for_failed_login(driver):
     xpaths = [
-        '/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[2]/a/div/span/span',
-        '/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[1]/a/div',
-        '/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[2]/span',
-        '/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[1]/span',
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[2]/a/div/span/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[1]/a/div",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[2]/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[1]/span",
     ]
 
     for xpath in xpaths:
@@ -129,15 +128,18 @@ def check_for_failed_login(driver):
             element = find_element_by_xpath(driver, xpath)
             text = element.text
 
-            if "Sign up" in text or "Log in" in text or "People on X are the first to know." in text or "Don’t miss what’s happening" in text:
+            if (
+                "Sign up" in text
+                or "Log in" in text
+                or "People on X are the first to know." in text
+                or "Don’t miss what’s happening" in text
+            ):
                 return True
-
 
         except:
             pass
 
     return False
-
 
 
 def login_to_twitter(driver, logger) -> bool:
@@ -191,7 +193,7 @@ def login_to_twitter(driver, logger) -> bool:
         return False
     time.sleep(2)
 
-    #get back to twitter.com
+    # get back to twitter.com
     get_to_webpage(driver, "https://twitter.com")
     time.sleep(3)
 
@@ -199,7 +201,7 @@ def login_to_twitter(driver, logger) -> bool:
         logger.change_status("Failed to login")
         return False
     else:
-        logger.change_status('Good login!')
+        logger.change_status("Good login!")
         time.sleep(0.33)
 
     time_taken = str(time.time() - start_time)[:5]
@@ -390,7 +392,7 @@ def scrape_users_from_profile(driver, logger, scrape_target_profile_url, scrape_
 
 
 def scrape_for_profiles(driver, logger):
-    while count_greylist_profiles() < 300:
+    while count_greylist_profiles() < 1000:
         logger.change_status(
             f"There are {(count_greylist_profiles())} accounts in greylist file. Scraping more..."
         )
@@ -558,6 +560,43 @@ def check_for_private_account(driver):
     return False
 
 
+def vet_a_profile(driver, logger):
+    if count_greylist_profiles() < 1:
+        logger.change_status("Greylist is too low, scraping for more profiles...")
+        if scrape_for_profiles(driver, logger) == "timeout":
+            print("Found a timeout white scraping for profiles for greylist")
+            return "timeout"
+
+    # get a random name from greylist
+    name = get_name_from_greylist_file()
+
+    logger.change_status(f"Vetting [{name}]...")
+
+    vet_start_time = time.time()
+
+    # vet the profile
+    profile_check = vet_profile(driver, logger, name)
+
+    vet_time_taken = str(time.time() - vet_start_time)[:5]
+
+    logger.change_status(f'Took {vet_time_taken} to vet profile "{name}"')
+
+    # if timeout occured during check, retunr 'timeout'
+    if profile_check == "timeout" or check_for_timeout_webpage(driver):
+        logger.change_status("Timeout page #2456")
+        return "timeout"
+
+    # if profile check vetted the profile as bad, add name to blacklist, return True
+    if profile_check is not True:
+        logger.change_status(f"Username [{name}] failed for reason: {profile_check}")
+        add_to_blacklist_file(name)
+        return False
+
+    logger.change_status("Good profile!")
+    add_to_whitelist_file(name)
+    return True
+
+
 def vet_profiles(driver, logger, whitelist_count):
     logger.change_status(f"Whitelist count is {count_whitelist_profiles()}")
 
@@ -567,34 +606,9 @@ def vet_profiles(driver, logger, whitelist_count):
         logger.change_status("Vetting a profile...")
         update_data_list_logger_values(logger)
 
-        if count_greylist_profiles() < 1:
-            logger.change_status("Greylist is too low, scraping for more profiles...")
-            if scrape_for_profiles(driver, logger) == "timeout":
-                print("Found a timeout #5162")
-                return "timeout"
-
-        # get a random name from greylist
-        name = get_name_from_greylist_file()
-
-        logger.change_status(f"Vetting [{name}]...")
-        vet_start_time = time.time()
-        profile_check = vet_profile(driver, logger, name)
-        vet_time_taken = str(time.time() - vet_start_time)[:5]
-        logger.change_status(f'Took {vet_time_taken} to vet profile "{name}"')
-        if profile_check == "timeout" or check_for_timeout_webpage(driver):
-            logger.change_status("Timeout page #2456")
+        if vet_a_profile(driver, logger) == "timeout":
+            logger.change_status("Foudn a timeout while vetting a profile")
             return "timeout"
-
-        count += 1
-
-        if profile_check is not True:
-            logger.change_status(
-                f"Username [{name}] failed for reason: {profile_check}"
-            )
-            add_to_blacklist_file(name)
-        else:
-            logger.change_status("Good profile!")
-            add_to_whitelist_file(name)
 
     logger.change_status(
         f"There are {(count_whitelist_profiles())} accounts in whitelist file. Stopping"
@@ -635,8 +649,19 @@ def click_follow_button_on_this_profile(driver):
     return False
 
 
-def follow_a_profile(driver, logger, profile_username):
+def follow_a_profile(driver, logger):
     start_time = time.time()
+
+    logger.change_status("Following a random profile")
+
+    if count_whitelist_profiles() < 2:
+        logger.change_status("Whitelist is empty, vetting profiles")
+        while vet_a_profile(driver, logger) is not True:
+            print('Vetting profiles until it gets 1 so bot can continue to follow...')
+
+    profile_username = get_name_from_whitelist_file()
+    logger.change_status(f"Following a [{profile_username}]")
+
     logger.change_status(f"Following {profile_username}")
 
     # get to profile
@@ -650,6 +675,7 @@ def follow_a_profile(driver, logger, profile_username):
         time_taken = str(time.time() - start_time)[:5]
         logger.change_status(f"Followed a profile in {time_taken}")
         logger.add_follow()
+        logger.set_time_of_last_follow()
         return True
 
     logger.change_status(f"Failed to follow {profile_username}")
@@ -725,7 +751,8 @@ def unfollow_users(driver, logger, users_to_unfollow):
     while users_left_to_unfollow > 0:
         # get to profile
         url = f"https://twitter.com/{username}/following"
-        get_to_webpage(driver, url)
+        if get_to_webpage(driver, url) is False:
+            return "timeout"
         time.sleep(1)
 
         # wait for unfollow buttons to apppear
@@ -763,77 +790,50 @@ def update_data_list_logger_values(logger):
     logger.set_blacklist_count(count_blacklist_profiles())
 
 
-def main_loop(driver, logger) -> bool:
-    start_time = time.time()
-
-    # count whitelist, blacklist, and greylist profiles
-    update_data_list_logger_values(logger)
-
-    # if bot user is following more than BOT_USER_FOLLOWING_LIMIT people, unfollow BOT_USER_FOLLOWING_LIMIT*0.7 people
-    logger.change_status("Checking bot user profile following stats...")
-    following, followers = count_bot_user_following_stats(driver)
+def update_bot_user_following_stats(logger, following, followers):
     logger.set_bot_user_follower_value(followers)
     logger.set_bot_user_following_value(following)
-    logger.change_status(f"Bot user is following {following} profiles")
-
-    # update data file
     add_line_to_data_file(followers, following)
 
-    # if following too many users, unfollow some
+
+def main_loop(driver, logger):
+    # update whitelist, blacklist values
+    print("Updating logger's whitelist/blacklist values")
+    update_data_list_logger_values(logger)
+
+    # update following, followers values for bot user
+    print("Updating logger's followers/following values")
+    following, followers = count_bot_user_following_stats(driver)
+    update_bot_user_following_stats(logger, following, followers)
+
+    # if following is too high, unfollow users till at 1/3 of limit
     if following > BOT_USER_FOLLOWING_LIMIT:
-        unfollow_users(driver, logger, int(BOT_USER_FOLLOWING_LIMIT * 0.7))
-        logger.change_status(
-            f"Completed following loop in {str(time.time() - start_time)[:5]}"
-        )
-        return True
-
-    # if whitelist is below 1, vet more profiles
-    elif count_whitelist_profiles() < 1:
-        logger.change_status("Whitelist is low! Scraping for more profiles...")
-
-        if vet_profiles(driver, logger, 5) == "timeout":
-            logger.change_status("Timeout page")
+        if (
+            unfollow_users(driver, logger, int(0.3333 * BOT_USER_FOLLOWING_LIMIT))
+            == "timeout"
+        ):
+            # if timeout occures while unfollowing users, return False
             return False
 
-        logger.change_status(
-            f"Completed scrape loop in {str(time.time() - start_time)[:5]}"
-        )
+        # if unfollowed users without timeout, return True
         return True
+    print("User following count is below the limit... continuing")
 
-    # else follow a profile
-    else:
-        logger.change_status("Stats and whitelist are good! Following a profile...")
-        follow_return = follow_a_profile(driver, logger, get_name_from_whitelist_file())
-
-        # if the follow method expereinced a timeout page, restart the driver
-        if follow_return == "timeout":
-            logger.change_status("Timeout page")
+    # if its been long enough, follow a profile
+    if logger.check_if_can_follow():
+        if follow_a_profile(driver, logger) == "timeout":
+            logger.change_status("Experienced a timeout while following a profile")
             return False
 
-        # if good follow, wait a bit and vet profiles
-        if follow_return:
-            wait_start_time = time.time()
-            wait_time = 300  # s
-            wait_vets = 0
-            while time.time() - wait_start_time < wait_time:
-                print("Vetting profiles while waiting")
-                try:
-                    vet_return = vet_profiles(
-                        driver,
-                        logger,
-                        whitelist_count=count_whitelist_profiles() + 1,
-                    )
-                    if vet_return == "timeout":
-                        logger.change_status("Timeout page")
-                        return False
-                    else:
-                        wait_vets += vet_return
-                except:
-                    pass
-            logger.change_status(
-                f"Inspected {wait_vets} profiles while waiting for next profile"
-            )
-        else:
-            logger.change_status("Failed to follow this profile...")
+        # if followed a user correctly, return True
+        return True
+    print("Hasn't been long enough to follow a profile... continuing")
 
+    # otherwise just vet a profile
+    if vet_a_profile(driver, logger) == "timeout":
+        logger.change_status("Experienced a timeout while vetting a profile")
+        return False
+
+    print("Vetted a profile in the meantime...")
+    # if completed all checks and tasks without timeout, return True
     return True

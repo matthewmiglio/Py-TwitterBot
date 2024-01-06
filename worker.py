@@ -1,3 +1,4 @@
+import sys
 import random
 import time
 
@@ -52,15 +53,16 @@ class WorkerThread(PausableThread):
 
                 while self.pause_flag.is_set():
                     time.sleep(0.1)  # sleep for 100ms until pause flag is unset
-
         except ThreadKilled:
             # normal shutdown
-            return
+            print("Normal shutdown!")
+            sys.exit()
 
         except Exception as err:  # pylint: disable=broad-except
             # we don't want the thread to crash the interface so we catch all exceptions and log
-            # raise e
+            print("Unexpected shutdown!")
             self.logger.error(str(err))
+            return self.run()
 
 
 def restart_wait(logger, duration):
@@ -68,7 +70,7 @@ def restart_wait(logger, duration):
     while time.time() - start_time < duration:
         time_taken = time.time() - start_time
         time_left = str(duration - time_taken)[:5]
-        logger.change_status(f"Waiting {time_left}s more after restart...")
+        logger.change_status(f"Waiting {time_left}s more before restart...")
 
         time.sleep(random.randint(1, 100) / 100)
 

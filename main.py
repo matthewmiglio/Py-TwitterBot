@@ -60,10 +60,6 @@ def start_button_event(logger: Logger, window: Window, values) -> WorkerThread |
     thread = WorkerThread(logger, None)
     thread.start()
 
-    # # start the plotting thread
-    # plotter_thread = PlotWorkerThread()
-    # plotter_thread.start()
-
     # start the docking thread
     start_dock_mode()
 
@@ -228,7 +224,7 @@ class PlotWorkerThread(StoppableThread):
 
     def run(self):
         # Make a new plot and save it to the appdata/roaming/Py-TwitterBot folder every 200 seconds
-        print("Initializing plotter thread")
+        # print("Initializing plotter thread")
         figure_update_delay = 280
 
         # loop this until the program is stopped
@@ -239,9 +235,9 @@ class PlotWorkerThread(StoppableThread):
                     make_new_plot()
                 except:
                     continue
-                print(
-                    f"PLOT: Made a new plot... sleeping {figure_update_delay} seconds"
-                )
+                # print(
+                #     f"PLOT: Made a new plot... sleeping {figure_update_delay} seconds"
+                # )
 
                 time.sleep(figure_update_delay)
 
