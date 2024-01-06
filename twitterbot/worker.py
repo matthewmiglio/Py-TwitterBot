@@ -5,7 +5,7 @@ import time
 from utils.logger import Logger
 from utils.thread import PausableThread, ThreadKilled
 from firefox.firefox_driver import create_firefox_driver
-from twitterbot import login_to_twitter, main_loop, update_data_list_logger_values
+from twitterbot.twitterbot import login_to_twitter, main_loop, update_data_list_logger_values
 
 
 def restart_driver(driver, logger):
