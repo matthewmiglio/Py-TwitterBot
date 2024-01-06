@@ -2,19 +2,20 @@
 This module contains the main entry point for the py-clash-bot program.
 It provides a GUI interface for users to configure and run the bot.
 """
-import sys
-import PySimpleGUI as sg
 import os
-from PySimpleGUI import Window
-from utils.logger import Logger
-from twitterbot.worker import WorkerThread
-from utils.thread import StoppableThread, PausableThread
-from interface.layout import create_window
-from threading import Lock
+import sys
 import time
-from plotter.plot_followers import make_new_plot, plot_png_dir
-from utils.docker import start_dock_mode
+from threading import Lock
 
+import PySimpleGUI as sg
+from PySimpleGUI import Window
+
+from twitterbot.bot.worker import WorkerThread
+from twitterbot.interface.layout import create_window
+from twitterbot.plotter.plot_followers import make_new_plot, plot_png_dir
+from twitterbot.utils.docker import start_dock_mode
+from twitterbot.utils.logger import Logger
+from twitterbot.utils.thread import PausableThread, StoppableThread
 
 plot_mutex = Lock()
 
@@ -233,6 +234,7 @@ class PlotWorkerThread(StoppableThread):
                 try:
                     make_new_plot()
                 except:
+                    time.sleep(10)
                     continue
 
                 time.sleep(figure_update_delay)

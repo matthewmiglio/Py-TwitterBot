@@ -1,8 +1,8 @@
 import os
+
 import pandas as pd
 import plotly.express as px
 from plotly.subplots import make_subplots
-
 
 plot_png_dir = os.path.join(os.getenv("APPDATA"), "TwitterBot", "data_figure.png")
 

@@ -5,8 +5,6 @@ This module defines the layout of the PyClashBot interface using PySimpleGUI.
 import os
 
 import PySimpleGUI as sg
-
-
 from PySimpleGUI import Window
 
 sg.theme("Material2")

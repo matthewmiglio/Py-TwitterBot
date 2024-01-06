@@ -1,12 +1,18 @@
 [tool.poetry]
-name = "py-twitterbot"
+name = "twitterbot"
 version = "0.1.0"
 description = ""
-authors = ["Matt Main_PC <matmigg0804@gmail.com>"]
+authors = ["Matt Miglio <matmigg0804@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+pysimplegui = "^4.60.5"
+selenium = "^4.16.0"
+pandas = "^2.1.4"
+plotly = "^5.18.0"
+pygetwindow = "^0.0.9"
+
 
 
 [build-system]

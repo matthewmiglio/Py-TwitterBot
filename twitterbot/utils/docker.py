@@ -1,4 +1,5 @@
 import threading
+
 import pygetwindow as gw
 
 GUI_NAME = "Twitterbot v0.0.1"

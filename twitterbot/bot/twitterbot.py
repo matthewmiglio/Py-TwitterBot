@@ -1,28 +1,31 @@
-from utils.logger import Logger
-import PySimpleGUI as sg
-
 import random
 import time
-from firefox.firefox_driver import (
-    find_element_by_xpath,
-    get_to_webpage,
-    scroll_down_to_load_more,
-)
-from data.file_handler import (
+
+
+import PySimpleGUI as sg
+
+from twitterbot.firefox.firefox_driver import find_element_by_xpath
+
+
+from twitterbot.bot.file_handler import (
     add_to_blacklist_file,
-    get_creds,
     add_to_greylist_file,
+    add_to_whitelist_file,
+    count_blacklist_profiles,
     count_greylist_profiles,
     count_whitelist_profiles,
-    get_name_from_greylist_file,
-    add_to_whitelist_file,
+    get_creds,
     check_if_line_exists_in_whitelist,
     check_if_line_exists_in_blacklist,
-    get_name_from_whitelist_file,
-    count_blacklist_profiles,
     add_line_to_data_file,
+    get_name_from_whitelist_file,
+    get_name_from_greylist_file,
 )
-from firefox.firefox_driver import check_for_timeout_webpage
+from twitterbot.firefox.firefox_driver import (
+    get_to_webpage,
+    scroll_down_to_load_more,
+    check_for_timeout_webpage,
+)
 
 
 BOT_USER_FOLLOWING_LIMIT = 3000
@@ -277,9 +280,6 @@ def type_username_into_input(driver, username):
 def click_sign_in_button(driver):
     xpaths = [
         "/html/body/div/div/div/div[2]/main/div/div/div[1]/div/div/div[3]/div[5]/a/div",
-        "",
-        "",
-        "",
     ]
 
     timeout = 30  # s
@@ -472,10 +472,16 @@ def vet_profile(driver, logger, profile_username):
     if follower_count is False:
         return "Fail Read follower_count"
 
+    # if follower count is less than 100, return False
+    FOLLOWER_COUNT_LOWER_LIMIT = 50
+    if int(follower_count) < FOLLOWER_COUNT_LOWER_LIMIT:
+        return f"Follower count <{FOLLOWER_COUNT_LOWER_LIMIT}"
+
     # if following less than 10 people, return False
     FOLLOWING_COUNT_LOWER_LIMIT = 10
     if int(following_count) < FOLLOWING_COUNT_LOWER_LIMIT:
         return f"Follow count <{FOLLOWING_COUNT_LOWER_LIMIT}"
+
 
     # if ratio is bad, return bad
     ratio = following_count / follower_count
@@ -493,10 +499,7 @@ def vet_profile(driver, logger, profile_username):
     if int(follower_count) > FOLLOWER_COUNT_LIMIT:
         return f"Follower count >{FOLLOWER_COUNT_LIMIT}"
 
-    # if follower count is less than 100, return False
-    FOLLOWER_COUNT_LOWER_LIMIT = 50
-    if int(follower_count) < FOLLOWER_COUNT_LOWER_LIMIT:
-        return f"Follower count <{FOLLOWER_COUNT_LOWER_LIMIT}"
+
 
     return True
 
@@ -624,9 +627,6 @@ def click_follow_button_on_this_profile(driver):
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div[2]/div[1]/div[2]/div[2]/div[1]/div/div/span/span",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div[1]/div/div[1]/div[2]/div[3]/div[1]/div/div/span/span",
         "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[1]/div[2]/div[2]/div[1]/div/div/span/span",
-        "",
-        "",
-        "",
     ]
 
     timeout = 10  # s
@@ -657,7 +657,7 @@ def follow_a_profile(driver, logger):
     if count_whitelist_profiles() < 2:
         logger.change_status("Whitelist is empty, vetting profiles")
         while vet_a_profile(driver, logger) is not True:
-            print('Vetting profiles until it gets 1 so bot can continue to follow...')
+            print("Vetting profiles until it gets 1 so bot can continue to follow...")
 
     profile_username = get_name_from_whitelist_file()
     logger.change_status(f"Following a [{profile_username}]")
@@ -817,7 +817,7 @@ def main_loop(driver, logger):
 
         # if unfollowed users without timeout, return True
         return True
-    print("User following count is below the limit... continuing")
+    print("\nUser following count is below the limit... continuing")
 
     # if its been long enough, follow a profile
     if logger.check_if_can_follow():
@@ -827,13 +827,13 @@ def main_loop(driver, logger):
 
         # if followed a user correctly, return True
         return True
-    print("Hasn't been long enough to follow a profile... continuing")
+    print("\nHasn't been long enough to follow a profile... continuing")
 
     # otherwise just vet a profile
     if vet_a_profile(driver, logger) == "timeout":
         logger.change_status("Experienced a timeout while vetting a profile")
         return False
 
-    print("Vetted a profile in the meantime...")
+    print("\nVetted a profile in the meantime...")
     # if completed all checks and tasks without timeout, return True
     return True

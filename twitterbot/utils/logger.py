@@ -37,14 +37,14 @@ class Logger:
         self.current_state = "Idle"
         self.start_time = time.time()
         self.restarts = 0
+        self.time_of_last_restart = None
 
         # write initial values to queue
         self._update_stats()
 
-
     def check_if_can_follow(self) -> bool:
-        #follow timeout = 4 minutes
-        follow_timeout = 4*60
+        # follow timeout = 4 minutes
+        follow_timeout = 4 * 60
 
         if self.time_of_last_follow is None:
             return True
@@ -56,15 +56,19 @@ class Logger:
 
         return False
 
+    def set_time_of_last_restart(self):
+        self.time_of_last_restart = time.time()
+
     def check_if_should_restart(self):
-        restart_increment = 10*60 # 6 minutes
+        restart_increment = 10 * 60
 
-        restarts = self.restarts
-        time_taken = time.time() - self.start_time
+        time_of_last_restart = self.time_of_last_restart
 
-        target_restarts = round_down_int(time_taken / restart_increment)
+        time_since_last_restart = time.time() - time_of_last_restart
 
-        if restarts < target_restarts:
+        print(f"It has been {time_since_last_restart}s since last restart")
+
+        if time_since_last_restart > restart_increment:
             return True
 
         return False
@@ -92,7 +96,7 @@ class Logger:
                 "status": self.current_state,
                 "bot_user_following_value": self.bot_user_following_value,
                 "bot_user_follower_value": self.bot_user_follower_value,
-                "restarts":self.restarts,
+                "restarts": self.restarts,
                 "whitelist_count": self.whitelist_count,
                 "greylist_count": self.greylist_count,
                 "blacklist_count": self.blacklist_count,
@@ -165,10 +169,6 @@ class Logger:
     @_updates_log
     def set_time_of_last_follow(self):
         self.time_of_last_follow = time.time()
-
-
-
-
 
     @_updates_log
     def add_unfollow(self):

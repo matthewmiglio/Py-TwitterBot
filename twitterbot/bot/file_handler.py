@@ -1,8 +1,6 @@
-import time
-import random
 import os
-from re import L
-
+import random
+import time
 
 appdata_dir = os.getenv("APPDATA")
 
