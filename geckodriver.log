@@ -1987,3 +1987,24 @@ console.warn: services.settings: main/search-config-v2 Signature verified failed
 1704563598562	Marionette	INFO	Stopped listening on port 54273
 Dynamically enable window occlusion 1
 1704563601407	geckodriver	INFO	Listening on 127.0.0.1:54462
+1704563604451	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--mute-audio" "--disable-gpu" "--disable-s ... 63" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\matt\\AppData\\Local\\Temp\\rust_mozprofilepSwzYc"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1704563604663	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+console.error: "Warning: unrecognized command line flag" "-mute-audio"
+console.error: "Warning: unrecognized command line flag" "-disable-software-rasterizer"
+1704563604715	Marionette	INFO	Listening on port 54478
+WebDriver BiDi listening on ws://127.0.0.1:54463
+Read port: 54478
+1704563604833	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://127.0.0.1:54463/devtools/browser/b0413633-fc18-4c4a-88dc-54d63c480afb
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://twitter.com."
+JavaScript error: https://abs.twimg.com/responsive-web/client-web/main.a6b76bba.js, line 1: Error: ApiError: https://twitter.com/i/api/graphql/h2T1HQnHrvf-aWCmoQD30A/HomeTimeline HTTP-0 codes:[1004]
+JavaScript error: resource://gre/modules/XULStore.sys.mjs, line 60: Error: Can't find profile directory.
+1704563634726	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+console.error: services.settings: 
+  main/search-config-v2 Signature failed  InvalidSignatureError: Invalid content signature (main/search-config-v2) using 'remote-settings.content-signature.mozilla.org-2024-02-08-20-06-04.chain'
+console.error: services.settings: 
+  main/search-config-v2 local data was corrupted
+console.warn: services.settings: main/search-config-v2 Signature verified failed. Retry from scratch
