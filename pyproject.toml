@@ -13,6 +13,7 @@ pandas = "^2.1.4"
 plotly = "^5.18.0"
 pygetwindow = "^0.0.9"
 kaleido = "0.1.0post1"
+pillow = "^10.2.0"
 
 
 

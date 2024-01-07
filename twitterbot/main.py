@@ -16,6 +16,7 @@ from twitterbot.plotter.plot_followers import make_new_plot, plot_png_dir
 from twitterbot.utils.docker import start_dock_mode
 from twitterbot.utils.logger import Logger
 from twitterbot.utils.thread import PausableThread, StoppableThread
+from twitterbot.bot.file_handler import check_for_invalid_creds, creds_file_path
 
 plot_mutex = Lock()
 
@@ -194,6 +195,10 @@ def main_gui(start_on_run=False, settings: None | dict[str, str] = None) -> None
 
         # on start event, start the thread
         if event == "start_button":
+            if check_for_invalid_creds():
+                sg.popup(f"Enter credentials in {creds_file_path} file")
+                continue
+
             logger = Logger()
             thread = start_button_event(logger, window, values)
 

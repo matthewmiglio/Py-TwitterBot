@@ -113,6 +113,10 @@ def read_file_lines(directory):
     return lines
 
 
+
+
+
+
 def get_creds():
     lines = read_file_lines(creds_file_path)
     username = None
@@ -126,6 +130,19 @@ def get_creds():
             password = l.split(":")[1].strip("\n")
 
     return username, password
+
+
+def check_for_invalid_creds():
+    creds = get_creds()
+    if creds[0] == "" or creds[1] == "":
+        return True
+
+    #if either password or username or under length of 3, return True
+    if len(creds[0]) < 3 or len(creds[1]) < 3:
+        return True
+
+    return False
+
 
 
 # method to check if a line exists in a given text file
@@ -230,3 +247,7 @@ def file_setup():
 
 
 file_setup()
+
+
+if __name__ == '__main__':
+    print(get_creds())

@@ -140,12 +140,19 @@ controls_layout = [
 
 plot_layout = [
     # PLOT IMAGE
-    [
-        sg.Image(
-            os.path.join(os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"),
-            key="data_figure",
-        )
-    ],
+    sg.Frame(
+        title="",
+        layout=[
+            [
+                sg.Image(
+                    os.path.join(
+                        os.environ["APPDATA"], "py-TwitterBot", "data_figure.png"
+                    ),
+                    key="data_figure",
+                )
+            ],
+        ],
+    ),
 ]
 
 # main_layout = [stats, controls_layout, plot_layout]
