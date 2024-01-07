@@ -679,7 +679,6 @@ def follow_a_profile(driver, logger):
         return True
 
     logger.change_status(f"Failed to follow {profile_username}")
-    input("Enter to continue")
     return False
 
 
