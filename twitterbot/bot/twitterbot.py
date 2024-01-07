@@ -392,7 +392,7 @@ def scrape_users_from_profile(driver, logger, scrape_target_profile_url, scrape_
 
 
 def scrape_for_profiles(driver, logger):
-    while count_greylist_profiles() < 1000:
+    while count_greylist_profiles() < 100:
         logger.change_status(
             f"There are {(count_greylist_profiles())} accounts in greylist file. Scraping more..."
         )
