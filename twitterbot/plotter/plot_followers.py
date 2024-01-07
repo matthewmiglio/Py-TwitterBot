@@ -25,7 +25,7 @@ def convert_time_to_datetime(time):
     return pd.to_datetime(time, unit="s")
 
 
-def make_new_plot(mode="save"):
+def make_data():
     # get path of data file
     path = os.path.join(
         os.path.join(os.getenv("APPDATA"), "TwitterBot"), "bot_user_data.txt"
@@ -52,6 +52,13 @@ def make_new_plot(mode="save"):
             "following_value": float(values[1]),
         }
         data_list.append(data_point)
+
+    return data_list
+
+
+def make_new_plot(mode="save"):
+    #parse the data list into a dict
+    data_list=make_data()
 
     # Create a DataFrame from the list of dictionaries and sort by the "time" column
     df = pd.DataFrame(data_list).sort_values(by="time")
