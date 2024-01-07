@@ -118,8 +118,8 @@ def make_new_plot(mode="save"):
 
 # method to save a plotly figure as a png
 def save_plotly_figure(fig):
-    print(f"Saving plot...")
-    fig.write_image(plot_png_dir)
+    print(f"Saving plot to {plot_png_dir}...")
+    print(fig.write_image(plot_png_dir))
     print("Saved new plot!")
 
 

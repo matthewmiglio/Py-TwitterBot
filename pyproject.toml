@@ -12,6 +12,7 @@ selenium = "^4.16.0"
 pandas = "^2.1.4"
 plotly = "^5.18.0"
 pygetwindow = "^0.0.9"
+kaleido = "0.1.0post1"
 
 
 
