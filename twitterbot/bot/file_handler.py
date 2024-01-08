@@ -217,7 +217,7 @@ def make_bot_user_data_file():
 
 
 def add_line_to_data_file(follower_count, following_count):
-    line = f"JJ{follower_count}JJ{following_count}JJ{time.time()}JJ"
+    line = f"NEW_DELIMITER{follower_count}NEW_DELIMITER{following_count}NEW_DELIMITER{time.time()}NEW_DELIMITER"
     add_line_to_file(bot_user_data_file_dir, line)
 
 
@@ -246,8 +246,32 @@ def file_setup():
         print("  Made bot user data file")
 
 
-file_setup()
+
+def change_delimiter():
+    #bot_user_data_file_dir =
+
+    #get all lines from data file
+    lines = read_file_lines(bot_user_data_file_dir)
+
+    #print all lines
+    new_lines = []
+    for l in lines:
+        print(l)
+        l=l.replace('NEW_DELIMITER ','NEW_DELIMITER')
+        print(l)
+        new_lines.append(l)
+
+    #remove all lines frmo data file
+    open(bot_user_data_file_dir, 'w').close()
+
+    #add all lines back to data file
+    for l in new_lines:
+        add_line_to_file(bot_user_data_file_dir, l)
+
+
+
 
 
 if __name__ == '__main__':
-    print(get_creds())
+    # change_delimiter()
+    file_setup()

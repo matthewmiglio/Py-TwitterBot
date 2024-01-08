@@ -46,7 +46,7 @@ def make_data():
     for line in lines:
         if line == "\n" or line == " " or line == "":
             continue
-        values = line.strip().split("JJ")
+        values = line.strip().split("NEW_DELIMITER")
         values = parse_values(values)
 
         if values is False:
