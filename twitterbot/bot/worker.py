@@ -11,8 +11,10 @@ from twitterbot.bot.twitterbot import (
 from twitterbot.utils.logger import Logger
 from twitterbot.utils.thread import PausableThread, ThreadKilled
 
+RESTART_TIMEOUT = 10  # s
 
-def restart_driver(driver, logger:Logger):
+
+def restart_driver(driver, logger: Logger):
     logger.set_time_of_last_restart()
 
     if driver is not None:
@@ -49,11 +51,10 @@ class WorkerThread(PausableThread):
 
                 # code to run
                 if main_loop(driver, self.logger) is not True:
-                    restart_timeout = random.randint(45, 120)  # s
                     self.logger.change_status(
-                        f"Waiting {restart_timeout}s before restarting driver..."
+                        f"Waiting {RESTART_TIMEOUT}s before restarting driver..."
                     )
-                    restart_wait(self.logger, restart_timeout)
+                    restart_wait(self.logger, RESTART_TIMEOUT)
 
                     driver = restart_driver(driver, self.logger)
 
