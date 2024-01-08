@@ -257,6 +257,7 @@ def change_delimiter():
     new_lines = []
     for l in lines:
         print(l)
+        l=l.replace('JJ ','NEW_DELIMITER')
         l=l.replace('NEW_DELIMITER ','NEW_DELIMITER')
         print(l)
         new_lines.append(l)
@@ -273,5 +274,5 @@ def change_delimiter():
 
 
 if __name__ == '__main__':
-    # change_delimiter()
+    change_delimiter()
     file_setup()
