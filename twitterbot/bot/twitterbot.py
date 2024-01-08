@@ -1,6 +1,9 @@
 import random
 import time
 
+from twitterbot.firefox.firefox_driver import create_background_firefox_driver
+from twitterbot.utils.logger import Logger
+import threading
 
 import PySimpleGUI as sg
 
@@ -113,30 +116,29 @@ SCRAPE_TARGET_USERNAMES = [
     "GelicaJayy",
     "Chiitan_Osaka",
     "Sacb0y",
-    'meowthendie',
-    'pIutogrrl',
-    'kinosaurusxx',
-    '_wannabe_sad',
-    'yndrlcy',
-    'colerawrz',
-    'bpdbunnii',
-    'basedantichrist',
-    'grmcreeper',
-    'nobodyondrugs',
-    'kyndallcollinss',
-    'beermistake',
-    'grandeexpert',
-    'GHOST1NALLDAY',
-    '1risgrande',
-    'som1likeyou',
-    'sheeshgwws',
-    'arianalife0',
-    'jordynceIeste',
-    'inmyheadlinepov',
-    'betteroffwbk',
-    'boyswntboys',
-    'dylanisunique',
-
+    "meowthendie",
+    "pIutogrrl",
+    "kinosaurusxx",
+    "_wannabe_sad",
+    "yndrlcy",
+    "colerawrz",
+    "bpdbunnii",
+    "basedantichrist",
+    "grmcreeper",
+    "nobodyondrugs",
+    "kyndallcollinss",
+    "beermistake",
+    "grandeexpert",
+    "GHOST1NALLDAY",
+    "1risgrande",
+    "som1likeyou",
+    "sheeshgwws",
+    "arianalife0",
+    "jordynceIeste",
+    "inmyheadlinepov",
+    "betteroffwbk",
+    "boyswntboys",
+    "dylanisunique",
 ]
 for n in SCRAPE_TARGET_USERNAMES:
     SCRAPE_TARGET_URLS.append(f"https://twitter.com/{n}/followers")
@@ -506,7 +508,6 @@ def vet_profile(driver, logger, profile_username):
     if int(following_count) < FOLLOWING_COUNT_LOWER_LIMIT:
         return f"Follow count <{FOLLOWING_COUNT_LOWER_LIMIT}"
 
-
     # if ratio is bad, return bad
     ratio = following_count / follower_count
     if ratio > 1.5:
@@ -522,8 +523,6 @@ def vet_profile(driver, logger, profile_username):
     FOLLOWER_COUNT_LIMIT = 5000
     if int(follower_count) > FOLLOWER_COUNT_LIMIT:
         return f"Follower count >{FOLLOWER_COUNT_LIMIT}"
-
-
 
     return True
 
@@ -622,6 +621,117 @@ def vet_a_profile(driver, logger):
     logger.change_status("Good profile!")
     add_to_whitelist_file(name)
     return True
+
+
+def vet_profile_given_stats(logger, profile_username, following_count, follower_count):
+    # if name in good list, return BAD
+    if check_if_line_exists_in_whitelist(profile_username):
+        logger.change_status("Already in whitelist")
+        return "Already in whitelist"
+
+    # if name already in bad list, return BAD
+    if check_if_line_exists_in_blacklist(profile_username):
+        logger.change_status("Already in blacklist")
+        return "Already in blacklist"
+
+    # if follower count is less than 100, return False
+    FOLLOWER_COUNT_LOWER_LIMIT = 50
+    if int(follower_count) < FOLLOWER_COUNT_LOWER_LIMIT:
+        return f"Follower count <{FOLLOWER_COUNT_LOWER_LIMIT}"
+
+    # if following less than 10 people, return False
+    FOLLOWING_COUNT_LOWER_LIMIT = 10
+    if int(following_count) < FOLLOWING_COUNT_LOWER_LIMIT:
+        return f"Follow count <{FOLLOWING_COUNT_LOWER_LIMIT}"
+
+    # if ratio is bad, return bad
+    ratio = following_count / follower_count
+    if ratio > 1.5:
+        logger.change_status("Bad ratio")
+        return f"Bad ratio: {str(ratio)[:4]}"
+
+    # if following count is greater than 1k, return FALSE
+    FOLLOWING_COUNT_LIMIT = 1000
+    if int(following_count) > FOLLOWING_COUNT_LIMIT:
+        return f"Follow count >{FOLLOWING_COUNT_LIMIT}"
+
+    # if follower count is greater than 3k, return False
+    FOLLOWER_COUNT_LIMIT = 5000
+    if int(follower_count) > FOLLOWER_COUNT_LIMIT:
+        return f"Follower count >{FOLLOWER_COUNT_LIMIT}"
+
+    return True
+
+
+def vet_some_profiles(driver, logger):
+    thread_count = 7
+
+    logger.change_status(f"Going to vet {thread_count} profiles")
+
+
+
+    names = []
+    while len(names) < thread_count:
+        #get more profiles if greylist is too low
+        if count_greylist_profiles() < 1:
+            logger.change_status("Greylist is too low, scraping for more profiles...")
+            if scrape_for_profiles(driver, logger) == "timeout":
+                print("Found a timeout white scraping for profiles for greylist")
+                return "timeout"
+
+        #get new names that dont exist in whitelist or blacklist
+        name = get_name_from_greylist_file()
+        if name in names:
+            continue
+        if check_if_line_exists_in_blacklist(name):
+            logger.change_status(f'{name} already exists in blacklist!')
+            continue
+        if check_if_line_exists_in_whitelist(name):
+            logger.change_status(f'{name} already exists in whitelist!')
+            continue
+        names.append(name)
+
+
+
+    results = []
+    scrape_target_thread(names, results)
+
+    for result in results:
+        # print(f"checking this result: {result}")
+        # if reading didnt work, just skip the profile. We dont know if its good or not
+        # print(result)
+        if (
+            result == "timeout"
+            or result == "Private account"
+            or result[1] == False
+            or result[2] == False
+        ):
+            print("Result is bad. Skipping")
+            continue
+
+        try:
+            int(result[1])
+            int(result[2])
+        except:
+            print("Values arent ints. continuing")
+            continue
+
+        following_count = parse_follower_count(result[1])
+        follower_count = parse_follower_count(result[2])
+
+        profile_username = result[0]
+
+        out = vet_profile_given_stats(
+            logger, profile_username, follower_count, following_count
+        )
+        # "timeout","Private account", values(index,int/bool,int/bool)
+
+        if out is True:
+            logger.change_status(f"Added {profile_username} to whitelist file")
+            add_to_whitelist_file(profile_username)
+        else:
+            logger.change_status(f"Added {profile_username} to blacklist file")
+            add_to_blacklist_file(profile_username)
 
 
 def vet_profiles(driver, logger, whitelist_count):
@@ -819,6 +929,47 @@ def update_bot_user_following_stats(logger, following, followers):
     add_line_to_data_file(followers, following)
 
 
+def scrape_these_follower_values(url, name):
+    driver = create_background_firefox_driver(logger=Logger())
+    driver.get(url)
+    values = name, read_follower_count(driver), read_following_count(driver)
+    # if private account, skip it
+    if check_for_private_account(driver):
+        print("Private account")
+        driver.close()
+        return "Private account"
+
+    if check_for_timeout_webpage(driver):
+        print("Timeout page")
+        driver.close()
+        return "timeout"
+
+    driver.close()
+    return values
+
+
+def scrape_target_thread(names, results):
+    urls = []
+    for name in names:
+        url = f"https://twitter.com/{name}"
+        urls.append(url)
+
+    threads = []
+    for i, url in enumerate(urls):
+        index = i  # Create a separate variable to store the value of i
+        thread = threading.Thread(
+            target=lambda u, index=index: results.append(
+                scrape_these_follower_values(u, names[index])
+            ),
+            args=(url,),
+        )
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+
+
 def main_loop(driver, logger):
     # update whitelist, blacklist values
     print("Updating logger's whitelist/blacklist values")
@@ -853,10 +1004,13 @@ def main_loop(driver, logger):
     print("\nHasn't been long enough to follow a profile... continuing")
 
     # otherwise just vet a profile
-    if vet_a_profile(driver, logger) == "timeout":
-        logger.change_status("Experienced a timeout while vetting a profile")
-        return False
+    # if vet_a_profile(driver, logger) == "timeout":
+    #     logger.change_status("Experienced a timeout while vetting a profile")
+    #     return False
 
-    print("\nVetted a profile in the meantime...")
+    logger.change_status("Vetting some profiles...")
+    vet_some_profiles(driver, logger)
+
+    print("\nVetted some profiles in the meantime...")
     # if completed all checks and tasks without timeout, return True
     return True

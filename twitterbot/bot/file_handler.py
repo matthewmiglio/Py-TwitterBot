@@ -113,10 +113,6 @@ def read_file_lines(directory):
     return lines
 
 
-
-
-
-
 def get_creds():
     lines = read_file_lines(creds_file_path)
     username = None
@@ -137,12 +133,11 @@ def check_for_invalid_creds():
     if creds[0] == "" or creds[1] == "":
         return True
 
-    #if either password or username or under length of 3, return True
+    # if either password or username or under length of 3, return True
     if len(creds[0]) < 3 or len(creds[1]) < 3:
         return True
 
     return False
-
 
 
 # method to check if a line exists in a given text file
@@ -246,33 +241,29 @@ def file_setup():
         print("  Made bot user data file")
 
 
-
 def change_delimiter():
-    #bot_user_data_file_dir =
+    # bot_user_data_file_dir =
 
-    #get all lines from data file
+    # get all lines from data file
     lines = read_file_lines(bot_user_data_file_dir)
 
-    #print all lines
+    # print all lines
     new_lines = []
     for l in lines:
         print(l)
-        l=l.replace('JJ ','NEW_DELIMITER')
-        l=l.replace('NEW_DELIMITER ','NEW_DELIMITER')
+        l = l.replace("JJ ", "NEW_DELIMITER")
+        l = l.replace("NEW_DELIMITER ", "NEW_DELIMITER")
         print(l)
         new_lines.append(l)
 
-    #remove all lines frmo data file
-    open(bot_user_data_file_dir, 'w').close()
+    # remove all lines frmo data file
+    open(bot_user_data_file_dir, "w").close()
 
-    #add all lines back to data file
+    # add all lines back to data file
     for l in new_lines:
         add_line_to_file(bot_user_data_file_dir, l)
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     change_delimiter()
     file_setup()

@@ -9,6 +9,7 @@ from threading import Lock
 
 import PySimpleGUI as sg
 from PySimpleGUI import Window
+from twitterbot.bot.twitterbot import login_to_twitter
 
 from twitterbot.bot.worker import WorkerThread
 from twitterbot.interface.layout import create_window
@@ -247,3 +248,16 @@ class PlotWorkerThread(StoppableThread):
 
 if __name__ == "__main__":
     main_gui()
+
+    # from twitterbot.bot.twitterbot import vet_some_profiles
+    # from twitterbot.utils.logger import Logger
+    # from twitterbot.firefox.firefox_driver import create_firefox_driver
+
+    # while 1:
+
+    #     logger = Logger()
+
+    #     driver = create_firefox_driver(logger)
+    #     login_to_twitter(driver, logger)
+
+    #     vet_some_profiles(driver,logger)
