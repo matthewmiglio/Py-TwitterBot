@@ -212,7 +212,23 @@ def make_bot_user_data_file():
 
 
 def add_line_to_data_file(follower_count, following_count):
-    line = f"NEW_DELIMITER{follower_count}NEW_DELIMITER{following_count}NEW_DELIMITER{time.time()}NEW_DELIMITER"
+    #handle bad inputs
+    if follower_count == None or following_count == None:
+        print(f'Called add_line_to_data_file() with bad inpputs: {follower_count}/{following_count}')
+        return
+
+    try:
+        int(follower_count)
+        int(following_count)
+    except:
+        print(f'Called add_line_to_data_file() with bad inpputs: {follower_count}/{following_count}')
+        return
+
+
+    #make the data line
+    line = f"NEW_DELIMITER{follower_count}NEW_DELIMITER{following_count}NEW_DELIMITER{time.time()}NEW_DELIMITER\n"
+
+    #add the line to file
     add_line_to_file(bot_user_data_file_dir, line)
 
 

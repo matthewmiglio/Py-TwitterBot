@@ -30,26 +30,19 @@ def create_firefox_driver(logger):
 
 
 def create_background_firefox_driver(logger):
-    start_time = time.time()
-    logger.change_status("Creating firefox driver...")
-
     # Set Firefox options
     firefox_options = Options()
 
     # firefox_options.add_argument('-headless')
-    firefox_options.add_argument("--start-minimized")
+    # firefox_options.add_argument("--start-minimized")
     firefox_options.add_argument("--mute-audio")
     firefox_options.add_argument("--disable-gpu")
     firefox_options.add_argument("--disable-software-rasterizer")
+    firefox_options.add_argument("--headless")
 
     driver = webdriver.Firefox(options=firefox_options)
 
-    if configure_background_driver(driver):
-        logger.change_status(
-            f"Successfully created and configured firefox driver in {str(time.time() - start_time)[:5]}s"
-        )
-    else:
-        logger.change_status("Failed to create and configure firefox driver")
+    configure_background_driver(driver)
 
     return driver
 
@@ -63,7 +56,6 @@ def configure_driver(driver) -> bool:
         return False
 
 
-
 def configure_background_driver(driver) -> bool:
     try:
         driver.set_window_size(800, 800)
@@ -71,6 +63,7 @@ def configure_background_driver(driver) -> bool:
         return True
     except:
         return False
+
 
 def find_element_by_xpath(driver, xpath):
     return driver.find_element(By.XPATH, xpath)

@@ -358,7 +358,9 @@ def scrape_follower_usernames_from_followers_list_page(driver, logger):
     time.sleep((random.randint(1, 3) / 3))
 
     these_names = read_follower_name_elements_on_this_page(driver)
-    logger.change_status(f"Found {len(these_names)} names")
+    logger.change_status(
+        f"Scraped {len(these_names)} usernames from this follower list"
+    )
 
     return these_names
 
@@ -511,8 +513,7 @@ def vet_profile(driver, logger, profile_username):
     # if ratio is bad, return bad
     ratio = following_count / follower_count
     if ratio > 1.5:
-        logger.change_status("Bad ratio")
-        return f"Bad ratio: {str(ratio)[:4]}"
+        return f"Bad ratio: {str(ratio)[:5]}"
 
     # if following count is greater than 1k, return FALSE
     FOLLOWING_COUNT_LIMIT = 1000
@@ -647,8 +648,7 @@ def vet_profile_given_stats(logger, profile_username, following_count, follower_
     # if ratio is bad, return bad
     ratio = following_count / follower_count
     if ratio > 1.5:
-        logger.change_status("Bad ratio")
-        return f"Bad ratio: {str(ratio)[:4]}"
+        return f"Bad ratio: {str(ratio)[:5]}"
 
     # if following count is greater than 1k, return FALSE
     FOLLOWING_COUNT_LIMIT = 1000
@@ -668,30 +668,28 @@ def vet_some_profiles(driver, logger):
 
     logger.change_status(f"Going to vet {thread_count} profiles")
 
-
-
     names = []
     while len(names) < thread_count:
-        #get more profiles if greylist is too low
+        # get more profiles if greylist is too low
         if count_greylist_profiles() < 1:
             logger.change_status("Greylist is too low, scraping for more profiles...")
             if scrape_for_profiles(driver, logger) == "timeout":
                 print("Found a timeout white scraping for profiles for greylist")
                 return "timeout"
 
-        #get new names that dont exist in whitelist or blacklist
+        # get new names that dont exist in whitelist or blacklist
         name = get_name_from_greylist_file()
         if name in names:
             continue
         if check_if_line_exists_in_blacklist(name):
-            logger.change_status(f'{name} already exists in blacklist!')
+            logger.change_status(f"{name} already exists in blacklist!")
             continue
         if check_if_line_exists_in_whitelist(name):
-            logger.change_status(f'{name} already exists in whitelist!')
+            logger.change_status(f"{name} already exists in whitelist!")
             continue
         names.append(name)
 
-
+    print(f"Got 7 names to vet: {names}")
 
     results = []
     scrape_target_thread(names, results)
@@ -722,15 +720,14 @@ def vet_some_profiles(driver, logger):
         profile_username = result[0]
 
         out = vet_profile_given_stats(
-            logger, profile_username, follower_count, following_count
+            logger, profile_username, following_count, follower_count
         )
-        # "timeout","Private account", values(index,int/bool,int/bool)
 
         if out is True:
-            logger.change_status(f"Added {profile_username} to whitelist file")
+            print(f"Added {profile_username} to whitelist file")
             add_to_whitelist_file(profile_username)
         else:
-            logger.change_status(f"Added {profile_username} to blacklist file")
+            print(f"Added {profile_username} to blacklist file")
             add_to_blacklist_file(profile_username)
 
 
