@@ -79,7 +79,7 @@ def check_positions():
 
     # print(x_diff,y_diff)
 
-    x_diff -= 745
+    x_diff -= 791
 
     # if x diff is more than 1 away from 731, return False
     if x_diff > 1:

@@ -33,8 +33,8 @@ new_stats = [
             expand_y=True,
             layout=[
                 [
-                    sg.Column([[sg.Text("Follows: ")], [sg.Text("Unfollows: ")]]),
-                    sg.Column([[stat_box("follows")], [stat_box("unfollows")]]),
+                    sg.Column([[sg.Text("Follows: ")], [sg.Text("Unfollows: ")], [sg.Text("Follows per minute: ")]]),
+                    sg.Column([[stat_box("follows")], [stat_box("unfollows")], [stat_box("follows_per_minute")]]),
                 ]
             ],
         ),

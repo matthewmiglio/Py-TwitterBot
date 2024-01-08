@@ -18,8 +18,16 @@ class Logger:
         self.stats = stats
         self.stats_mutex = threading.Lock()
 
+        # bot stats
+        self.runtime = self.calc_runtime()
+        self.current_state = "Idle"
+        self.start_time = time.time()
+        self.restarts = 0
+        self.time_of_last_restart = None
+
         # bot progress stats
         self.follows = 0
+        self.follows_per_minute = None
         self.unfollows = 0
         self.time_of_last_follow = None
 
@@ -31,13 +39,6 @@ class Logger:
         self.whitelist_count = 0
         self.greylist_count = 0
         self.blacklist_count = 0
-
-        # bot stats
-        self.runtime = self.calc_runtime()
-        self.current_state = "Idle"
-        self.start_time = time.time()
-        self.restarts = 0
-        self.time_of_last_restart = None
 
         # write initial values to queue
         self._update_stats()
@@ -82,6 +83,19 @@ class Logger:
 
         return t
 
+    def calc_follows_per_minute(self):
+        try:
+            start_time = self.start_time
+            time_taken = time.time() - start_time
+            follows = self.follows
+            follows_per_second = follows / time_taken
+            follows_per_minute = follows_per_second * 60
+            self.follows_per_minute = str(follows_per_minute)[:4]
+        except Exception as e:
+            print(f"Failed to calculate follows per minute: {e}")
+            self.follows_per_minute = 'follows_per_minute'
+
+
     def _update_log(self) -> None:
         self._update_stats()
         logging.info(self.current_state)
@@ -92,7 +106,6 @@ class Logger:
             self.stats = {
                 "follows": self.follows,
                 "unfollows": self.unfollows,
-                # "runtime": self.format_runtime(self.runtime),
                 "status": self.current_state,
                 "bot_user_following_value": self.bot_user_following_value,
                 "bot_user_follower_value": self.bot_user_follower_value,
@@ -100,6 +113,7 @@ class Logger:
                 "whitelist_count": self.whitelist_count,
                 "greylist_count": self.greylist_count,
                 "blacklist_count": self.blacklist_count,
+                "follows_per_minute": self.follows_per_minute,
             }
 
     def get_stats(self):
@@ -165,6 +179,7 @@ class Logger:
     def add_follow(self):
         """add 1 to follows"""
         self.follows += 1
+        self.calc_follows_per_minute()
 
     @_updates_log
     def set_time_of_last_follow(self):
@@ -218,3 +233,4 @@ class Logger:
         """
         self.current_state = status
         self.log(status)
+        self.calc_follows_per_minute()
