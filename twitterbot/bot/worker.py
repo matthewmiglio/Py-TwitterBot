@@ -2,7 +2,7 @@ import random
 import sys
 import time
 
-from firefox.firefox_driver import create_firefox_driver
+from firefox.firefox_driver import create_firefox_driver,close_all_firefox
 from twitterbot.bot.twitterbot import (
     login_to_twitter,
     main_loop,
@@ -16,6 +16,9 @@ RESTART_TIMEOUT = 10  # s
 
 def restart_driver(driver, logger: Logger):
     logger.set_time_of_last_restart()
+
+    close_all_firefox()
+
 
     if driver is not None:
         driver.quit()
