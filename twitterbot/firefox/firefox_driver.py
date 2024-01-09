@@ -5,6 +5,46 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 
 
+
+import psutil
+
+
+def get_firefox_pids():
+    pids = []
+    for process in psutil.process_iter(["pid", "name"]):
+        try:
+            # Print the process name and PID
+            pid = process.info["pid"]
+            name = process.info["name"]
+            if "firefox" in name:
+                pids.append(pid)
+
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            # Handle exceptions that might occur while accessing process information
+            pass
+
+    return pids
+
+
+def close_window_by_pid(pid):
+    try:
+        psutil.Process(pid).terminate()
+
+    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+        pass
+
+
+def close_all_firefox():
+    for _ in range(5):
+        pids = get_firefox_pids()
+        for pid in pids:
+            close_window_by_pid(pid)
+
+
+
+
+
+
 def create_firefox_driver(logger):
     start_time = time.time()
     logger.change_status("Creating firefox driver...")

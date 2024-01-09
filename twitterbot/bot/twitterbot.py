@@ -967,7 +967,12 @@ def update_bot_user_following_stats(logger, following, followers):
 
 def scrape_these_follower_values(url, name):
     driver = create_background_firefox_driver(logger=Logger())
-    driver.get(url)
+    while 1:
+        try:
+            driver.get(url)
+        except:
+            return 'timeout'
+
     values = name, read_follower_count(driver), read_following_count(driver)
     # if private account, skip it
     if check_for_private_account(driver):
