@@ -692,17 +692,22 @@ def vet_some_profiles(driver, logger):
     print(f"Got 7 names to vet: {names}")
 
     results = []
-    scrape_target_thread(names, results)
+    print("Beginning scrape_target_thread()")
+    try:
+        scrape_target_thread(names, results)
+    except Exception as e:
+        print(f"Failed during scrape_target_thread(): {e}")
 
     for result in results:
-        # print(f"checking this result: {result}")
+        print(f"checking this result: {result}")
         # if reading didnt work, just skip the profile. We dont know if its good or not
         # print(result)
         if (
             result == "timeout"
             or result == "Private account"
-            or result[1] == False
-            or result[2] == False
+            or result == "fail webpage"
+            or result[1] is False
+            or result[2] is False
         ):
             print("Result is bad. Skipping")
             continue
@@ -928,13 +933,21 @@ def update_bot_user_following_stats(logger, following, followers):
 
 def scrape_these_follower_values(url, name):
     driver = create_background_firefox_driver(logger=Logger())
-    while 1:
-        try:
-            driver.get(url)
-        except:
-            return 'timeout'
 
-    values = name, read_follower_count(driver), read_following_count(driver)
+    try:
+        driver.get(url)
+    except Exception as e:
+        print(f"Failed to get to webpage with error: {e}")
+        return "fail webpage"
+
+    follower_count = read_follower_count(driver)
+    follower_count = parse_follower_count(follower_count)
+
+    following_count = read_following_count(driver)
+    following_count = parse_follower_count(following_count)
+
+    values = name, follower_count, following_count
+
     # if private account, skip it
     if check_for_private_account(driver):
         print("Private account")

@@ -18,6 +18,7 @@ from twitterbot.utils.docker import start_dock_mode
 from twitterbot.utils.logger import Logger
 from twitterbot.utils.thread import PausableThread, StoppableThread
 from twitterbot.bot.file_handler import check_for_invalid_creds, creds_file_path
+from twitterbot.firefox.firefox_driver import close_all_firefox
 
 plot_mutex = Lock()
 
@@ -58,6 +59,10 @@ def start_button_event(logger: Logger, window: Window, values) -> WorkerThread |
 
     logger.log("Start Button Event")
     logger.change_status(status="Starting the bot!")
+
+    logger.change_status("Closing all firefox instances...")
+    close_all_firefox()
+    logger.change_status("Closed all firefox instances...")
 
     # args: tuple[list[str], int] = (jobs, acc_count)
     thread = WorkerThread(logger, None)
