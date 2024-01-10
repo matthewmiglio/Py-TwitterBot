@@ -728,7 +728,10 @@ def vet_some_profiles(driver, logger):
             continue
         names.append(name)
 
-    print(f"Got 7 names to vet: {names}")
+    print(f"Got {len(names)} names to vet:")
+    for n in names:
+        print(n)
+    print("\n")
 
     results = []
     print("Beginning scrape_target_thread()")
@@ -971,15 +974,17 @@ def update_bot_user_following_stats(logger, following, followers):
 
 
 def scrape_these_follower_values(url, name):
+    start_time = time.time()
+
     driver = None
     while driver is None or driver is False:
         print("Making driver")
         driver = create_background_firefox_driver(logger=Logger())
-
     try:
         driver.get(url)
     except Exception as e:
         print(f"Failed to get to webpage with error: {e}")
+        print(f"Took {str(time.time() - start_time)[:5]}s to scrape {name}")
         return "fail webpage"
 
     follower_count = read_follower_count(driver)
@@ -994,14 +999,17 @@ def scrape_these_follower_values(url, name):
     if check_for_private_account(driver):
         print("Private account")
         driver.close()
+        print(f"Took {str(time.time() - start_time)[:5]}s to scrape {name}")
         return "Private account"
 
     if check_for_timeout_webpage(driver):
         print("Timeout page")
         driver.close()
+        print(f"Took {str(time.time() - start_time)[:5]}s to scrape {name}")
         return "timeout"
 
     driver.close()
+    print(f"Took {str(time.time() - start_time)[:5]}s to scrape {name}")
     return values
 
 
@@ -1010,6 +1018,11 @@ def scrape_target_thread(names, results):
     for name in names:
         url = f"https://twitter.com/{name}"
         urls.append(url)
+
+    print("\nGonna use these urls:")
+    for u in urls:
+        print(u)
+    print("\n")
 
     threads = []
     for i, url in enumerate(urls):

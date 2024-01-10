@@ -17,6 +17,7 @@ from twitterbot.utils.docker import start_dock_mode
 from twitterbot.utils.logger import Logger
 from twitterbot.utils.thread import PausableThread, StoppableThread
 from twitterbot.bot.file_handler import check_for_invalid_creds, creds_file_path
+
 # from twitterbot.firefox.firefox_driver import close_all_firefox
 
 plot_mutex = Lock()

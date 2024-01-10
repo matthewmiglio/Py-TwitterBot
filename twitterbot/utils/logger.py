@@ -1,3 +1,5 @@
+import psutil
+
 """import logging for file logging"""
 import logging
 import threading
@@ -24,6 +26,7 @@ class Logger:
         self.start_time = time.time()
         self.restarts = 0
         self.time_of_last_restart = None
+        self.active_drivers = None
 
         # bot progress stats
         self.follows = 0
@@ -93,8 +96,31 @@ class Logger:
             self.follows_per_minute = str(follows_per_minute)[:4]
         except Exception as e:
             print(f"Failed to calculate follows per minute: {e}")
-            self.follows_per_minute = 'follows_per_minute'
+            self.follows_per_minute = "follows_per_minute"
 
+    def calc_active_drivers(self):
+        try:
+            pids = []
+            for process in psutil.process_iter(["pid", "name"]):
+                try:
+                    # Print the process name and PID
+                    pid = process.info["pid"]
+                    name = process.info["name"]
+                    if "firefox" in name:
+                        pids.append(pid)
+
+                except (
+                    psutil.NoSuchProcess,
+                    psutil.AccessDenied,
+                    psutil.ZombieProcess,
+                ):
+                    # Handle exceptions that might occur while accessing process information
+                    pass
+
+            self.active_drivers = len(pids)
+        except Exception as e:
+            print("Failed to count active drivers: ", e)
+            self.active_drivers = "0"
 
     def _update_log(self) -> None:
         self._update_stats()
@@ -102,6 +128,8 @@ class Logger:
 
     def _update_stats(self) -> None:
         """updates the stats with a dictionary of mutable statistics"""
+        self.calc_active_drivers()
+
         with self.stats_mutex:
             self.stats = {
                 "follows": self.follows,
@@ -109,6 +137,7 @@ class Logger:
                 "status": self.current_state,
                 "bot_user_following_value": self.bot_user_following_value,
                 "bot_user_follower_value": self.bot_user_follower_value,
+                "driver_count": self.active_drivers,
                 "restarts": self.restarts,
                 "whitelist_count": self.whitelist_count,
                 "greylist_count": self.greylist_count,

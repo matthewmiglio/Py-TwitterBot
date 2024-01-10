@@ -89,12 +89,12 @@ new_stats = [
                 [
                     sg.Column(
                         [
-                            [sg.Text("Restarts: ")],
+                            [sg.Text("Restarts: ")],[sg.Text("Firefox Processes: ")],
                         ]
                     ),
                     sg.Column(
                         [
-                            [stat_box("restarts")],
+                            [stat_box("restarts")],[stat_box("driver_count")],
                         ]
                     ),
                 ]
