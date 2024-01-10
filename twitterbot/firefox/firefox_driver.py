@@ -8,6 +8,35 @@ from selenium.webdriver.firefox.options import Options
 import psutil
 
 
+import os
+import shutil
+
+
+def delete_scoped_dirs(folder_path):
+    deleted_count = 0
+    for entry in os.listdir(folder_path):
+        entry_path = os.path.join(folder_path, entry)
+        if os.path.isdir(entry_path) and "scoped_dir" in entry:
+            try:
+                shutil.rmtree(entry_path)
+                print(f"{entry_path} and its contents deleted successfully.")
+                deleted_count += 1
+            except Exception as e:
+                print(f"Error deleting {entry_path}: {e}")
+
+    return deleted_count
+
+
+def delete_old_firefox_data():
+    top_level = r"C:\Windows\SystemTemp"
+
+    deleted_count = delete_scoped_dirs(top_level)
+
+    print(
+        f'Total {deleted_count} directories containing "scoped_dir" have been deleted.'
+    )
+
+
 def get_firefox_pids():
     pids = []
     for process in psutil.process_iter(["pid", "name"]):
@@ -44,27 +73,35 @@ def create_firefox_driver(logger):
     start_time = time.time()
     logger.change_status("Creating firefox driver...")
 
-    # Set Firefox options
-    firefox_options = Options()
+    delete_old_firefox_data()
 
-    # firefox_options.add_argument('-headless')
-    firefox_options.add_argument("--mute-audio")
-    firefox_options.add_argument("--disable-gpu")
-    firefox_options.add_argument("--disable-software-rasterizer")
+    try:
+        # Set Firefox options
+        firefox_options = Options()
 
-    driver = webdriver.Firefox(options=firefox_options)
+        # firefox_options.add_argument('-headless')
+        firefox_options.add_argument("--mute-audio")
+        firefox_options.add_argument("--disable-gpu")
+        firefox_options.add_argument("--disable-software-rasterizer")
 
-    if configure_driver(driver):
-        logger.change_status(
-            f"Successfully created and configured firefox driver in {str(time.time() - start_time)[:5]}s"
-        )
-    else:
-        logger.change_status("Failed to create and configure firefox driver")
+        driver = webdriver.Firefox(options=firefox_options)
 
-    return driver
+        if configure_driver(driver):
+            logger.change_status(
+                f"Successfully created and configured firefox driver in {str(time.time() - start_time)[:5]}s"
+            )
+        else:
+            logger.change_status("Failed to create and configure firefox driver")
+
+        return driver
+    except:
+        logger.change_status("Failed to create firefox driver")
+        return False
 
 
 def create_background_firefox_driver(logger):
+    delete_old_firefox_data()
+
     try:
         # Set Firefox options
         firefox_options = Options()
@@ -82,7 +119,7 @@ def create_background_firefox_driver(logger):
 
         return driver
 
-    except Exceptions as e:
+    except Exception as e:
         print(f"Failed to made driver for reason: {e}")
         return False
 
