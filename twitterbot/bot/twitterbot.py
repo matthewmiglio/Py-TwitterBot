@@ -1008,7 +1008,11 @@ def scrape_these_follower_values(url, name):
         print(f"Took {str(time.time() - start_time)[:5]}s to scrape {name}")
         return "timeout"
 
-    driver.close()
+    try:
+        driver.close()
+    except:
+        pass
+    
     print(f"Took {str(time.time() - start_time)[:5]}s to scrape {name}")
     return values
 
