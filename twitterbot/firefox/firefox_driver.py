@@ -73,7 +73,6 @@ def create_firefox_driver(logger):
     start_time = time.time()
     logger.change_status("Creating firefox driver...")
 
-    delete_old_firefox_data()
 
     try:
         # Set Firefox options
@@ -100,7 +99,6 @@ def create_firefox_driver(logger):
 
 
 def create_background_firefox_driver(logger):
-    delete_old_firefox_data()
 
     try:
         # Set Firefox options
@@ -204,3 +202,7 @@ def scroll_down_to_load_more(driver, scroll_pause_time=2, num_scrolls=5):
 
     except Exception as e:
         print(f"Error while scrolling down: {str(e)}")
+
+
+
+delete_old_firefox_data()
