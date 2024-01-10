@@ -3,7 +3,11 @@ import sys
 import time
 
 from twitterbot.firefox.firefox_driver import create_firefox_driver, close_all_firefox
-from twitterbot.bot.twitterbot import login_to_twitter, main_loop, update_data_list_logger_values
+from twitterbot.bot.twitterbot import (
+    login_to_twitter,
+    main_loop,
+    update_data_list_logger_values,
+)
 from twitterbot.utils.logger import Logger
 from twitterbot.utils.thread import PausableThread, ThreadKilled
 
@@ -15,13 +19,19 @@ def restart_driver(driver, logger: Logger):
 
     close_all_firefox()
 
-
     if driver is not None:
         driver.quit()
 
     driver = create_firefox_driver(logger)
 
-    login_to_twitter(driver, logger)
+    while login_to_twitter(driver, logger) is False:
+        logger.change_status("Failed to login to twitter, retrying...")
+        try:
+            driver.quit()
+        except:
+            pass
+        close_all_firefox()
+        driver = create_firefox_driver(logger)
 
     logger.add_restart()
 

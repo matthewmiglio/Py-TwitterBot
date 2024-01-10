@@ -145,8 +145,12 @@ def find_element_by_xpath(driver, xpath):
 
 
 def get_to_webpage(driver, url) -> bool:
-    driver.get(url)
-    time.sleep(0.33)
+    try:
+        driver.get(url)
+        time.sleep(0.33)
+    except:
+        return False
+
     if check_for_timeout_webpage(driver):
         return False
 

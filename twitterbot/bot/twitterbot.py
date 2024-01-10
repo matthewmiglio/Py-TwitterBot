@@ -218,7 +218,9 @@ def login_to_twitter(driver, logger) -> bool:
     logger.change_status("Logging in to twitter...")
 
     # get to twitter
-    get_to_webpage(driver, "https://twitter.com")
+    if get_to_webpage(driver, "https://twitter.com") is False:
+        time.sleep(5)
+        return False
 
     # click login button
     if click_sign_in_button(driver) is True:
@@ -262,7 +264,8 @@ def login_to_twitter(driver, logger) -> bool:
     time.sleep(2)
 
     # get back to twitter.com
-    get_to_webpage(driver, "https://twitter.com")
+    if get_to_webpage(driver, "https://twitter.com") is False:
+        return False
     time.sleep(3)
 
     if check_for_failed_login(driver):
@@ -1012,7 +1015,14 @@ def scrape_these_follower_values(url, name):
         driver.close()
     except:
         pass
-    
+
+    try:
+        driver.quit()
+    except:
+        pass
+
+
+
     print(f"Took {str(time.time() - start_time)[:5]}s to scrape {name}")
     return values
 
