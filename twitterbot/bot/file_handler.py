@@ -31,8 +31,7 @@ def check_for_twitterbot_folder():
 def check_for_folder(directory):
     if os.path.exists(directory):
         return True
-    else:
-        return False
+    return False
 
 
 def make_folder(directory, folder_name):

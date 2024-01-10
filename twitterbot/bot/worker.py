@@ -2,12 +2,8 @@ import random
 import sys
 import time
 
-from firefox.firefox_driver import create_firefox_driver,close_all_firefox
-from twitterbot.bot.twitterbot import (
-    login_to_twitter,
-    main_loop,
-    update_data_list_logger_values,
-)
+from twitterbot.firefox.firefox_driver import create_firefox_driver, close_all_firefox
+from twitterbot.bot.twitterbot import login_to_twitter, main_loop, update_data_list_logger_values
 from twitterbot.utils.logger import Logger
 from twitterbot.utils.thread import PausableThread, ThreadKilled
 

@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 
 
-
 import psutil
 
 
@@ -41,10 +40,6 @@ def close_all_firefox():
             close_window_by_pid(pid)
 
 
-
-
-
-
 def create_firefox_driver(logger):
     start_time = time.time()
     logger.change_status("Creating firefox driver...")
@@ -70,21 +65,26 @@ def create_firefox_driver(logger):
 
 
 def create_background_firefox_driver(logger):
-    # Set Firefox options
-    firefox_options = Options()
+    try:
+        # Set Firefox options
+        firefox_options = Options()
 
-    # firefox_options.add_argument('-headless')
-    # firefox_options.add_argument("--start-minimized")
-    firefox_options.add_argument("--mute-audio")
-    firefox_options.add_argument("--disable-gpu")
-    firefox_options.add_argument("--disable-software-rasterizer")
-    firefox_options.add_argument("--headless")
+        # firefox_options.add_argument('-headless')
+        # firefox_options.add_argument("--start-minimized")
+        firefox_options.add_argument("--mute-audio")
+        firefox_options.add_argument("--disable-gpu")
+        firefox_options.add_argument("--disable-software-rasterizer")
+        firefox_options.add_argument("--headless")
 
-    driver = webdriver.Firefox(options=firefox_options)
+        driver = webdriver.Firefox(options=firefox_options)
 
-    configure_background_driver(driver)
+        configure_background_driver(driver)
 
-    return driver
+        return driver
+
+    except Exceptions as e:
+        print(f"Failed to made driver for reason: {e}")
+        return False
 
 
 def configure_driver(driver) -> bool:
