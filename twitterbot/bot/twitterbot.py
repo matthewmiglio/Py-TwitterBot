@@ -711,6 +711,7 @@ def vet_some_profiles(driver, logger):
     logger.change_status(f"Going to vet {thread_count} profiles")
 
     names = []
+    name_attempts = 0
     while len(names) < thread_count:
         # get more profiles if greylist is too low
         if count_greylist_profiles() < 1:
@@ -721,17 +722,21 @@ def vet_some_profiles(driver, logger):
 
         # get new names that dont exist in whitelist or blacklist
         name = get_name_from_greylist_file()
+        name_attempts+=1
         if name in names:
             continue
+
         if check_if_line_exists_in_blacklist(name):
             logger.change_status(f"{name} already exists in blacklist!")
             continue
+
         if check_if_line_exists_in_whitelist(name):
             logger.change_status(f"{name} already exists in whitelist!")
             continue
+
         names.append(name)
 
-    print(f"Got {len(names)} names to vet:")
+    print(f"Got {len(names)} names to vet in {name_attempts} tries:")
     for n in names:
         print(n)
     print("\n")
@@ -1020,8 +1025,6 @@ def scrape_these_follower_values(url, name):
         driver.quit()
     except:
         pass
-
-
 
     print(f"Took {str(time.time() - start_time)[:5]}s to scrape {name}")
     return values
