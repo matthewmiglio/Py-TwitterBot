@@ -278,7 +278,4 @@ def change_delimiter():
     for l in new_lines:
         add_line_to_file(bot_user_data_file_dir, l)
 
-
-if __name__ == "__main__":
-    change_delimiter()
-    file_setup()
+file_setup()
