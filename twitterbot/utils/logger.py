@@ -225,10 +225,24 @@ class Logger:
 
     @_updates_log
     def set_bot_user_follower_value(self, value):
+        prev_value = self.bot_user_follower_value
+        if abs(prev_value - value) > 500:
+            print(
+                "This value is too different from the previous value. Skipping set_bot_user_follower_value()"
+            )
+            return
+
         self.bot_user_follower_value = value
 
     @_updates_log
     def set_bot_user_following_value(self, value):
+        prev_value = self.bot_user_following_value
+        if abs(prev_value - value) > 500:
+            print(
+                "This value is too different from the previous value. Skipping set_bot_user_following_value()"
+            )
+            return
+
         self.bot_user_following_value = value
 
     @_updates_log

@@ -955,7 +955,7 @@ def update_data_list_logger_values(logger):
     logger.set_blacklist_count(count_blacklist_profiles())
 
 
-def update_bot_user_following_stats(logger, following, followers):
+def update_bot_user_following_stats(logger:Logger, following, followers):
     logger.set_bot_user_follower_value(followers)
     logger.set_bot_user_following_value(following)
     add_line_to_data_file(followers, following)
