@@ -506,42 +506,6 @@ def parse_follower_count(value):
 
 
 def vet_profile(driver, logger, profile_username):
-    url = f"https://twitter.com/{profile_username}"
-
-    # if name in good list, return BAD
-    if check_if_line_exists_in_whitelist(profile_username):
-        logger.change_status("Already in whitelist")
-        return "Already in whitelist"
-
-    # if name already in bad list, return BAD
-    if check_if_line_exists_in_blacklist(profile_username):
-        logger.change_status("Already in blacklist")
-        return "Already in blacklist"
-
-    # go to the profile
-    if not get_to_webpage(driver, url):
-        return "timeout"
-    time.sleep(2)
-
-    # if private account, skip it
-    if check_for_private_account(driver):
-        logger.change_status("Private account")
-        return "Private account"
-
-    if check_for_timeout_webpage(driver):
-        logger.change_status("Timeout page")
-        return "timeout"
-
-    # read following count
-    following_count = parse_follower_count(read_following_count(driver))
-    if following_count is False:
-        return "Fail Read following_count"
-
-    # read follower count
-    follower_count = parse_follower_count(read_follower_count(driver))
-    if follower_count is False:
-        return "Fail Read follower_count"
-
     # if follower count is less than 100, return False
     FOLLOWER_COUNT_LOWER_LIMIT = 50
     if int(follower_count) < FOLLOWER_COUNT_LOWER_LIMIT:
@@ -630,21 +594,45 @@ def check_for_private_account(driver):
 
 
 def vet_a_profile(driver, logger):
+    # get a random name from greylist that isnt in whitelist or blacklist
+    logger.change_status(f"Selecting a profile to vet...")
     if count_greylist_profiles() < 1:
         logger.change_status("Greylist is too low, scraping for more profiles...")
         if scrape_for_profiles(driver, logger) == "timeout":
             print("Found a timeout white scraping for profiles for greylist")
             return "timeout"
 
-    # get a random name from greylist
     name = get_name_from_greylist_file()
 
     logger.change_status(f"Vetting [{name}]...")
 
     vet_start_time = time.time()
 
+    # get to the profile
+    url = f"https://twitter.com/{name}"
+    if not get_to_webpage(driver, url):
+        logger.change_status("Timeout page")
+        return "timeout"
+
+    # if private account, skip it
+    if check_for_private_account(driver):
+        logger.change_status("Private account")
+        return "Private account"
+
+    # read following count
+    following_count = parse_follower_count(read_following_count(driver))
+    if following_count is False:
+        return "Fail Read following_count"
+
+    # read follower count
+    follower_count = parse_follower_count(read_follower_count(driver))
+    if follower_count is False:
+        return "Fail Read follower_count"
+
     # vet the profile
-    profile_check = vet_profile(driver, logger, name)
+    profile_check = vet_profile_given_stats(
+        logger, name, following_count, follower_count
+    )
 
     vet_time_taken = str(time.time() - vet_start_time)[:5]
 
@@ -705,14 +693,11 @@ def vet_profile_given_stats(logger, profile_username, following_count, follower_
     return True
 
 
-def vet_some_profiles(driver, logger):
-    thread_count = 7
 
-    logger.change_status(f"Going to vet {thread_count} profiles")
-
+def get_unique_names_from_greylist(driver, logger, count):
     names = []
     name_attempts = 0
-    while len(names) < thread_count:
+    while len(names) < count:
         # get more profiles if greylist is too low
         if count_greylist_profiles() < 1:
             logger.change_status("Greylist is too low, scraping for more profiles...")
@@ -722,7 +707,7 @@ def vet_some_profiles(driver, logger):
 
         # get new names that dont exist in whitelist or blacklist
         name = get_name_from_greylist_file()
-        name_attempts+=1
+        name_attempts += 1
         if name in names:
             continue
 
@@ -737,10 +722,25 @@ def vet_some_profiles(driver, logger):
         names.append(name)
 
     print(f"Got {len(names)} names to vet in {name_attempts} tries:")
+    return names
+
+
+def vet_some_profiles(driver, logger) -> int:
+    thread_count = 7
+
+    positive_vets = 0
+
+    logger.change_status(f"Going to vet {thread_count} profiles")
+
+    #select unique names that aren't in blacklist or whitelist yet
+    names = get_unique_names_from_greylist(driver, logger, thread_count)
+
+    #print out the names that will be vetted
     for n in names:
         print(n)
     print("\n")
 
+    #vet each profile in a thread
     results = []
     print("Beginning scrape_target_thread()")
     try:
@@ -749,9 +749,7 @@ def vet_some_profiles(driver, logger):
         print(f"Failed during scrape_target_thread(): {e}")
 
     for result in results:
-        print(f"checking this result: {result}")
         # if reading didnt work, just skip the profile. We dont know if its good or not
-        # print(result)
         if (
             result == "timeout"
             or result == "Private account"
@@ -769,8 +767,8 @@ def vet_some_profiles(driver, logger):
             print("Values arent ints. continuing")
             continue
 
-        following_count = parse_follower_count(result[1])
-        follower_count = parse_follower_count(result[2])
+        following_count = parse_follower_count(result[2])
+        follower_count = parse_follower_count(result[1])
 
         profile_username = result[0]
 
@@ -780,32 +778,13 @@ def vet_some_profiles(driver, logger):
 
         if out is True:
             print(f"Added {profile_username} to whitelist file")
+            positive_vets+=1
             add_to_whitelist_file(profile_username)
         else:
-            print(f"Added {profile_username} to blacklist file")
+            print(f"Added {profile_username} to blacklist file: {out}")
             add_to_blacklist_file(profile_username)
 
-
-def vet_profiles(driver, logger, whitelist_count):
-    logger.change_status(f"Whitelist count is {count_whitelist_profiles()}")
-
-    count = 0
-
-    while count_whitelist_profiles() < whitelist_count:
-        logger.change_status("Vetting a profile...")
-        update_data_list_logger_values(logger)
-
-        if vet_a_profile(driver, logger) == "timeout":
-            logger.change_status("Foudn a timeout while vetting a profile")
-            return "timeout"
-
-    logger.change_status(
-        f"There are {(count_whitelist_profiles())} accounts in whitelist file. Stopping"
-    )
-
-    update_data_list_logger_values(logger)
-
-    return count
+    return positive_vets
 
 
 def click_follow_button_on_this_profile(driver):
@@ -840,10 +819,11 @@ def follow_a_profile(driver, logger):
 
     logger.change_status("Following a random profile")
 
-    if count_whitelist_profiles() < 2:
+    while count_whitelist_profiles() < 2:
         logger.change_status("Whitelist is empty, vetting profiles")
-        while vet_a_profile(driver, logger) is not True:
-            print("Vetting profiles until it gets 1 so bot can continue to follow...")
+        positive_vets=vet_some_profiles(driver, logger)
+        logger.change_status(f'Found {positive_vets} positive vets!')
+
 
     profile_username = get_name_from_whitelist_file()
     logger.change_status(f"Following a [{profile_username}]")
@@ -1096,7 +1076,8 @@ def main_loop(driver, logger):
     #     return False
 
     logger.change_status("Vetting some profiles...")
-    vet_some_profiles(driver, logger)
+    positive_vets = vet_some_profiles(driver, logger)
+    logger.change_status(f'Found {positive_vets} positive vets!')
 
     print("\nVetted some profiles in the meantime...")
     # if completed all checks and tasks without timeout, return True

@@ -33,8 +33,20 @@ new_stats = [
             expand_y=True,
             layout=[
                 [
-                    sg.Column([[sg.Text("Follows: ")], [sg.Text("Unfollows: ")], [sg.Text("Follows per minute: ")]]),
-                    sg.Column([[stat_box("follows")], [stat_box("unfollows")], [stat_box("follows_per_minute")]]),
+                    sg.Column(
+                        [
+                            [sg.Text("Follows: ")],
+                            [sg.Text("Unfollows: ")],
+                            [sg.Text("Follows per minute: ")],
+                        ]
+                    ),
+                    sg.Column(
+                        [
+                            [stat_box("follows")],
+                            [stat_box("unfollows")],
+                            [stat_box("follows_per_minute")],
+                        ]
+                    ),
                 ]
             ],
         ),
@@ -89,12 +101,14 @@ new_stats = [
                 [
                     sg.Column(
                         [
-                            [sg.Text("Restarts: ")],[sg.Text("Firefox Processes: ")],
+                            [sg.Text("Restarts: ")],
+                            [sg.Text("Firefox Processes: ")],
                         ]
                     ),
                     sg.Column(
                         [
-                            [stat_box("restarts")],[stat_box("driver_count")],
+                            [stat_box("restarts")],
+                            [stat_box("driver_count")],
                         ]
                     ),
                 ]
