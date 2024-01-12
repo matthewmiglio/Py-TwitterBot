@@ -721,7 +721,7 @@ def get_unique_names_from_greylist(driver, logger, count):
 
         names.append(name)
 
-    print(f"Got {len(names)} names to vet in {name_attempts} tries:")
+    logger.change_status(f"Got {len(names)} names to vet in {name_attempts} tries:")
     return names
 
 
