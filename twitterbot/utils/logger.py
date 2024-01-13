@@ -233,7 +233,7 @@ class Logger:
 
         if abs(prev_value - value) > 500:
             print(
-                "This value is too different from the previous value. Skipping set_bot_user_follower_value()"
+                f"This value: {value} is too different from the previous value. Skipping set_bot_user_follower_value()"
             )
             return
 
@@ -249,7 +249,7 @@ class Logger:
 
         if abs(prev_value - value) > 500:
             print(
-                "This value is too different from the previous value. Skipping set_bot_user_following_value()"
+                f"This value: {value} is too different from the previous value. Skipping set_bot_user_following_value()"
             )
             return
 
