@@ -25,6 +25,7 @@ from twitterbot.bot.file_handler import (
 
 from twitterbot.firefox.firefox_driver import (
     get_to_webpage,
+    restart_driver,
     scroll_down_to_load_more,
     check_for_timeout_webpage,
     find_element_by_xpath,
@@ -32,7 +33,7 @@ from twitterbot.firefox.firefox_driver import (
 )
 
 
-BOT_USER_FOLLOWING_LIMIT = 2000
+BOT_USER_FOLLOWING_LIMIT = 3000
 GREYLIST_LOWER_LIMIT = 100
 WHITELIST_LOWER_LIMIT = 30
 FOLLOW_TIMEOUT_TIME = 300  # s
@@ -183,187 +184,6 @@ for n in SCRAPE_TARGET_USERNAMES:
     SCRAPE_TARGET_URLS.append(f"https://twitter.com/{n}/followers")
 
 
-def check_for_failed_login(driver):
-    xpaths = [
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[2]/a/div/span/span",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[1]/a/div",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[2]/span",
-        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[1]/span",
-    ]
-
-    for xpath in xpaths:
-        try:
-            element = find_element_by_xpath(driver, xpath)
-            text = element.text
-
-            if (
-                "Sign up" in text
-                or "Log in" in text
-                or "People on X are the first to know." in text
-                or "Don’t miss what’s happening" in text
-            ):
-                return True
-
-        except:
-            pass
-
-    return False
-
-
-def login_to_twitter(driver, logger) -> bool:
-    start_time = time.time()
-
-    user, password = get_creds()
-
-    logger.change_status("Logging in to twitter...")
-
-    # get to twitter
-    if get_to_webpage(driver, "https://twitter.com") is False:
-        time.sleep(5)
-        return False
-
-    # click login button
-    if click_sign_in_button(driver) is True:
-        # logger.change_status('CLicked "Sign in" button')
-        time.sleep(0.5)
-    else:
-        logger.change_status("Failed to click login button Returning False")
-        return False
-
-    # type username
-    if type_username_into_input(driver, user):
-        # logger.change_status("Typed username")
-        pass
-    else:
-        logger.change_status("Failed to type username Returning False")
-        return False
-
-    # click next
-    if click_next_after_username_input(driver):
-        # logger.change_status("Clicked next")
-        time.sleep(0.5)
-    else:
-        logger.change_status("Failed to click next Returning False")
-        return False
-
-    # type password
-    if type_password_into_input(driver, password):
-        # logger.change_status("Typed password")
-        time.sleep(0.5)
-    else:
-        logger.change_status("Failed to type password Returning False")
-        return False
-
-    # click login button
-    if click_log_in_after_password_input(driver):
-        # logger.change_status("Clicked login button")
-        pass
-    else:
-        logger.change_status("Failed to click login button Returning False")
-        return False
-    time.sleep(2)
-
-    # get back to twitter.com
-    if get_to_webpage(driver, "https://twitter.com") is False:
-        return False
-    time.sleep(3)
-
-    if check_for_failed_login(driver):
-        logger.change_status("Failed to login")
-        return False
-    else:
-        logger.change_status("Good login!")
-        time.sleep(0.33)
-
-    time_taken = str(time.time() - start_time)[:5]
-    logger.change_status(f"Logged in to twitter in {time_taken}s")
-
-    return True
-
-
-def click_log_in_after_password_input(driver):
-    xpath = "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div"
-
-    timeout = 10  # s
-    start_time = time.time()
-    while time.time() - start_time < timeout:
-        try:
-            element = find_element_by_xpath(driver, xpath)
-            element.click()
-            return True
-        except:
-            continue
-
-    return False
-
-
-def type_password_into_input(driver, password):
-    xpath = "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input"
-
-    timeout = 10  # s
-    start_time = time.time()
-    while time.time() - start_time < timeout:
-        try:
-            element = find_element_by_xpath(driver, xpath)
-            element.send_keys(password)
-            return True
-        except:
-            continue
-
-    return False
-
-
-def click_next_after_username_input(driver):
-    xpath = "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[6]/div"
-
-    timeout = 10  # s
-    start_time = time.time()
-    while time.time() - start_time < timeout:
-        try:
-            element = find_element_by_xpath(driver, xpath)
-            element.click()
-            return True
-        except:
-            continue
-
-    return False
-
-
-def type_username_into_input(driver, username):
-    xpath = "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input"
-
-    timeout = 10  # s
-    start_time = time.time()
-    while time.time() - start_time < timeout:
-        try:
-            element = find_element_by_xpath(driver, xpath)
-            element.send_keys(username)
-            return True
-        except:
-            continue
-
-    return False
-
-
-def click_sign_in_button(driver):
-    xpaths = [
-        "/html/body/div/div/div/div[2]/main/div/div/div[1]/div/div/div[3]/div[5]/a/div",
-    ]
-
-    timeout = 30  # s
-    start_time = time.time()
-    while time.time() - start_time < timeout:
-        for xpath in xpaths:
-            try:
-                element = find_element_by_xpath(driver, xpath)
-                element.click()
-                return True
-            except:
-                continue
-
-    return False
-
-
 def click_followers_button_on_profile(driver):
     xpath = "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div/div[5]/div[2]/a/span[2]/span"
 
@@ -503,35 +323,6 @@ def parse_follower_count(value):
         return int(value)
 
     return int(value)
-
-
-def vet_profile(driver, logger, profile_username):
-    # if follower count is less than 100, return False
-    FOLLOWER_COUNT_LOWER_LIMIT = 50
-    if int(follower_count) < FOLLOWER_COUNT_LOWER_LIMIT:
-        return f"Follower count <{FOLLOWER_COUNT_LOWER_LIMIT}"
-
-    # if following less than 10 people, return False
-    FOLLOWING_COUNT_LOWER_LIMIT = 10
-    if int(following_count) < FOLLOWING_COUNT_LOWER_LIMIT:
-        return f"Follow count <{FOLLOWING_COUNT_LOWER_LIMIT}"
-
-    # if ratio is bad, return bad
-    ratio = following_count / follower_count
-    if ratio > 1.5:
-        return f"Bad ratio: {str(ratio)[:5]}"
-
-    # if following count is greater than 1k, return FALSE
-    FOLLOWING_COUNT_LIMIT = 1000
-    if int(following_count) > FOLLOWING_COUNT_LIMIT:
-        return f"Follow count >{FOLLOWING_COUNT_LIMIT}"
-
-    # if follower count is greater than 3k, return False
-    FOLLOWER_COUNT_LIMIT = 5000
-    if int(follower_count) > FOLLOWER_COUNT_LIMIT:
-        return f"Follower count >{FOLLOWER_COUNT_LIMIT}"
-
-    return True
 
 
 def read_follower_count(driver):
@@ -895,8 +686,8 @@ def click_unfollow_elements(driver, logger, count=20):
 
         logger.change_status(f"Unfollowed {unfollows} users")
         return unfollows
-    except Exception as e:
-        logger.change_status(f"Failed to unfollow users with error: {e}")
+    except:
+        logger.change_status(f"Errored while unfollowing users")
 
     return unfollows
 
@@ -1035,6 +826,41 @@ def scrape_target_thread(names, results):
         thread.join()
 
 
+def unfollow_main_loop(driver, logger):
+    users_to_unfollow = int(BOT_USER_FOLLOWING_LIMIT / 2)
+    unfollow_loops = 0
+
+    while 1:
+        # update loop count
+        unfollow_loops += 1
+
+        # unfollow some users, tracking the unfollow count
+        unfollows = unfollow_users(driver, logger)
+
+        # update users_to_unfollow
+        users_to_unfollow -= unfollows
+
+        # make printout
+        print(f"Users left to unfollow: {users_to_unfollow}")
+        print(f"Unfollow loops: {unfollow_loops}")
+
+        # break if done
+        if users_to_unfollow < 1:
+            break
+
+        # update bot user stats each loop
+        following, followers = count_bot_user_following_stats(driver)
+        update_bot_user_following_stats(logger, following, followers)
+
+        # every n loops, restart driver then relogin
+        if unfollow_loops % 5 == 0:
+            logger.set_time_of_last_restart()
+
+            driver = restart_driver(driver, logger)
+
+    return True
+
+
 def main_loop(driver, logger):
     # update whitelist, blacklist values
     print("Updating logger's whitelist/blacklist values")
@@ -1046,18 +872,8 @@ def main_loop(driver, logger):
     update_bot_user_following_stats(logger, following, followers)
 
     # if following is too high, unfollow users till at 1/3 of limit
-    unfollow_loops = 0
     if following > BOT_USER_FOLLOWING_LIMIT:
-        users_to_unfollow = int(BOT_USER_FOLLOWING_LIMIT / 2)
-        while 1:
-            unfollows = unfollow_users(driver, logger)
-
-            users_to_unfollow -= unfollows
-            print(f"Users left to unfollow: {users_to_unfollow}")
-            print(f"Unfollow loops: {unfollow_loops}")
-
-            if users_to_unfollow < 1:
-                break
+        unfollow_main_loop(driver, logger)
 
     print("\nUser following count is below the limit... continuing")
 

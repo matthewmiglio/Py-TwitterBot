@@ -1,10 +1,9 @@
-import psutil
-
 """import logging for file logging"""
 import logging
 import threading
 import time
 from functools import wraps
+import psutil
 
 
 def round_down_int(this_float):
@@ -227,15 +226,16 @@ class Logger:
     def set_bot_user_follower_value(self, value):
         prev_value = self.bot_user_follower_value
 
-        # if value is of type bool, return
-        if type(value) == bool:
-            return
+        if prev_value != 0:
+            # if value is of type bool, return
+            if type(value) == bool:
+                return
 
-        if abs(prev_value - value) > 500:
-            print(
-                f"This value: {value} is too different from the previous value. Skipping set_bot_user_follower_value()"
-            )
-            return
+            if abs(prev_value - value) > 500:
+                print(
+                    f"This value: {value} is too different from the previous value. Skipping set_bot_user_follower_value()"
+                )
+                return
 
         self.bot_user_follower_value = value
 
@@ -243,15 +243,16 @@ class Logger:
     def set_bot_user_following_value(self, value):
         prev_value = self.bot_user_following_value
 
-        # if value is of type bool, return
-        if type(value) == bool:
-            return
+        if prev_value != 0:
+            # if value is of type bool, return
+            if type(value) == bool:
+                return
 
-        if abs(prev_value - value) > 500:
-            print(
-                f"This value: {value} is too different from the previous value. Skipping set_bot_user_following_value()"
-            )
-            return
+            if abs(prev_value - value) > 500:
+                print(
+                    f"This value: {value} is too different from the previous value. Skipping set_bot_user_following_value()"
+                )
+                return
 
         self.bot_user_following_value = value
 

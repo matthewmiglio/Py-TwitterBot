@@ -1,10 +1,8 @@
 import random
 import sys
 import time
-
-from twitterbot.firefox.firefox_driver import create_firefox_driver, close_all_firefox
+from twitterbot.firefox.firefox_driver import close_all_firefox, restart_driver
 from twitterbot.bot.twitterbot import (
-    login_to_twitter,
     main_loop,
     update_data_list_logger_values,
 )
@@ -12,30 +10,6 @@ from twitterbot.utils.logger import Logger
 from twitterbot.utils.thread import PausableThread, ThreadKilled
 
 RESTART_TIMEOUT = 10  # s
-
-
-def restart_driver(driver, logger: Logger):
-    logger.set_time_of_last_restart()
-
-    close_all_firefox()
-
-    if driver is not None:
-        driver.quit()
-
-    driver = create_firefox_driver(logger)
-
-    while login_to_twitter(driver, logger) is False:
-        logger.change_status("Failed to login to twitter, retrying...")
-        try:
-            driver.quit()
-        except:
-            pass
-        close_all_firefox()
-        driver = create_firefox_driver(logger)
-
-    logger.add_restart()
-
-    return driver
 
 
 class WorkerThread(PausableThread):
@@ -72,6 +46,7 @@ class WorkerThread(PausableThread):
         except ThreadKilled:
             # normal shutdown
             print("Normal shutdown!")
+            close_all_firefox()
             sys.exit()
 
         except Exception as err:  # pylint: disable=broad-except
@@ -89,9 +64,3 @@ def restart_wait(logger, duration):
         logger.change_status(f"Waiting {time_left}s more before restart...")
 
         time.sleep(random.randint(1, 100) / 100)
-
-
-if __name__ == "__main__":
-    d = restart_driver(None, Logger())
-
-    input("Enter to continue")

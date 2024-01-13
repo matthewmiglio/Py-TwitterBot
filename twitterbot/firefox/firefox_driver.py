@@ -3,13 +3,219 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
-
+from twitterbot.utils.logger import Logger
+from twitterbot.bot.file_handler import get_creds
 
 import psutil
 
 
 import os
 import shutil
+
+
+def check_for_failed_login(driver):
+    xpaths = [
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[2]/a/div/span/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[2]/div/div/div[1]/a/div",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[2]/span",
+        "/html/body/div[1]/div/div/div[1]/div/div[1]/div/div/div/div/div[1]/div[1]/span",
+    ]
+
+    for xpath in xpaths:
+        try:
+            element = find_element_by_xpath(driver, xpath)
+            text = element.text
+
+            if (
+                "Sign up" in text
+                or "Log in" in text
+                or "People on X are the first to know." in text
+                or "Don’t miss what’s happening" in text
+            ):
+                return True
+
+        except:
+            pass
+
+    return False
+
+
+def click_log_in_after_password_input(driver):
+    xpath = "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div"
+
+    timeout = 10  # s
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            element = find_element_by_xpath(driver, xpath)
+            element.click()
+            return True
+        except:
+            continue
+
+    return False
+
+
+def type_password_into_input(driver, password):
+    xpath = "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input"
+
+    timeout = 10  # s
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            element = find_element_by_xpath(driver, xpath)
+            element.send_keys(password)
+            return True
+        except:
+            continue
+
+    return False
+
+
+def click_next_after_username_input(driver):
+    xpath = "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[6]/div"
+
+    timeout = 10  # s
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            element = find_element_by_xpath(driver, xpath)
+            element.click()
+            return True
+        except:
+            continue
+
+    return False
+
+
+def type_username_into_input(driver, username):
+    xpath = "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input"
+
+    timeout = 10  # s
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            element = find_element_by_xpath(driver, xpath)
+            element.send_keys(username)
+            return True
+        except:
+            continue
+
+    return False
+
+
+def click_sign_in_button(driver):
+    xpaths = [
+        "/html/body/div/div/div/div[2]/main/div/div/div[1]/div/div/div[3]/div[5]/a/div",
+    ]
+
+    timeout = 30  # s
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        for xpath in xpaths:
+            try:
+                element = find_element_by_xpath(driver, xpath)
+                element.click()
+                return True
+            except:
+                continue
+
+    return False
+
+
+def login_to_twitter(driver, logger) -> bool:
+    start_time = time.time()
+
+    user, password = get_creds()
+
+    logger.change_status("Logging in to twitter...")
+
+    # get to twitter
+    if get_to_webpage(driver, "https://twitter.com") is False:
+        time.sleep(5)
+        return False
+
+    # click login button
+    if click_sign_in_button(driver) is True:
+        # logger.change_status('CLicked "Sign in" button')
+        time.sleep(0.5)
+    else:
+        logger.change_status("Failed to click login button Returning False")
+        return False
+
+    # type username
+    if type_username_into_input(driver, user):
+        # logger.change_status("Typed username")
+        pass
+    else:
+        logger.change_status("Failed to type username Returning False")
+        return False
+
+    # click next
+    if click_next_after_username_input(driver):
+        # logger.change_status("Clicked next")
+        time.sleep(0.5)
+    else:
+        logger.change_status("Failed to click next Returning False")
+        return False
+
+    # type password
+    if type_password_into_input(driver, password):
+        # logger.change_status("Typed password")
+        time.sleep(0.5)
+    else:
+        logger.change_status("Failed to type password Returning False")
+        return False
+
+    # click login button
+    if click_log_in_after_password_input(driver):
+        # logger.change_status("Clicked login button")
+        pass
+    else:
+        logger.change_status("Failed to click login button Returning False")
+        return False
+    time.sleep(2)
+
+    # get back to twitter.com
+    if get_to_webpage(driver, "https://twitter.com") is False:
+        return False
+    time.sleep(3)
+
+    if check_for_failed_login(driver):
+        logger.change_status("Failed to login")
+        return False
+    else:
+        logger.change_status("Good login!")
+        time.sleep(0.33)
+
+    time_taken = str(time.time() - start_time)[:5]
+    logger.change_status(f"Logged in to twitter in {time_taken}s")
+
+    return True
+
+
+def restart_driver(driver, logger: Logger):
+    logger.set_time_of_last_restart()
+
+    close_all_firefox()
+
+    if driver is not None:
+        driver.quit()
+
+    driver = create_firefox_driver(logger)
+
+    while login_to_twitter(driver, logger) is False:
+        logger.change_status("Failed to login to twitter, retrying...")
+        try:
+            driver.quit()
+        except:
+            pass
+        close_all_firefox()
+        driver = create_firefox_driver(logger)
+
+    logger.add_restart()
+
+    return driver
 
 
 def delete_scoped_dirs(folder_path):
