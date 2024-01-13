@@ -878,9 +878,9 @@ def click_confirm_unfollow_button(driver):
 
 
 def click_unfollow_elements(driver, logger, count=20):
+    unfollows = 0
     try:
         elements = find_unfollow_elements(driver)
-        unfollows = 0
 
         # cut elements to a random {count}
         if count < len(elements):
@@ -898,7 +898,7 @@ def click_unfollow_elements(driver, logger, count=20):
     except Exception as e:
         logger.change_status(f"Failed to unfollow users with error: {e}")
 
-    return 0
+    return unfollows
 
 
 def wait_for_following_page(driver):
