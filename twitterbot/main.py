@@ -253,3 +253,14 @@ class PlotWorkerThread(StoppableThread):
 
 if __name__ == "__main__":
     main_gui()
+
+    # from twitterbot.firefox.firefox_driver import create_firefox_driver
+    # from twitterbot.bot.twitterbot import unfollow_users, login_to_twitter
+    # from twitterbot.utils.logger import Logger
+
+    # users_to_unfollow = 200
+    # logger = Logger()
+    # driver = create_firefox_driver(logger)
+    # login_to_twitter(driver, logger)
+    # time.sleep(1)
+    # unfollow_users(driver, logger, users_to_unfollow)

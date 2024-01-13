@@ -226,6 +226,11 @@ class Logger:
     @_updates_log
     def set_bot_user_follower_value(self, value):
         prev_value = self.bot_user_follower_value
+
+        # if value is of type bool, return
+        if type(value) == bool:
+            return
+
         if abs(prev_value - value) > 500:
             print(
                 f"This value: {value} is too different from the previous value. Skipping set_bot_user_follower_value()"
@@ -237,6 +242,11 @@ class Logger:
     @_updates_log
     def set_bot_user_following_value(self, value):
         prev_value = self.bot_user_following_value
+
+        # if value is of type bool, return
+        if type(value) == bool:
+            return
+
         if abs(prev_value - value) > 500:
             print(
                 f"This value: {value} is too different from the previous value. Skipping set_bot_user_following_value()"

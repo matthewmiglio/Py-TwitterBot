@@ -32,7 +32,7 @@ from twitterbot.firefox.firefox_driver import (
 )
 
 
-BOT_USER_FOLLOWING_LIMIT = 3000
+BOT_USER_FOLLOWING_LIMIT = 2000
 GREYLIST_LOWER_LIMIT = 100
 WHITELIST_LOWER_LIMIT = 30
 FOLLOW_TIMEOUT_TIME = 300  # s
@@ -693,7 +693,6 @@ def vet_profile_given_stats(logger, profile_username, following_count, follower_
     return True
 
 
-
 def get_unique_names_from_greylist(driver, logger, count):
     names = []
     name_attempts = 0
@@ -732,15 +731,15 @@ def vet_some_profiles(driver, logger) -> int:
 
     logger.change_status(f"Going to vet {thread_count} profiles")
 
-    #select unique names that aren't in blacklist or whitelist yet
+    # select unique names that aren't in blacklist or whitelist yet
     names = get_unique_names_from_greylist(driver, logger, thread_count)
 
-    #print out the names that will be vetted
+    # print out the names that will be vetted
     for n in names:
         print(n)
     print("\n")
 
-    #vet each profile in a thread
+    # vet each profile in a thread
     results = []
     print("Beginning scrape_target_thread()")
     try:
@@ -778,7 +777,7 @@ def vet_some_profiles(driver, logger) -> int:
 
         if out is True:
             print(f"Added {profile_username} to whitelist file")
-            positive_vets+=1
+            positive_vets += 1
             add_to_whitelist_file(profile_username)
         else:
             print(f"Added {profile_username} to blacklist file: {out}")
@@ -821,9 +820,8 @@ def follow_a_profile(driver, logger):
 
     while count_whitelist_profiles() < 2:
         logger.change_status("Whitelist is empty, vetting profiles")
-        positive_vets=vet_some_profiles(driver, logger)
-        logger.change_status(f'Found {positive_vets} positive vets!')
-
+        positive_vets = vet_some_profiles(driver, logger)
+        logger.change_status(f"Found {positive_vets} positive vets!")
 
     profile_username = get_name_from_whitelist_file()
     logger.change_status(f"Following a [{profile_username}]")
@@ -879,23 +877,28 @@ def click_confirm_unfollow_button(driver):
     return False
 
 
-def click_unfollow_elements(driver, logger, count):
-    elements = find_unfollow_elements(driver)
-    unfollows = 0
+def click_unfollow_elements(driver, logger, count=20):
+    try:
+        elements = find_unfollow_elements(driver)
+        unfollows = 0
 
-    # cut elements to a random {count}
-    if count < len(elements):
-        elements = random.sample(elements, count)
+        # cut elements to a random {count}
+        if count < len(elements):
+            elements = random.sample(elements, count)
 
-    for element in elements:
-        element.click()
-        if click_confirm_unfollow_button(driver) is False:
-            continue
-        unfollows += 1
-        logger.add_unfollow()
+        for element in elements:
+            element.click()
+            if click_confirm_unfollow_button(driver) is False:
+                continue
+            unfollows += 1
+            logger.add_unfollow()
 
-    logger.change_status(f"Unfollowed {unfollows} users")
-    return unfollows
+        logger.change_status(f"Unfollowed {unfollows} users")
+        return unfollows
+    except Exception as e:
+        logger.change_status(f"Failed to unfollow users with error: {e}")
+
+    return 0
 
 
 def wait_for_following_page(driver):
@@ -908,33 +911,28 @@ def wait_for_following_page(driver):
     return False
 
 
-def unfollow_users(driver, logger, users_to_unfollow):
-    username = get_creds()[0]
+def unfollow_users(driver, logger):
+    print("Getting to bot user profile to unfollow users...")
+    url = f"https://twitter.com/{get_creds()[0]}/following"
 
-    users_left_to_unfollow = users_to_unfollow
+    if get_to_webpage(driver, url) is False:
+        logger.change_status("Failed to get to bot user profile to unfollow users")
+        return False
+    time.sleep(1)
 
-    while users_left_to_unfollow > 0:
-        # get to profile
-        url = f"https://twitter.com/{username}/following"
-        if get_to_webpage(driver, url) is False:
-            return "timeout"
-        time.sleep(1)
+    # wait for unfollow buttons to apppear
+    print("Waiting for following list to appear")
+    if wait_for_following_page(driver) is False:
+        logger.change_status("Failed waiting for following page")
+        return False
 
-        # wait for unfollow buttons to apppear
-        if wait_for_following_page(driver) is False:
-            logger.change_status("Failed waiting for following page")
-            return False
+    # click unfollow buttons
+    print("Unfollowing users...")
+    unfollows = click_unfollow_elements(driver, logger)
 
-        # click unfollow buttons
-        unfollows = click_unfollow_elements(driver, logger, users_left_to_unfollow)
+    logger.change_status(f"Just unfollowed {unfollows} users")
 
-        logger.change_status(f"Just unfollowed {unfollows} users")
-
-        users_left_to_unfollow -= unfollows
-
-        logger.change_status(f"New users left to unfollow: {users_left_to_unfollow}")
-
-    return True
+    return unfollows
 
 
 def count_bot_user_following_stats(driver):
@@ -955,7 +953,7 @@ def update_data_list_logger_values(logger):
     logger.set_blacklist_count(count_blacklist_profiles())
 
 
-def update_bot_user_following_stats(logger:Logger, following, followers):
+def update_bot_user_following_stats(logger: Logger, following, followers):
     logger.set_bot_user_follower_value(followers)
     logger.set_bot_user_following_value(following)
     add_line_to_data_file(followers, following)
@@ -1048,16 +1046,19 @@ def main_loop(driver, logger):
     update_bot_user_following_stats(logger, following, followers)
 
     # if following is too high, unfollow users till at 1/3 of limit
+    unfollow_loops = 0
     if following > BOT_USER_FOLLOWING_LIMIT:
-        if (
-            unfollow_users(driver, logger, int(0.3333 * BOT_USER_FOLLOWING_LIMIT))
-            == "timeout"
-        ):
-            # if timeout occures while unfollowing users, return False
-            return False
+        users_to_unfollow = int(BOT_USER_FOLLOWING_LIMIT / 2)
+        while 1:
+            unfollows = unfollow_users(driver, logger)
 
-        # if unfollowed users without timeout, return True
-        return True
+            users_to_unfollow -= unfollows
+            print(f"Users left to unfollow: {users_to_unfollow}")
+            print(f"Unfollow loops: {unfollow_loops}")
+
+            if users_to_unfollow < 1:
+                break
+
     print("\nUser following count is below the limit... continuing")
 
     # if its been long enough, follow a profile
@@ -1077,7 +1078,7 @@ def main_loop(driver, logger):
 
     logger.change_status("Vetting some profiles...")
     positive_vets = vet_some_profiles(driver, logger)
-    logger.change_status(f'Found {positive_vets} positive vets!')
+    logger.change_status(f"Found {positive_vets} positive vets!")
 
     print("\nVetted some profiles in the meantime...")
     # if completed all checks and tasks without timeout, return True
