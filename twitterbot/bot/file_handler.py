@@ -211,23 +211,26 @@ def make_bot_user_data_file():
 
 
 def add_line_to_data_file(follower_count, following_count):
-    #handle bad inputs
+    # handle bad inputs
     if follower_count == None or following_count == None:
-        print(f'Called add_line_to_data_file() with bad inpputs: {follower_count}/{following_count}')
+        print(
+            f"Called add_line_to_data_file() with bad inpputs: {follower_count}/{following_count}"
+        )
         return
 
     try:
         int(follower_count)
         int(following_count)
     except:
-        print(f'Called add_line_to_data_file() with bad inpputs: {follower_count}/{following_count}')
+        print(
+            f"Called add_line_to_data_file() with bad inpputs: {follower_count}/{following_count}"
+        )
         return
 
-
-    #make the data line
+    # make the data line
     line = f"NEW_DELIMITER{follower_count}NEW_DELIMITER{following_count}NEW_DELIMITER{time.time()}NEW_DELIMITER\n"
 
-    #add the line to file
+    # add the line to file
     add_line_to_file(bot_user_data_file_dir, line)
 
 
@@ -278,4 +281,58 @@ def change_delimiter():
     for l in new_lines:
         add_line_to_file(bot_user_data_file_dir, l)
 
+
+def delete_file(directory):
+    """
+    Deletes a file given its directory.
+
+    Parameters:
+    - directory (str): The directory of the file to be deleted.
+    """
+    try:
+        os.remove(directory)
+        print(f"Deleted file: {directory}")
+    except OSError as e:
+        print(f"Error deleting file: {e}")
+
+
+def clean_data_file():
+    # track original length
+    prev_length = len(read_file_lines(bot_user_data_file_dir))
+
+    # get every god line from data file
+    good_lines = []
+    lines = read_file_lines(bot_user_data_file_dir)
+    for l in lines:
+        if "False" in l:
+            continue
+
+        parts = l.split("NEW_DELIMITER")
+        if len(parts) != 5:
+            continue
+
+        good_lines.append(l)
+
+    # delete the old file
+    delete_file(bot_user_data_file_dir)
+
+    # remake the file
+    make_bot_user_data_file()
+
+    # add each good line to bot user data file
+    for line in good_lines:
+        parts = line.split("NEW_DELIMITER")
+        follower_count = parts[1]
+        following_count = parts[2]
+
+        add_line_to_data_file(follower_count, following_count)
+
+
+    # track end length
+    end_length = len(read_file_lines(bot_user_data_file_dir))
+
+    print(f"Removed {prev_length - end_length} trash lines from data file")
+
+
 file_setup()
+clean_data_file()
