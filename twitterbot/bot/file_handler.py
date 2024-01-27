@@ -327,7 +327,6 @@ def clean_data_file():
 
         add_line_to_data_file(follower_count, following_count)
 
-
     # track end length
     end_length = len(read_file_lines(bot_user_data_file_dir))
 
@@ -335,4 +334,3 @@ def clean_data_file():
 
 
 file_setup()
-clean_data_file()
