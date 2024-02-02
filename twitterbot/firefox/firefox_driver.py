@@ -413,3 +413,8 @@ def scroll_down_to_load_more(driver, scroll_pause_time=2, num_scrolls=5):
 
 
 delete_old_firefox_data()
+
+
+if __name__ == "__main__":
+    logger = Logger()
+    print(login_to_twitter(create_firefox_driver(logger), logger))

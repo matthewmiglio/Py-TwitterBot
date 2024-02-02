@@ -162,11 +162,80 @@ def png_file_exists(file_path):
     return os.path.exists(file_path) and file_path.lower().endswith(".png")
 
 
+
+def check_if_value_is_int(value):
+    try:
+        i = int(value)
+        return True
+    except:
+        pass
+    return False
+
+
+def check_if_value_is_float(value):
+    try:
+        f = float(value)
+        return True
+    except:
+        pass
+    return False
+
+def find_bad_data():
+    # get path of data file
+    path = os.path.join(
+        os.path.join(os.getenv("APPDATA"), "TwitterBot"), "bot_user_data.txt"
+    )
+
+    # Read data from the file
+    with open(path, "r") as file:
+        lines = file.readlines()
+
+        for line in lines:
+            if line == '\n':
+                continue
+            parts = line.split('NEW_DELIMITER')
+
+            #check if the line has enough vars
+            if len(parts) !=5:
+                print(line)
+
+            #get the individual vars
+            followers = parts[1]
+            following = parts[2]
+            time_value = parts[3]
+
+            if not check_if_value_is_int(followers):
+                print(line)
+                continue
+
+            if not check_if_value_is_int(following):
+                print(line)
+                continue
+
+            if not check_if_value_is_float(time_value):
+                print(line)
+                continue
+
+            if int(followers) < 3000:
+                print(line)
+                continue
+
+
+            # for part in parts:print(part)
+    print('Done searching for bad data')
+
+
 if not png_file_exists(plot_png_dir):
     print("Creating empty plot image...")
     make_empty_image()
     print("Created empty plot image")
 
 
-# make_new_plot(mode="save")
+make_new_plot(mode="save")
 # make_new_plot(mode="show")
+
+
+
+
+# if __name__ == '__main__':
+#     find_bad_data()
